@@ -1,1 +1,0 @@
-# tourist-guide-app-backend
