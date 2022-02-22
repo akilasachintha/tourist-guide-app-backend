@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    username: root
-    url: jdbc:mysql://localhost:3306/touristapp
-    password: ''
+    username: sql6474577
+    url: jdbc:mysql://sql6.freemysqlhosting.net/sql6474577
+    password: EQQIRVvnty
   jpa:
     hibernate:
       ddl-auto: update
