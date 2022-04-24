@@ -1,65 +1,53 @@
 package com.datapirates.touristguideapp.model;
 
-import com.datapirates.touristguideapp.model.user.Driver;
-import lombok.*;
-import org.hibernate.Hibernate;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "Location")
+@Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
-@AllArgsConstructor
 @ToString
-@Table(name = "location")
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "location_id")
     private Long locationId;
 
-    @Column(name = "location_name", nullable = false)
+    @NotNull
     private String locationName;
 
-    @Column(name = "district")
     private String district;
 
-    @Column(name = "town")
     private String town;
 
-    @Column(name = "category")
-    private String category;
-
-    @Column(name = "description")
+    @Lob
     private String description;
 
-    @Column(name = "latitude")
-    private Double latitude;
+    private String category;
 
-    @Column(name = "longitude")
-    private Double longitude;
-
-    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     @ToString.Exclude
-    private Set<Hotel> hotels;
+    private Set<LocationImage> locationImages = new HashSet<>();
 
-    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private Set<Driver> drivers;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Location location = (Location) o;
-        return locationId != null && Objects.equals(locationId, location.locationId);
+    public Long getLocationId() {
+        return locationId;
     }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
+    public void setLocationImages(Set<LocationImage> locationImages) {
+        this.locationImages = locationImages;
+
+        for (LocationImage b : locationImages) {
+            b.setLocation(this);
+        }
     }
 }

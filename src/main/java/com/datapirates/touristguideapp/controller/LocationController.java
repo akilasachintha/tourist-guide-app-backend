@@ -1,9 +1,10 @@
 package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.model.Location;
-import com.datapirates.touristguideapp.service.interfaces.LocationService;
+import com.datapirates.touristguideapp.service.LocationService;
+
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -13,43 +14,51 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 
 @RestController
+@RequestMapping("/api/v1/locations")
 @CrossOrigin
-@RequestMapping("/api")
 @Slf4j
+@AllArgsConstructor
 public class LocationController {
-
     private final LocationService locationService;
 
-    @Autowired
-    public LocationController(LocationService locationService) {
-        this.locationService = locationService;
+    // api/v1/locations
+    @PostMapping
+    public ResponseEntity<Location> saveLocation(@Validated @RequestBody Location location) {
+        Location savedLocation = locationService.saveLocation(location);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(savedLocation.getLocationId()).toUri();
+
+        return ResponseEntity.created(uri).body(savedLocation);
     }
 
-    @PostMapping("/location")
-    public ResponseEntity<Location> saveLocation(@Validated @RequestBody Location location){
-        log.info("Successfully Added location => " + location);
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/location/save").toUriString());
-        return ResponseEntity.created(uri).body(locationService.saveLocation(location));
-    }
-
-    @GetMapping("/location")
-    public ResponseEntity<Map<String, List<Location>>> getLocations(){
+    // api/v1/locations
+    @GetMapping
+    public ResponseEntity<Map<String, List<Location>>> getAllLocations() {
         Map<String, List<Location>> response = new HashMap<>();
-        response.put("locations", locationService.getLocations());
+        response.put("locations", locationService.getAllLocations());
         log.info("Get Locations => " + response);
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/location/update")
-    public ResponseEntity<Location> updateLocation(@RequestBody Location location){
-        log.info("Successfully Updated Location => " + location);
-        return ResponseEntity.ok().body(locationService.updateLocation(location));
+    // api/v1/locations/1
+    @GetMapping("/{locationId}")
+    public Optional<Location> getLocationById(@PathVariable(name = "locationId") Long id) {
+        return locationService.getLocationById(id);
     }
 
-    @DeleteMapping("/location/delete/{id}")
-    public String deleteLocation(@PathVariable Long id){
-        return (String) locationService.deleteLocation(id);
+    // api/v1/locations/1
+    @PutMapping("/{locationId}")
+    public ResponseEntity<String> updateLocation(@PathVariable(name = "locationId") Long id, @RequestBody Location location) {
+        return ResponseEntity.ok().body(locationService.updateLocation(id, location));
+    }
+
+    // api/v1/locations/1
+    @DeleteMapping("/{locationId}")
+    public ResponseEntity<String> deleteLocation(@PathVariable(name = "locationId") Long id) {
+        return ResponseEntity.ok().body(locationService.deleteLocation(id));
     }
 }
