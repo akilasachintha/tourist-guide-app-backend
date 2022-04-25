@@ -1,5 +1,6 @@
-package com.datapirates.touristguideapp.model;
+package com.datapirates.touristguideapp.entity;
 
+import com.datapirates.touristguideapp.entity.users.Guide;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,16 +13,16 @@ import javax.persistence.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@IdClass(LocationImageId.class)
 @ToString
-public class LocationImage {
+@IdClass(GuideLanguageId.class)
+public class GuideLanguage {
 
     @Id
-    private String url;
+    private String language;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "images_fk1"))
-    @JsonBackReference
+    @JoinColumn(name = "guide_id", foreignKey = @ForeignKey(name = "guide_language_fk1"))
+    @JsonBackReference(value = "guide-guideLanguages")
     @ToString.Exclude
-    private Location location;
+    private Guide guide;
 }

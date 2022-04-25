@@ -1,8 +1,7 @@
 package com.datapirates.touristguideapp.service;
 
-import com.datapirates.touristguideapp.model.Location;
+import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.repository.LocationRepository;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

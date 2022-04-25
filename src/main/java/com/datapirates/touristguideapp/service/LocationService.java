@@ -1,6 +1,6 @@
 package com.datapirates.touristguideapp.service;
 
-import com.datapirates.touristguideapp.model.Location;
+import com.datapirates.touristguideapp.entity.location.Location;
 
 import java.util.List;
 import java.util.Optional;

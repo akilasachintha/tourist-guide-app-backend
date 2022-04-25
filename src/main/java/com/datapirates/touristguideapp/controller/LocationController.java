@@ -1,8 +1,7 @@
 package com.datapirates.touristguideapp.controller;
 
-import com.datapirates.touristguideapp.model.Location;
+import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.service.LocationService;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class LocationController {
     private final LocationService locationService;
 
     // api/v1/locations
-    @PostMapping
+    @PostMapping(consumes = {"application/json"})
     public ResponseEntity<Location> saveLocation(@Validated @RequestBody Location location) {
         Location savedLocation = locationService.saveLocation(location);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")

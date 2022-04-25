@@ -1,4 +1,4 @@
-package com.datapirates.touristguideapp.model;
+package com.datapirates.touristguideapp.entity.location;
 
 import lombok.Data;
 
