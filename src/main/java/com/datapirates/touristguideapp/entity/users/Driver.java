@@ -1,8 +1,8 @@
 package com.datapirates.touristguideapp.entity.users;
 
-import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.Vehicle;
 import com.datapirates.touristguideapp.entity.bookings.DriverBooking;
+import com.datapirates.touristguideapp.entity.location.Location;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -17,9 +17,13 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
 @ToString
+@RequiredArgsConstructor
+@PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "driver_fk1"))
 public class Driver extends User {
+
+    private String userType = "driver";
+
     private String licenceNo;
 
     private String availability;
@@ -37,7 +41,7 @@ public class Driver extends User {
     private Set<DriverBooking> driverBookings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "driver_fk1"))
+    @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "driver_fk2"))
     @JsonBackReference(value = "location-drivers")
     @ToString.Exclude
     private Location location;

@@ -1,20 +1,19 @@
 package com.datapirates.touristguideapp.entity.hotel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Entity
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor
 @IdClass(HotelRoomId.class)
-@ToString
 public class HotelRoom {
 
     @Id
@@ -37,4 +36,17 @@ public class HotelRoom {
     @JsonBackReference(value = "roomCategory-hotelRooms")
     @ToString.Exclude
     private RoomCategory roomCategory;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        HotelRoom hotelRoom = (HotelRoom) o;
+        return roomNo != null && Objects.equals(roomNo, hotelRoom.roomNo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roomNo);
+    }
 }

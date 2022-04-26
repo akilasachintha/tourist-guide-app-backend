@@ -1,22 +1,23 @@
 package com.datapirates.touristguideapp.entity.hotel;
 
-import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.bookings.HotelBooking;
+import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
-@AllArgsConstructor
 @ToString
+@RequiredArgsConstructor
 public class Hotel {
 
     @Id
@@ -35,14 +36,17 @@ public class Hotel {
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotel-hotelImages")
+    @ToString.Exclude
     private Set<HotelImage> hotelImages = new HashSet<>();
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotel-hotelRooms")
+    @ToString.Exclude
     private Set<HotelRoom> hotelRooms = new HashSet<>();
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotel-hotelBookings")
+    @ToString.Exclude
     private Set<HotelBooking> hotelBookings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
@@ -56,6 +60,19 @@ public class Hotel {
     @JsonBackReference(value = "hotelOwner-hotels")
     @ToString.Exclude
     private HotelOwner hotelOwner;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Hotel hotel = (Hotel) o;
+        return hotelId != null && Objects.equals(hotelId, hotel.hotelId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
 
 

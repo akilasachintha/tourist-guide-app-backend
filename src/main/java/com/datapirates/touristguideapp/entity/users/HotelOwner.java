@@ -2,26 +2,26 @@ package com.datapirates.touristguideapp.entity.users;
 
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
 @ToString
+@RequiredArgsConstructor
+@PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "hotel_owner_fk1"))
 public class HotelOwner extends User {
 
-    @OneToMany(mappedBy = "hotelOwner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private String userType = "hotelOwner";
+
+    @OneToMany(mappedBy = "hotelOwner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotelOwner-hotels")
+    @ToString.Exclude
     private Set<Hotel> hotel = new HashSet<>();
+
 }

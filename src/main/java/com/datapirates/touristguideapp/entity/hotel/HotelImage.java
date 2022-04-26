@@ -1,18 +1,17 @@
 package com.datapirates.touristguideapp.entity.hotel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
 @ToString
+@RequiredArgsConstructor
 @IdClass(HotelImageId.class)
 public class HotelImage {
     @Id
@@ -23,4 +22,17 @@ public class HotelImage {
     @JsonBackReference(value = "hotel-hotelImages")
     @ToString.Exclude
     private Hotel hotel;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        HotelImage that = (HotelImage) o;
+        return url != null && Objects.equals(url, that.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url);
+    }
 }

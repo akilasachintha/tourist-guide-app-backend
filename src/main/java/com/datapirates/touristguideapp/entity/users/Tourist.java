@@ -1,26 +1,23 @@
 package com.datapirates.touristguideapp.entity.users;
 
 import com.datapirates.touristguideapp.entity.bookings.Booking;
-import com.datapirates.touristguideapp.entity.users.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
-@RequiredArgsConstructor
 @ToString
+@RequiredArgsConstructor
+@PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "tourist_fk1"))
 public class Tourist extends User {
+
+    private String userType = "tourist";
 
     private String passport;
 
@@ -30,4 +27,5 @@ public class Tourist extends User {
     @JsonManagedReference(value = "tourist-bookings")
     @ToString.Exclude
     private Set<Booking> bookings = new HashSet<>();
+
 }
