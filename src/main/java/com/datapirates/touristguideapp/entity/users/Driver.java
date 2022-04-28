@@ -20,7 +20,7 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "driver_fk1"))
-public class Driver extends User {
+public class Driver extends AppUser {
 
     private String userType = "driver";
 

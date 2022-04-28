@@ -13,7 +13,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @ToString
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;

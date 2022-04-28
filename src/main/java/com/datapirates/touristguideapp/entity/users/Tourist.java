@@ -15,7 +15,7 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "tourist_fk1"))
-public class Tourist extends User {
+public class Tourist extends AppUser {
 
     private String userType = "tourist";
 
