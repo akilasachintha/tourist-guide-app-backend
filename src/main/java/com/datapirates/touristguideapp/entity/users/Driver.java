@@ -37,7 +37,7 @@ public class Driver extends AppUser {
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "driver_fk2"))
+    @JoinColumn(name = "location", foreignKey = @ForeignKey(name = "driver_fk2"))
     @JsonBackReference(value = "location-drivers")
     @ToString.Exclude
     private Location location;

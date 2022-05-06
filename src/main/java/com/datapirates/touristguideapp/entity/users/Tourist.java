@@ -23,6 +23,6 @@ public class Tourist extends AppUser {
 
     private String country;
 
-    private Set<Booking> bookings = new HashSet<>();
+   // private Set<Booking> bookings = new HashSet<>();
 
 }

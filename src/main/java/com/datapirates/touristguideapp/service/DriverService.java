@@ -15,4 +15,6 @@ public interface DriverService {
     String driverRating(Long id,int starCount);
 
     List<Driver> getDriverByAvailabilityAndLocationId(String availability,Long id);
+
+    String setDriverAvailability(Long id,String availability);
 }

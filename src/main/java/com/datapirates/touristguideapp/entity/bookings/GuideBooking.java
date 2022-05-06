@@ -17,11 +17,11 @@ import java.util.Objects;
 public class GuideBooking extends Booking {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
-    @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    @JoinColumn(name = "guide", referencedColumnName = "userId")
 
     private Guide guide;
 
-    @Override
+  /*  @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
@@ -32,5 +32,5 @@ public class GuideBooking extends Booking {
     @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
+    }*/
 }

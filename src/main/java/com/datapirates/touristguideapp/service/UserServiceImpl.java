@@ -2,12 +2,7 @@ package com.datapirates.touristguideapp.service;
 
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
-import com.datapirates.touristguideapp.entity.bookings.HotelBooking;
-import com.datapirates.touristguideapp.entity.users.AppUser;
-import com.datapirates.touristguideapp.entity.users.Guide;
-import com.datapirates.touristguideapp.entity.users.HotelOwner;
-import com.datapirates.touristguideapp.entity.users.Tourist;
-import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
+import com.datapirates.touristguideapp.entity.users.*;
 import com.datapirates.touristguideapp.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +34,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginResDTO authUser(LoginReqDTO loginReqDTO) {
-        LoginResDTO loginResDTO = new LoginResDTO();
-
-        AppUser existingAppUser = userRepository.findByEmail(loginReqDTO.getEmail()).orElseThrow(
-                () -> new ResourceNotFoundException("User", "Email", loginReqDTO.getEmail())
-        );
-
-        loginResDTO.setUserId(existingAppUser.getUserId());
-        loginResDTO.setUserType(existingAppUser.getUserType());
-        loginResDTO.setStatus(true);
-        return loginResDTO;
+        return null;
     }
+//
+//    @Override
+//    public LoginResDTO authUser(LoginReqDTO loginReqDTO) {
+//        LoginResDTO loginResDTO = new LoginResDTO();
+//
+//        AppUser existingAppUser = userRepository.findByEmail(loginReqDTO.getEmail()).orElseThrow(
+//                () -> new ResourceNotFoundException("User", "Email", loginReqDTO.getEmail())
+//        );
+//
+//        loginResDTO.setUserId(existingAppUser.getUserId());
+//        loginResDTO.setUserType(existingAppUser.getUserType());
+//        loginResDTO.setStatus(true);
+//        return loginResDTO;
+//    }
 
     @Override
     public String guideRating(Long id, int starCount) {
@@ -89,6 +89,16 @@ public class UserServiceImpl implements UserService {
         }
         guideRepository.save(guide);
         return "update success";
+    }
+
+    @Override
+    public String setGuideAvailability(Long id, String availability) {
+        Optional<Guide> checking = guideRepository.findById(id);
+        if (!checking.isPresent()){
+            return "not available Id";
+        }
+        guideRepository.setAvailability(id,availability);
+        return "successfully updated";
     }
 
     @Override

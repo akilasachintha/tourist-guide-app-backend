@@ -17,8 +17,12 @@ import java.util.Optional;
 public interface roomRepository extends JpaRepository<HotelRoom, Long> {
     @Transactional
     @Modifying
-    @Query("update HotelRoom R set R.roomAvailability=:availability where R.hotel_id=:id and R.roomNo=:roomNo")
+    @Query("update HotelRoom R set R.roomAvailability=:availability where R.hotel=:id and R.roomNo=:roomNo")
     void setAvailability(Long id,String availability,Long roomNo);
-    List<HotelRoom> findByHotelIdAndRoomAvailability(Long id,String availability);
-    Optional<HotelRoom> findByHotelIdAndRoomNo(Long id,Long roomNo);
+    @Transactional
+    @Modifying
+    @Query("update HotelRoom R set R.roomCategory=:category where R.roomCategory=:type")
+    void setCategory(String category,String type);
+    List<HotelRoom> findByHotelAndRoomAvailability(Long id, String availability);
+    Optional<HotelRoom> findByHotelAndRoomNo(Long id, Long roomNo);
 }

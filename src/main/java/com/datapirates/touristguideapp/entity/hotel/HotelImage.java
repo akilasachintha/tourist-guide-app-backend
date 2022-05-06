@@ -23,7 +23,7 @@ public class HotelImage {
     @ToString.Exclude
     private Hotel hotel;
 
-    @Override
+ /*   @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
@@ -34,5 +34,5 @@ public class HotelImage {
     @Override
     public int hashCode() {
         return Objects.hash(url);
-    }
+    }*/
 }

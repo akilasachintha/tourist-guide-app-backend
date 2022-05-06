@@ -16,6 +16,7 @@ public interface hotelService {
 
     List<HotelRoom> getByAvailabilityAndHotel(Long id,String availability);
     String updateAvailability(Long id,Long roomNo,String availability);
+    void updateCategoryType(String category,String type);
 
     /***Hotel***/
     String hotelRating(Long id,int starCount);
@@ -24,4 +25,8 @@ public interface hotelService {
     Hotel saveHotel(Hotel hotel);
     String updateHotel(Long id,Hotel hotel);
     Long getOwnerId(Long hotelId);
+    void updateOwner(Long owner,Long id);
+
+    /***bookingRooms***/
+    void updateRoomsAvailability(Long hotelBooking, String availability, Long hotelId);
 }

@@ -1,12 +1,12 @@
 package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
-import com.datapirates.touristguideapp.dto.responseDto.LocationLocationImageDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
 import com.datapirates.touristguideapp.service.VehicleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,25 +24,27 @@ import java.util.Map;
 @AllArgsConstructor
 public class VehicleController {
 
-    private final VehicleService vehicleService;
+    @Autowired
+    private  VehicleService vehicleService;
+
 
     // api/v1/vehicles
-    @PostMapping()
+   /* @PostMapping()
     public ResponseEntity<Vehicle> saveVehicle(@Validated @RequestBody VehicleReqDTO vehicleReqDTO) {
         Vehicle savedVehicle = vehicleService.saveVehicle(vehicleReqDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedVehicle.getVehicleNo()).toUri();
 
         return ResponseEntity.created(uri).body(savedVehicle);
-    }
+    }*/
 
 
-    @GetMapping
+  /*  @GetMapping
     public ResponseEntity<Map<String, List<VehicleResDTO>>> getVehicles() {
         Map<String, List<VehicleResDTO>> response = new HashMap<>();
         response.put("vehicles", vehicleService.getVehicles());
         log.info("Get Vehicles => " + response);
         return ResponseEntity.ok().body(response);
-    }
+    }*/
 
 }

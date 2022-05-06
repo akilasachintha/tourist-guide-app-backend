@@ -20,7 +20,11 @@ public interface hotelRepository extends JpaRepository<Hotel, Long> {
     @Modifying
     @Query("update Hotel H set H.rateAmount=:rateAmount where H.hotelId=:id")
     void setRateAmount(Long id,Long rateAmount);
-    @Query("select H.hotel_owner_id from Hotel H where H.hotelId=:id")
+    @Transactional
+    @Modifying
+    @Query("update Hotel H set H.hotelOwner=:owner where H.hotelOwner=:id")
+    void setOwner(Long id,Long owner);
+    @Query("select H.hotelOwner from Hotel H where H.hotelId=:id")
     Long getOwnerId(Long id);
     @Query("select H.rating from Hotel H where H.hotelId=:id")
     Double getRate(Long id);

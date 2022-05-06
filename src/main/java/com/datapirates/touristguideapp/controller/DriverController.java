@@ -28,14 +28,14 @@ public class DriverController {
     private  DriverService driverService;
 
     @PostMapping()
-    public ResponseEntity<Driver> saveDriver(@Validated @RequestBody UserDriverReqDTO userDriverReqDTO) {
+  /*  public ResponseEntity<Driver> saveDriver(@Validated @RequestBody UserDriverReqDTO userDriverReqDTO) {
 
         Driver savedDriver = driverService.saveDriver(userDriverReqDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedDriver.getUserId()).toUri();
 
         return ResponseEntity.created(uri).body(savedDriver);
-    }
+    }*/
     
     @GetMapping("/{userId}")
     public ResponseEntity<DriverResponseDTO> getDriverById(@PathVariable(name = "userId") Long userId){

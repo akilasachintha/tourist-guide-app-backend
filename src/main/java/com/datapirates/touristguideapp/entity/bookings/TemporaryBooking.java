@@ -38,10 +38,10 @@ public class TemporaryBooking {
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "booking_id", foreignKey = @ForeignKey(name = "temporary_booking_fk1"))
+    @JoinColumn(name = "bookingid", foreignKey = @ForeignKey(name = "temporary_booking_fk1"))
     @JsonBackReference(value = "booking-temporaryBookings")
     @ToString.Exclude
-    private Booking booking;
+    private Booking bookingid;
 
     @Override
     public boolean equals(Object o) {
@@ -51,8 +51,8 @@ public class TemporaryBooking {
         return tempBookingId != null && Objects.equals(tempBookingId, that.tempBookingId);
     }
 
-    @Override
+  /*  @Override
     public int hashCode() {
         return getClass().hashCode();
-    }
+    }*/
 }

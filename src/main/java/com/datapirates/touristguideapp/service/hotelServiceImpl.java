@@ -3,8 +3,6 @@ package com.datapirates.touristguideapp.service;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
-import com.datapirates.touristguideapp.entity.users.Driver;
-import com.datapirates.touristguideapp.entity.users.Guide;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.datapirates.touristguideapp.repository.*;
@@ -23,6 +21,10 @@ public class hotelServiceImpl implements hotelService{
 
     @Autowired
     private roomCategoryRepository roomCategoryRepository;
+
+    @Autowired
+    private bookingRoomsRepository bookingRoomsRepository;
+
     @Override
     public List<RoomCategory> getAllCategories() {
         return roomCategoryRepository.findAll();
@@ -50,17 +52,22 @@ public class hotelServiceImpl implements hotelService{
 
     @Override
     public List<HotelRoom> getByAvailabilityAndHotel(Long id, String availability) {
-        return roomRepository.findByHotelIdAndRoomAvailability(id,availability);
+        return roomRepository.findByHotelAndRoomAvailability(id,availability);
     }
 
     @Override
     public String updateAvailability(Long id, Long roomNo, String availability) {
-        Optional<HotelRoom> checking = roomRepository.findByHotelIdAndRoomNo(id,roomNo);
+        Optional<HotelRoom> checking = roomRepository.findByHotelAndRoomNo(id,roomNo);
         if (!checking.isPresent()){
             return "not available Id";
         }
         roomRepository.setAvailability(id,availability,roomNo);
         return "update success";
+    }
+
+    @Override
+    public void updateCategoryType(String category, String type) {
+        roomRepository.setCategory(category,type);
     }
 
     @Override
@@ -111,5 +118,20 @@ public class hotelServiceImpl implements hotelService{
     @Override
     public Long getOwnerId(Long hotelId) {
         return hotelRepository.getOwnerId(hotelId);
+    }
+
+    @Override
+    public void updateOwner(Long owner, Long id) {
+        hotelRepository.setOwner(id,owner);
+    }
+
+    /*** booking rooms **/
+    @Override
+    public void updateRoomsAvailability(Long hotelBooking, String availability, Long hotelId) {
+        List<Long> rooms = bookingRoomsRepository.getRoomNosByBooking(hotelBooking);
+        for(int index=0; index<rooms.size(); index++){
+            Long roomNo = rooms.get(index);
+             roomRepository.setAvailability(hotelId,availability,roomNo);
+        }
     }
 }

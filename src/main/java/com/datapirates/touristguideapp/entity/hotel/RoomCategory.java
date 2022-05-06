@@ -21,16 +21,16 @@ public class RoomCategory {
     private String description;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        RoomCategory that = (RoomCategory) o;
-        return categoryType != null && Objects.equals(categoryType, that.categoryType);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+//        RoomCategory that = (RoomCategory) o;
+//        return categoryType != null && Objects.equals(categoryType, that.categoryType);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return getClass().hashCode();
+//    }
 }

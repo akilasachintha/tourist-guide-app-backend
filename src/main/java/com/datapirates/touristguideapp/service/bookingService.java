@@ -15,6 +15,7 @@ public interface bookingService {
     String updateTemporaryId(Long id,Long id2);
     Optional<Booking> getTemporaryId(Long id);
     String setBookingStatus(Long id,String status);
+    void updateTourist(Long tourist,Long id);
 
     /*********temporary interface********/
 
@@ -42,6 +43,7 @@ public interface bookingService {
     Optional<GuideBooking> getBookingIdByGuide(Long id);
     String updateGuideBooking(Long id,GuideBooking guideBooking);
     Optional<GuideBooking> getGuideId(Long id);
+    void updateGuide(Long guide,Long id);
 
     /***driver booking interface***/
 
@@ -49,6 +51,7 @@ public interface bookingService {
     Optional<DriverBooking> getBookingIdByDriver(Long id);
     String updateDriverBooking(Long id,DriverBooking driverBooking);
     Optional<DriverBooking> getDriverId(Long id);
+    void updateDriver(Long driver,Long id);
 
     /***Hotel booking interface***/
 
@@ -56,5 +59,6 @@ public interface bookingService {
     Optional<HotelBooking> getBookingIdHotel(Long id);
     String updateHotelBooking(Long id,HotelBooking hotelBooking);
     List<HotelBooking> getHotelId(Long id);
+    void updateHotel(Long hotel,Long id);
 
 }

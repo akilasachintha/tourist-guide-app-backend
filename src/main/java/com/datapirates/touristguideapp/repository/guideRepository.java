@@ -15,11 +15,11 @@ import java.util.List;
 public interface guideRepository extends JpaRepository<Guide, Long> {
     @Transactional
     @Modifying
-    @Query("update Guide g set g.rating=:rate where g.user_id=:id")
+    @Query("update Guide g set g.rating=:rate where g.userId=:id")
     void setRate(Long id,double rate);
     @Transactional
     @Modifying
-    @Query("update Guide G set G.availability=:availability where G.user_id=:id")
+    @Query("update Guide G set G.availability=:availability where G.userId=:id")
     void setAvailability(Long id,String availability);
     List<Guide> findByAvailability(String availability);
 }

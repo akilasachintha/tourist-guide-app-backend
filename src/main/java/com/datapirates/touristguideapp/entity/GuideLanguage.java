@@ -25,16 +25,16 @@ public class GuideLanguage {
     @ToString.Exclude
     private Guide guide;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        GuideLanguage that = (GuideLanguage) o;
-        return language != null && Objects.equals(language, that.language);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(language);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+//        GuideLanguage that = (GuideLanguage) o;
+//        return language != null && Objects.equals(language, that.language);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(language);
+//    }
 }

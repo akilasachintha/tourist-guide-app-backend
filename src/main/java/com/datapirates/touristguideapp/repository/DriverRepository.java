@@ -15,12 +15,12 @@ import java.util.List;
 public interface DriverRepository extends JpaRepository<Driver, Long> {
     @Transactional
     @Modifying
-    @Query("update Driver D set D.rating=:rate where D.user_id=:id")
+    @Query("update Driver D set D.rating=:rate where D.userId=:id")
     void setRate(Long id,double rate);
     @Transactional
     @Modifying
-    @Query("update Driver D set D.availability=:availability where D.user_id=:id")
+    @Query("update Driver D set D.availability=:availability where D.userId=:id")
     void setAvailability(Long id,String availability);
-    List<Driver> findByAvailabilityAndLocationId(String availability,Long id);
+    List<Driver> findByAvailabilityAndLocation(String availability, Long id);
 
 }

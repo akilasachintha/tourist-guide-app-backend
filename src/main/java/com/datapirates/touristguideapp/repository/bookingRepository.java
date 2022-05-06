@@ -17,11 +17,11 @@ import java.util.Optional;
 @Repository
 public interface bookingRepository extends JpaRepository<Booking, Long> {
 
-    List<Booking> findByTouristId(Long id);
+    List<Booking> findByTourist(Long id);
     Optional<Booking> findByRelativeTemporaryId(Long id);
     @Query("select B.relativeTemporaryId from Booking B where B.bookingId=:id")
     Optional<Booking> findTempId(Long id);
-    @Query("select B.user_id from Booking B where B.bookingId=:id")
+    @Query("select B.tourist from Booking B where B.bookingId=:id")
     Long getTouristId(Long id);
     @Query("select B.bookingId from Booking B where B.relativeTemporaryId=:id")
     Long getTBookingId(Long id);
@@ -31,9 +31,13 @@ public interface bookingRepository extends JpaRepository<Booking, Long> {
     void setTempId(Long id,Long id2);
     @Transactional
     @Modifying
+    @Query("update Booking B set B.tourist=:tourist where B.tourist=:id")
+    void setTourist(Long id,Long tourist);
+    @Transactional
+    @Modifying
     @Query("update Booking B set B.bookingStatus=:status where B.bookingId=:id")
     void setBookingStatus(Long id,String status);
-    @Query("select B.bookingId from Booking B where B.user_id=:id and B.bookingStatus=:status")
+    @Query("select B.bookingId from Booking B where B.tourist=:id and B.bookingStatus=:status")
     List<Long> getBookingIds(Long id,String status);
 
 }

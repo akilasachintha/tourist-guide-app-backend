@@ -30,7 +30,7 @@ public class bookingServiceImpl implements bookingService{
 
     @Override
     public List<Booking> getBookingByTourist(Long id) {
-        return bookingRepository.findByTouristId(id);
+        return bookingRepository.findByTourist(id);
     }
 
     @Override
@@ -88,11 +88,16 @@ public class bookingServiceImpl implements bookingService{
         return "update success";
     }
 
+    @Override
+    public void updateTourist(Long tourist, Long id) {
+        bookingRepository.setTourist(id,tourist);
+    }
+
     /*****temporary booking methods****/
 
     @Override
     public String updateGuideState(Long id, String state) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingId(id);
+        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingid(id);
         if (!checking.isPresent()){
             return "Error Id";
         }
@@ -102,7 +107,7 @@ public class bookingServiceImpl implements bookingService{
 
     @Override
     public String updateDriverState(Long id, String state) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingId(id);
+        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingid(id);
         if (!checking.isPresent()){
             return "Error Id";
         }
@@ -112,7 +117,7 @@ public class bookingServiceImpl implements bookingService{
 
     @Override
     public String updateHotelState(Long id, String state) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingId(id);
+        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingid(id);
         if (!checking.isPresent()){
             return "Error Id";
         }
@@ -160,7 +165,7 @@ public class bookingServiceImpl implements bookingService{
 
     @Override
     public String updatePendingGuide(Long id, Long id2) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingId(id);
+        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingid(id);
         if (!checking.isPresent()){
             return "Error Id";
         }
@@ -170,7 +175,7 @@ public class bookingServiceImpl implements bookingService{
 
     @Override
     public String updatePendingDriver(Long id, Long id2) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingId(id);
+        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingid(id);
         if (!checking.isPresent()){
             return "Error Id";
         }
@@ -180,7 +185,7 @@ public class bookingServiceImpl implements bookingService{
 
     @Override
     public String updatePendingHotel(Long id, Long id2) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingId(id);
+        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByBookingid(id);
         if (!checking.isPresent()){
             return "Error Id";
         }
@@ -301,6 +306,11 @@ public class bookingServiceImpl implements bookingService{
         return guideBookingRepository.findGuideId(id);
     }
 
+    @Override
+    public void updateGuide(Long guide, Long id) {
+        guideBookingRepository.setGuide(id,guide);
+    }
+
     /***driver booking***/
 
     @Override
@@ -326,6 +336,11 @@ public class bookingServiceImpl implements bookingService{
     @Override
     public Optional<DriverBooking> getDriverId(Long id) {
         return driverBookingRepository.findDriverId(id);
+    }
+
+    @Override
+    public void updateDriver(Long driver, Long id) {
+        driverBookingRepository.setDriver(id,driver);
     }
 
     /****Hotel Booking****/
@@ -354,5 +369,10 @@ public class bookingServiceImpl implements bookingService{
     @Override
     public List<HotelBooking> getHotelId(Long id) {
         return hotelBookingRepository.findHotelId(id);
+    }
+
+    @Override
+    public void updateHotel(Long hotel, Long id) {
+        hotelBookingRepository.setHotel(id,hotel);
     }
 }

@@ -31,6 +31,14 @@ public class otherServicesImpl implements otherServices{
     private hotelRepository hotelRepository;
     @Autowired
     private temporary_bookingRepository temporaryBookingRepository;
+    @Autowired
+    private DriverRepository driverRepository;
+    @Autowired
+    private guideRepository guideRepository;
+
+    @Autowired
+    private hotelService hotelService;
+
     @Override
     public void sendMails(String toEmail, String subject, String body) {
     }
@@ -95,6 +103,7 @@ public class otherServicesImpl implements otherServices{
                 subject = "your time has over booking is canceled";
                 body = "something";
                 sendMails(ownerEmail,subject,body);
+                hotelService.updateRoomsAvailability(bookingId,"available",hotelId);
 
             }
 
@@ -130,6 +139,7 @@ public class otherServicesImpl implements otherServices{
                 String body = "something";
                 sendMails(touristEmail,subject,body);
                 String driverEmail = userRepository.getEmail(driverId);
+                driverRepository.setAvailability(driverId,"available");
                 subject = "your time has over booking is canceled";
                 body = "something";
                 sendMails(driverEmail,subject,body);
@@ -167,12 +177,16 @@ public class otherServicesImpl implements otherServices{
                 String body = "something";
                 sendMails(touristEmail,subject,body);
                 String guideEmail = userRepository.getEmail(guideId);
+                guideRepository.setAvailability(guideId,"available");
                 subject = "your time has over booking is canceled";
                 body = "something";
                 sendMails(guideEmail,subject,body);
 
             }
         }
+
+        /*** booking confirmation**/
+
         List<Long> allTemporaryIds = temporaryBookingRepository.getAllTempIds();
         for (int index=0;index<allTemporaryIds.size();index++){
             Long temporaryId = allTemporaryIds.get(index);

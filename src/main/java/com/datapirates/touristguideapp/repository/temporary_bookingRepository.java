@@ -16,15 +16,15 @@ public interface temporary_bookingRepository extends JpaRepository<TemporaryBook
 
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.guideState=:state where booking_id=:id")
+    @Query("update TemporaryBooking t set t.guideStatus=:state where bookingid=:id")
     void setGuideState(Long id,String state);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.driverState=:state where booking_id=:id")
+    @Query("update TemporaryBooking t set t.driverStatus=:state where bookingid=:id")
     void setDriverState(Long id,String state);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.hotelState=:state where booking_id=:id")
+    @Query("update TemporaryBooking t set t.hotelStatus=:state where bookingid=:id")
     void setHotelState(Long id,String state);
     @Transactional
     @Modifying
@@ -68,11 +68,11 @@ public interface temporary_bookingRepository extends JpaRepository<TemporaryBook
     Long getPendingHotel(Long id);
     @Query("select t.tempBookingId from TemporaryBooking t where t.pendingHotel=:id")
     List<TemporaryBooking> checkPendingHotel(Long id);
-    @Query("select t.driverState from TemporaryBooking t where t.tempBookingId=:id")
+    @Query("select t.driverStatus from TemporaryBooking t where t.tempBookingId=:id")
     String getDriverStatus(Long id);
-    @Query("select t.guideState from TemporaryBooking t where t.tempBookingId=:id")
+    @Query("select t.guideStatus from TemporaryBooking t where t.tempBookingId=:id")
     String getGuideStatus(Long id);
-    @Query("select t.hotelState from TemporaryBooking t where t.tempBookingId=:id")
+    @Query("select t.hotelStatus from TemporaryBooking t where t.tempBookingId=:id")
     String getHotelStatus(Long id);
     @Query("select t.tempBookingId from TemporaryBooking t where t.hotelStatus=:status")
     List<Long> getIdsByHotel(String status);
@@ -86,6 +86,6 @@ public interface temporary_bookingRepository extends JpaRepository<TemporaryBook
     Optional<TemporaryBooking> findByPendingGuide(Long id);
     Optional<TemporaryBooking> findByPendingDriver(Long id);
     Optional<TemporaryBooking> findByPendingHotel(Long id);
-    Optional<TemporaryBooking> findByBookingId(Long id);
+    Optional<TemporaryBooking> findByBookingid(Long id);
 
 }

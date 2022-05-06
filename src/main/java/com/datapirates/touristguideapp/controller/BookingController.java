@@ -1,16 +1,12 @@
 package com.datapirates.touristguideapp.controller;
 
-import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
-import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.bookings.DriverBooking;
 import com.datapirates.touristguideapp.entity.bookings.GuideBooking;
 import com.datapirates.touristguideapp.entity.bookings.HotelBooking;
-import com.datapirates.touristguideapp.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.datapirates.touristguideapp.service.bookingService;
 
@@ -62,6 +58,11 @@ public class BookingController {
     private String updateStatus(@RequestParam Long id , @RequestParam String status){
         return bookingService.setBookingStatus(id,status);
     }
+    @PutMapping("/updateTourist")
+    private String updateTourist(@RequestParam Long tourist){
+        bookingService.updateTourist(tourist,null);
+        return "successfully updated";
+    }
     @DeleteMapping("/delete")
     private String deleteBooking(@RequestParam Long id){
         bookingService.deleteBooking(id);
@@ -90,6 +91,12 @@ public class BookingController {
         return bookingService.updateGuideBooking(id,guideBooking);
     }
 
+    @PutMapping("/guideBooking/updateGuide")
+    private String updateGuide(@RequestParam Long guide){
+           bookingService.updateGuide(guide,null);
+           return "successfully updated";
+    }
+
     /*** Driver Booking ***/
 
     @PostMapping("/driverBooking/add")
@@ -110,6 +117,11 @@ public class BookingController {
     @PutMapping("/driverBooking/update")
     private String updateDriverBooking(@RequestParam Long id , @RequestBody DriverBooking driverBooking){
         return bookingService.updateDriverBooking(id,driverBooking);
+    }
+    @PutMapping("/driverBooking/updateDriver")
+    private String updateDriver(@RequestParam Long driver){
+        bookingService.updateDriver(driver,null);
+        return "successfully updated";
     }
 
     /*** Hotel Booking ***/
@@ -133,5 +145,10 @@ public class BookingController {
     @PutMapping("/hotelBooking/update")
     private String updateHotelBooking(@RequestParam Long id , @RequestBody HotelBooking hotelBooking ){
         return bookingService.updateHotelBooking(id,hotelBooking);
+    }
+    @PutMapping("/hotelBooking/updateHotel")
+    private String updateHotel(@RequestParam Long hotel ){
+        bookingService.updateHotel(hotel,null);
+        return "successfully updated";
     }
 }

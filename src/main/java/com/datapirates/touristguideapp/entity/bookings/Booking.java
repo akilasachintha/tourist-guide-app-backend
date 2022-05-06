@@ -35,13 +35,13 @@ public class Booking {
 
     private String time;
 
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bookingid", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("booking-temporaryBookings")
     @ToString.Exclude
     private Set<TemporaryBooking> temporaryBookings;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
-    @JoinColumn(name = "user_id",referencedColumnName = "userId")
+    @JoinColumn(name = "tourist",referencedColumnName = "userId")
     private Tourist tourist;
 
     @Override

@@ -19,6 +19,8 @@ public interface UserService {
     Guide saveGuide(Guide guide);
 
     String updateGuide(Long id,Guide guide);
+
+    String setGuideAvailability(Long id,String availability);
 /***/
 
     HotelOwner saveHotelOwner(HotelOwner hotelOwner);

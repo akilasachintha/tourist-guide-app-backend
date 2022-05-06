@@ -33,7 +33,7 @@ public class hotelController {
     private List<Hotel> getAllHotels(){
         return hotelService.getAllHotels();
     }
-    @GetMapping("/getAll")
+    @GetMapping("/getHotel")
     private Optional<Hotel> getHotel(@RequestParam Long id){
         return hotelService.getHotelById(id);
     }
@@ -46,6 +46,11 @@ public class hotelController {
     @PutMapping("/update")
     private String updateHotel(@RequestParam Long id,@RequestBody Hotel hotel){
         return hotelService.updateHotel(id,hotel);
+    }
+    @PutMapping("/updateOwner")
+    private String updateOwner(@RequestParam Long owner){
+        hotelService.updateOwner(owner,null);
+        return "successfully updated";
     }
     @PutMapping("/rating")
     private String rateHotel(@RequestParam Long id,@RequestBody int starCount){
@@ -84,7 +89,14 @@ public class hotelController {
     }
 
     @PutMapping("/hotelRoom/updateAvailability")
-    private String updateRoom(@RequestParam Long id,Long roomNo,String availability){
-        return hotelService.updateAvailability(id,roomNo,availability);
+    private String updateRoomAvailability(@RequestParam Long hotelBooking, String availability, Long hotelId){
+         hotelService.updateRoomsAvailability(hotelBooking,availability,hotelId);
+         return "successfully updated";
+    }
+
+    @PutMapping("/hotelRoom/updateCategory")
+    private String updateCategory(@RequestParam String type){
+        hotelService.updateCategoryType(type,null);
+        return "successfully updated";
     }
 }

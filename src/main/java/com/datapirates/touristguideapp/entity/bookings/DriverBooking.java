@@ -20,19 +20,19 @@ public class DriverBooking extends Booking {
     private double advancedPayment;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
-    @JoinColumn(name = "user_id",referencedColumnName = "userId")
+    @JoinColumn(name = "driver",referencedColumnName = "userId")
     private Driver driver;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        DriverBooking that = (DriverBooking) o;
-        return getBookingId() != null && Objects.equals(getBookingId(), that.getBookingId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+//        DriverBooking that = (DriverBooking) o;
+//        return getBookingId() != null && Objects.equals(getBookingId(), that.getBookingId());
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return getClass().hashCode();
+//    }
 }
