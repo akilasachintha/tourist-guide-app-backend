@@ -5,7 +5,11 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
+import com.datapirates.touristguideapp.entity.bookings.HotelBooking;
 
 
 @Entity
@@ -31,11 +35,14 @@ public class HotelRoom {
     @ToString.Exclude
     private Hotel hotel;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "category_type", foreignKey = @ForeignKey(name = "hotel_room_fk2"))
-    @JsonBackReference(value = "roomCategory-hotelRooms")
-    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @JoinColumn(name = "category_type", referencedColumnName = "categoryType")
     private RoomCategory roomCategory;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "booking_rooms",joinColumns = {@JoinColumn(name = "booking_id")},
+            inverseJoinColumns = {@JoinColumn(name = "room_no")})
+    private Set<HotelBooking> hotelBookings = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

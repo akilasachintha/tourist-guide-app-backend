@@ -21,6 +21,10 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
 
+    private Long relativeTemporaryId;
+
+    private String bookingStatus;
+
     private String checkInDate;
 
     private String checkOutDate;
@@ -36,10 +40,8 @@ public class Booking {
     @ToString.Exclude
     private Set<TemporaryBooking> temporaryBookings;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "booking_fk1"))
-    @JsonBackReference("tourist-bookings")
-    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @JoinColumn(name = "user_id",referencedColumnName = "userId")
     private Tourist tourist;
 
     @Override

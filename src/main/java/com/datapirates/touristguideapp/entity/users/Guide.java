@@ -30,15 +30,7 @@ public class Guide extends AppUser {
 
     private String availability;
 
-    @OneToMany(mappedBy = "guide",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "guide-guideLanguages")
-    @ToString.Exclude
-    private Set<GuideLanguage> guideLanguages = new HashSet<>();
 
-    @OneToMany(mappedBy = "guide",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "guide-guideBookings")
-    @ToString.Exclude
-    private Set<GuideBooking> guideBookings = new HashSet<>();
 
 
 }

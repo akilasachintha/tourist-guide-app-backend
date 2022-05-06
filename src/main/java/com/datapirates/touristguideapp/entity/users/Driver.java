@@ -35,10 +35,6 @@ public class Driver extends AppUser {
     @ToString.Exclude
     private Set<Vehicle> vehicles  = new HashSet<>();
 
-    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "driver-driverBookings")
-    @ToString.Exclude
-    private Set<DriverBooking> driverBookings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "driver_fk2"))

@@ -4,12 +4,17 @@ import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
 import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.Driver;
+import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
-import com.datapirates.touristguideapp.repository.LocationRepository;
+import com.datapirates.touristguideapp.repository.*;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -17,6 +22,9 @@ public class DriverServiceImpl implements DriverService {
     private final DriverRepository driverRepository;
     private final LocationRepository locationRepository;
     private final ModelMapper modelMapper;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Driver saveDriver(UserDriverReqDTO userDriverReqDTO) {
@@ -39,6 +47,31 @@ public class DriverServiceImpl implements DriverService {
         driverResponseDTO.setUserPhotoUrl(existingDriver.getUserPhotoUrl());
 
         return driverResponseDTO;
+    }
+
+    @Override
+    public String driverRating(Long id, int starCount) {
+        Optional<Driver> checking = driverRepository.findById(id);
+        if (!checking.isPresent()){
+            return "not available Id";
+        }
+        double currentRate = userRepository.getRate(id);
+        Long currentAmount = userRepository.getRateAmount(id);
+        double currentStars = currentAmount * currentRate;
+
+        /*** after updating ***/
+
+        currentStars+=starCount;
+        currentAmount+=1;
+        currentRate=currentStars/currentAmount;
+        driverRepository.setRate(id,currentRate);
+        userRepository.setRateAmount(id,currentAmount);
+        return "successful rated";
+    }
+
+    @Override
+    public List<Driver> getDriverByAvailabilityAndLocationId(String availability, Long id) {
+        return driverRepository.findByAvailabilityAndLocationId(availability,id);
     }
 
     private Driver convertDtoToEntity(UserDriverReqDTO userDriverReqDTO) {

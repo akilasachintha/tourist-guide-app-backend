@@ -16,10 +16,9 @@ import java.util.Objects;
 @PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "guide_booking_fk1"))
 public class GuideBooking extends Booking {
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "guide_booking_fk2"))
-    @JsonBackReference(value = "guide-guideBookings")
-    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
+
     private Guide guide;
 
     @Override

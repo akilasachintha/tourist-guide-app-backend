@@ -19,10 +19,8 @@ public class DriverBooking extends Booking {
 
     private double advancedPayment;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "driver_booking_fk2"), insertable = false, updatable = false)
-    @JsonBackReference("driver-driverBookings")
-    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @JoinColumn(name = "user_id",referencedColumnName = "userId")
     private Driver driver;
 
     @Override

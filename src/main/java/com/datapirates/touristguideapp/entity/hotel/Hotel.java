@@ -26,6 +26,8 @@ public class Hotel {
 
     private double rating;
 
+    private Long rateAmount;
+
     private String name;
 
     private String No;
@@ -44,10 +46,6 @@ public class Hotel {
     @ToString.Exclude
     private Set<HotelRoom> hotelRooms = new HashSet<>();
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "hotel-hotelBookings")
-    @ToString.Exclude
-    private Set<HotelBooking> hotelBookings = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "location_id", foreignKey = @ForeignKey(name = "hotel_fk1"))
@@ -55,10 +53,8 @@ public class Hotel {
     @ToString.Exclude
     private Location location;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "hotel_owner_id", foreignKey = @ForeignKey(name = "hotel_fk2"))
-    @JsonBackReference(value = "hotelOwner-hotels")
-    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
+    @JoinColumn(name = "hotel_owner_id", referencedColumnName = "userId")
     private HotelOwner hotelOwner;
 
     @Override

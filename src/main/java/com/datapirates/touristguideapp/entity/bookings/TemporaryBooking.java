@@ -18,6 +18,12 @@ public class TemporaryBooking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tempBookingId;
 
+    private Long pendingHotel;
+
+    private Long pendingDriver;
+
+    private Long pendingGuide;
+
     private String driverStatus;
 
     private String guideStatus;
@@ -28,7 +34,8 @@ public class TemporaryBooking {
 
     private String hotelEndTime;
 
-    private String vehicleEndTime;
+    private String driverEndTime;
+
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "booking_id", foreignKey = @ForeignKey(name = "temporary_booking_fk1"))

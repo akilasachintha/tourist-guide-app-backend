@@ -18,6 +18,8 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    private Long rateAmount;
+
     private String userType;
 
     private String userPhotoUrl;
@@ -31,4 +33,5 @@ public class AppUser {
     private String dob;
 
     private String password;
+
 }
