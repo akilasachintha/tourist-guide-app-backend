@@ -39,6 +39,10 @@ public class BookingController {
     private List<Booking> getAll(){
         return bookingService.getAllBooking();
     }
+    @GetMapping("/getByTouristStatus")
+    private List<Booking> getByTouristAndStatus(@RequestParam Long id,@RequestParam String status){
+        return bookingService.getBookingByTouristAndState(id,status);
+    }
 
     @PostMapping("/add")
     private String addBooking(@RequestBody Booking booking){

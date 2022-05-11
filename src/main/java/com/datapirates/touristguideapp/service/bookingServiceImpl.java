@@ -93,6 +93,11 @@ public class bookingServiceImpl implements bookingService{
         bookingRepository.setTourist(id,tourist);
     }
 
+    @Override
+    public List<Booking> getBookingByTouristAndState(Long id, String status) {
+        return bookingRepository.findByTouristAndBookingStatus(id,status);
+    }
+
     /*****temporary booking methods****/
 
     @Override

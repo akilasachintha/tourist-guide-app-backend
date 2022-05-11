@@ -200,7 +200,7 @@ public class otherServicesImpl implements otherServices{
             if(!bookingProcessOver){
                 if (bookingConfirm){
                     Long bookingId = bookingRepository.getTBookingId(temporaryId);
-                    bookingRepository.setBookingStatus(bookingId,"confirm");
+                    bookingRepository.setBookingStatus(bookingId,"shouldPay");
                     temporaryBookingRepository.deleteById(temporaryId);
                     Long touristId = bookingRepository.getTouristId(bookingId);
                     String touristEmail = userRepository.getEmail(touristId);
@@ -217,6 +217,31 @@ public class otherServicesImpl implements otherServices{
                     String body = "Your Booking"+bookingId+"is canceled.You have to do new booking";
                     sendMails(touristEmail,subject,body);
                 }
+            }
+        }
+
+        /*** check rating time ***/
+        List<Long> bookingIdsOnPayed = bookingRepository.getAllBookingIdsByState("paid");
+        for (int index=0; index<bookingIdsOnPayed.size();index++){
+            Long bookingId = bookingIdsOnPayed.get(index);
+            String checkOutTime = bookingRepository.getCheckOutDateById(bookingId);
+
+            Date date = new Date();
+            SimpleDateFormat sdt = new SimpleDateFormat("dd");
+            SimpleDateFormat sdt2 = new SimpleDateFormat("MM");
+            SimpleDateFormat sdt3 = new SimpleDateFormat("YYYY");
+            SimpleDateFormat sdt5 = new SimpleDateFormat("hh");
+
+            String day= sdt.format(date);
+            String month = sdt2.format(date);
+            String year = sdt3.format(date);
+            String hour = sdt5.format(date);
+
+            Long nowTimeCount = bookingService.hourCount(day,month,year,hour);
+            Long checkOutTimeCount = Long.parseLong(checkOutTime);
+
+            if (checkOutTimeCount<=nowTimeCount){
+                bookingRepository.setBookingStatus(bookingId,"shouldRate");
             }
         }
     }

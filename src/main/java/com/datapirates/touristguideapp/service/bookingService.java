@@ -16,6 +16,7 @@ public interface bookingService {
     Optional<Booking> getTemporaryId(Long id);
     String setBookingStatus(Long id,String status);
     void updateTourist(Long tourist,Long id);
+    List<Booking> getBookingByTouristAndState(Long id,String status);
 
     /*********temporary interface********/
 
