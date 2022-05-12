@@ -32,7 +32,7 @@ public class BookingController {
         return bookingService.getBookingByTemporary(id);
     }
     @GetMapping("/getTemporary")
-    private Optional<Booking> getTemporary(@RequestParam Long id){
+    private Long getTemporary(@RequestParam Long id){
         return bookingService.getTemporaryId(id);
     }
     @GetMapping("/getAll")
@@ -67,6 +67,10 @@ public class BookingController {
         bookingService.updateTourist(tourist,null);
         return "successfully updated";
     }
+    @PutMapping("/cancelBooking")
+    private String cancelBooking(@RequestParam Long bookingId){
+        return bookingService.cancelFullBooking(bookingId);
+    }
     @DeleteMapping("/delete")
     private String deleteBooking(@RequestParam Long id){
         bookingService.deleteBooking(id);
@@ -86,7 +90,7 @@ public class BookingController {
         return bookingService.getBookingIdByGuide(id);
     }
     @GetMapping("/guideBooking/getId")
-    private Optional<GuideBooking> getIdByBooking(@RequestParam Long id){
+    private Long getIdByBooking(@RequestParam Long id){
         return bookingService.getGuideId(id);
     }
 
@@ -94,7 +98,10 @@ public class BookingController {
     private String updateGuideBooking(@RequestParam Long id , @RequestBody GuideBooking guideBooking){
         return bookingService.updateGuideBooking(id,guideBooking);
     }
-
+    @PutMapping("/guideBooking/cancel")
+    private String cancelGuideBooking(@RequestParam Long id){
+        return bookingService.cancelSingleBooking(id,"guide");
+    }
     @PutMapping("/guideBooking/updateGuide")
     private String updateGuide(@RequestParam Long guide){
            bookingService.updateGuide(guide,null);
@@ -114,13 +121,18 @@ public class BookingController {
         return bookingService.getBookingIdByDriver(id);
     }
     @GetMapping("/driverBooking/getId")
-    private Optional<DriverBooking> getDriverIdByBooking(@RequestParam Long id){
+    private Long getDriverIdByBooking(@RequestParam Long id){
         return bookingService.getDriverId(id);
     }
 
     @PutMapping("/driverBooking/update")
     private String updateDriverBooking(@RequestParam Long id , @RequestBody DriverBooking driverBooking){
         return bookingService.updateDriverBooking(id,driverBooking);
+    }
+
+    @PutMapping("/driverBooking/cancel")
+    private String cancelDriverBooking(@RequestParam Long id){
+        return bookingService.cancelSingleBooking(id,"driver");
     }
     @PutMapping("/driverBooking/updateDriver")
     private String updateDriver(@RequestParam Long driver){
@@ -142,13 +154,18 @@ public class BookingController {
         return bookingService.getBookingIdHotel(id);
     }
     @GetMapping("/hotelBooking/getId")
-    private List<HotelBooking> getHotelIdByBooking(@RequestParam Long id){
+    private Long getHotelIdByBooking(@RequestParam Long id){
         return bookingService.getHotelId(id);
     }
 
     @PutMapping("/hotelBooking/update")
     private String updateHotelBooking(@RequestParam Long id , @RequestBody HotelBooking hotelBooking ){
         return bookingService.updateHotelBooking(id,hotelBooking);
+    }
+
+    @PutMapping("/hotelBooking/cancel")
+    private String cancelHotelBooking(@RequestParam Long id){
+        return bookingService.cancelSingleBooking(id,"hotel");
     }
     @PutMapping("/hotelBooking/updateHotel")
     private String updateHotel(@RequestParam Long hotel ){

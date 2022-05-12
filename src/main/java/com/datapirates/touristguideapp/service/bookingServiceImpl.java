@@ -14,6 +14,8 @@ import java.util.Optional;
 public class bookingServiceImpl implements bookingService{
 
     @Autowired
+    private otherServices otherServices;
+    @Autowired
     private bookingRepository bookingRepository;
 
     @Autowired
@@ -27,6 +29,12 @@ public class bookingServiceImpl implements bookingService{
 
     @Autowired
     private hotelBookingRepository hotelBookingRepository;
+
+    @Autowired
+    private hotelRepository hotelRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Booking> getBookingByTourist(Long id) {
@@ -74,7 +82,7 @@ public class bookingServiceImpl implements bookingService{
     }
 
     @Override
-    public Optional<Booking> getTemporaryId(Long id) {
+    public Long getTemporaryId(Long id) {
         return bookingRepository.findTempId(id);
     }
 
@@ -96,6 +104,205 @@ public class bookingServiceImpl implements bookingService{
     @Override
     public List<Booking> getBookingByTouristAndState(Long id, String status) {
         return bookingRepository.findByTouristAndBookingStatus(id,status);
+    }
+
+    @Override
+    public String cancelFullBooking(Long id) {
+        Optional<Booking> checking = bookingRepository.findById(id);
+        if (!checking.isPresent()){
+            return "not available Id";
+        }
+        String bookingState = bookingRepository.getStateById(id);
+        if(bookingState.toLowerCase().equals("pending")){
+            Long tempID = bookingRepository.findTempId(id);
+            String hotelState = temporaryBookingRepository.getHotelStatus(tempID);
+            if(!(hotelState.toLowerCase().equals("souldselect")||hotelState.toLowerCase().equals("notselect"))){
+                Long hotelId = temporaryBookingRepository.getPendingHotel(tempID);
+                Long ownerId = hotelRepository.getOwnerId(hotelId);
+                String email = userRepository.getEmail(ownerId);
+                String subject="Booking cancel";
+                String body="Your Booking has canceled by tourist";
+                otherServices.sendMails(email,subject,body);
+            }
+            String driverState = temporaryBookingRepository.getDriverStatus(tempID);
+            if(!(driverState.toLowerCase().equals("souldselect")||driverState.toLowerCase().equals("notselect"))){
+                Long driverId = temporaryBookingRepository.getPendingDriver(tempID);
+                String email = userRepository.getEmail(driverId);
+                String subject="Booking cancel";
+                String body="Your Booking has canceled by tourist";
+                otherServices.sendMails(email,subject,body);
+            }
+            String guideState = temporaryBookingRepository.getGuideStatus(tempID);
+            if(!(guideState.toLowerCase().equals("souldselect")||guideState.toLowerCase().equals("notselect"))){
+                Long guideId = temporaryBookingRepository.getPendingGuide(tempID);
+                String email = userRepository.getEmail(guideId);
+                String subject="Booking cancel";
+                String body="Your Booking has canceled by tourist";
+                otherServices.sendMails(email,subject,body);
+            }
+            Long touristId = bookingRepository.getTouristId(id);
+            bookingRepository.deleteById(id);
+            String email = userRepository.getEmail(touristId);
+            String subject="Booking cancel";
+            String body="Your Booking has successfully canceled";
+            otherServices.sendMails(email,subject,body);
+        }
+        else {
+            if(bookingState.toLowerCase().equals("rated")){
+                return "ERROR: FinishedBooking";
+            }
+            Long hotelId = hotelBookingRepository.findHotelId(id);
+            if (hotelId!=null){
+                Long ownerId = hotelRepository.getOwnerId(hotelId);
+                String email = userRepository.getEmail(ownerId);
+                String subject="Booking cancel";
+                String body="Your Booking has canceled by tourist";
+                otherServices.sendMails(email,subject,body);
+            }
+            Long driverId = driverBookingRepository.findDriverId(id);
+            if (driverId!=null){
+                String email = userRepository.getEmail(driverId);
+                String subject="Booking cancel";
+                String body="Your Booking has canceled by tourist";
+                otherServices.sendMails(email,subject,body);
+            }
+            Long guideId = guideBookingRepository.findGuideId(id);
+            if (guideId!=null){
+                String email = userRepository.getEmail(guideId);
+                String subject="Booking cancel";
+                String body="Your Booking has canceled by tourist";
+                otherServices.sendMails(email,subject,body);
+            }
+            Long touristId = bookingRepository.getTouristId(id);
+            bookingRepository.deleteById(id);
+            String email = userRepository.getEmail(touristId);
+            String subject="Booking cancel";
+            String body="Your Booking has successfully canceled";
+            otherServices.sendMails(email,subject,body);
+        }
+
+        return "successfully canceled";
+    }
+
+    @Override
+    public String cancelSingleBooking(Long id, String type) {
+
+        String bookingState = bookingRepository.getStateById(id);
+        if(bookingState.toLowerCase().equals("pending")){
+            Long tempID = bookingRepository.findTempId(id);
+            if (type.toLowerCase().equals("hotel")){
+
+                String hotelState = temporaryBookingRepository.getHotelStatus(tempID);
+                if(!(hotelState.toLowerCase().equals("souldselect")||hotelState.toLowerCase().equals("notselect"))){
+                    Long hotelId = temporaryBookingRepository.getPendingHotel(tempID);
+                    Long ownerId = hotelRepository.getOwnerId(hotelId);
+                    String email = userRepository.getEmail(ownerId);
+                    String subject="Booking cancel";
+                    String body="Your Booking has canceled by tourist";
+                    otherServices.sendMails(email,subject,body);
+                    temporaryBookingRepository.setHotelState(tempID,"notSelected");
+                    hotelBookingRepository.deleteById(id);
+                }
+                else {
+                    return "ERROR : Hadn't Book Hotel";
+                }
+            }
+
+            if (type.toLowerCase().equals("driver")){
+
+                String driverState = temporaryBookingRepository.getDriverStatus(tempID);
+                if(!(driverState.toLowerCase().equals("souldselect")||driverState.toLowerCase().equals("notselect"))){
+                    Long driverId = temporaryBookingRepository.getPendingDriver(tempID);
+                    String email = userRepository.getEmail(driverId);
+                    String subject="Booking cancel";
+                    String body="Your Booking has canceled by tourist";
+                    otherServices.sendMails(email,subject,body);
+                    temporaryBookingRepository.setDriverState(tempID,"notSelected");
+                    driverBookingRepository.deleteById(id);
+                }
+                else {
+                    return "ERROR : Hadn't Book Driver";
+                }
+            }
+
+            if (type.toLowerCase().equals("guide")){
+
+                String guideState = temporaryBookingRepository.getGuideStatus(tempID);
+                if(!(guideState.toLowerCase().equals("souldselect")||guideState.toLowerCase().equals("notselect"))){
+                    Long guideId = temporaryBookingRepository.getPendingGuide(tempID);
+                    String email = userRepository.getEmail(guideId);
+                    String subject="Booking cancel";
+                    String body="Your Booking has canceled by tourist";
+                    otherServices.sendMails(email,subject,body);
+                    temporaryBookingRepository.setGuideState(tempID,"notSelected");
+                    guideBookingRepository.deleteById(id);
+                }
+                else {
+                    return "ERROR : Hadn't Book Guide";
+                }
+            }
+
+        }
+        else {
+            if(bookingState.toLowerCase().equals("rated")){
+                return "ERROR: FinishedBooking";
+            }
+            if (type.toLowerCase().equals("hotel")){
+                Long hotelId = hotelBookingRepository.findHotelId(id);
+                if (hotelId!=null){
+                    Long ownerId = hotelRepository.getOwnerId(hotelId);
+                    String email = userRepository.getEmail(ownerId);
+                    String subject="Booking cancel";
+                    String body="Your Booking has canceled by tourist";
+                    otherServices.sendMails(email,subject,body);
+                    hotelBookingRepository.deleteById(id);
+                }
+                else {
+                    return "ERROR : Hadn't Book Hotel";
+                }
+            }
+            else {
+                if (type.toLowerCase().equals("driver")){
+                    Long driverId = driverBookingRepository.findDriverId(id);
+                    if (driverId!=null){
+                        String email = userRepository.getEmail(driverId);
+                        String subject="Booking cancel";
+                        String body="Your Booking has canceled by tourist";
+                        otherServices.sendMails(email,subject,body);
+                        driverBookingRepository.deleteById(id);
+                    }
+                    else {
+                        return "ERROR : Hadn't Book Driver";
+                    }
+                }
+                else {
+                    if (type.toLowerCase().equals("guide")){
+                        Long guideId = guideBookingRepository.findGuideId(id);
+                        if (guideId!=null){
+                            String email = userRepository.getEmail(guideId);
+                            String subject="Booking cancel";
+                            String body="Your Booking has canceled by tourist";
+                            otherServices.sendMails(email,subject,body);
+                            guideBookingRepository.deleteById(id);
+                        }
+                        else {
+                            return "ERROR : Hadn't Book Driver";
+                        }
+                    }
+                    else {
+                        return "ERROR : Wrong Type";
+                    }
+
+                }
+            }
+        }
+        Long touristId = bookingRepository.getTouristId(id);
+        String email = userRepository.getEmail(touristId);
+        String subject="Booking cancel";
+        String body="Your Booking has successfully canceled";
+        otherServices.sendMails(email,subject,body);
+
+        return "successfully canceled";
     }
 
     /*****temporary booking methods****/
@@ -307,7 +514,7 @@ public class bookingServiceImpl implements bookingService{
     }
 
     @Override
-    public Optional<GuideBooking> getGuideId(Long id) {
+    public Long getGuideId(Long id) {
         return guideBookingRepository.findGuideId(id);
     }
 
@@ -339,7 +546,7 @@ public class bookingServiceImpl implements bookingService{
     }
 
     @Override
-    public Optional<DriverBooking> getDriverId(Long id) {
+    public Long getDriverId(Long id) {
         return driverBookingRepository.findDriverId(id);
     }
 
@@ -372,7 +579,7 @@ public class bookingServiceImpl implements bookingService{
     }
 
     @Override
-    public List<HotelBooking> getHotelId(Long id) {
+    public Long getHotelId(Long id) {
         return hotelBookingRepository.findHotelId(id);
     }
 

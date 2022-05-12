@@ -15,7 +15,7 @@ public interface guideBookingRepository extends JpaRepository<GuideBooking, Long
     @Query("select B.bookingId from GuideBooking B where B.guide=:id")
     Optional<GuideBooking> findIdByGuideId(Long id);
     @Query("select B.guide from GuideBooking B where B.bookingId=:id")
-    Optional<GuideBooking> findGuideId(Long id);
+    Long findGuideId(Long id);
     @Transactional
     @Modifying
     @Query("update GuideBooking G set G.guide=:guide where G.guide=:id")

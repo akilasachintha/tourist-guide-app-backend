@@ -21,7 +21,7 @@ public interface bookingRepository extends JpaRepository<Booking, Long> {
     Optional<Booking> findByRelativeTemporaryId(Long id);
     List<Booking> findByTouristAndBookingStatus(Long id,String status);
     @Query("select B.relativeTemporaryId from Booking B where B.bookingId=:id")
-    Optional<Booking> findTempId(Long id);
+    Long findTempId(Long id);
     @Query("select B.tourist from Booking B where B.bookingId=:id")
     Long getTouristId(Long id);
     @Query("select B.bookingId from Booking B where B.relativeTemporaryId=:id")
@@ -42,5 +42,6 @@ public interface bookingRepository extends JpaRepository<Booking, Long> {
     List<Long> getAllBookingIdsByState(String state);
     @Query("SELECT B.checkOutDate FROM Booking B where B.bookingId=:id")
     String getCheckOutDateById(Long id);
-
+    @Query("SELECT B.bookingStatus FROM Booking B where B.bookingId=:id")
+    String getStateById(Long id);
 }

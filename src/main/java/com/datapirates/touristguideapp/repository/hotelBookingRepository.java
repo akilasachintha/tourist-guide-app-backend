@@ -16,7 +16,7 @@ public interface hotelBookingRepository extends JpaRepository<HotelBooking, Long
     @Query("select B.bookingId from HotelBooking B where B.hotelid=:id")
     Optional<HotelBooking> findIdByHotelId(Long id);
     @Query("select B.hotelid from HotelBooking B where B.bookingId=:id")
-    List<HotelBooking> findHotelId(Long id);
+    Long findHotelId(Long id);
     @Transactional
     @Modifying
     @Query("update HotelBooking B set B.hotelid=:hotel where B.hotelid=:id")

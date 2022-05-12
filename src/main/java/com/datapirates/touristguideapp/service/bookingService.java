@@ -13,10 +13,12 @@ public interface bookingService {
     String updateBooking(Long id,Booking booking);
     void deleteBooking(Long id);
     String updateTemporaryId(Long id,Long id2);
-    Optional<Booking> getTemporaryId(Long id);
+    Long getTemporaryId(Long id);
     String setBookingStatus(Long id,String status);
     void updateTourist(Long tourist,Long id);
     List<Booking> getBookingByTouristAndState(Long id,String status);
+    String cancelFullBooking(Long id);
+    String cancelSingleBooking(Long id,String type);
 
     /*********temporary interface********/
 
@@ -43,7 +45,7 @@ public interface bookingService {
     GuideBooking saveGuideBooking(GuideBooking guideBooking);
     Optional<GuideBooking> getBookingIdByGuide(Long id);
     String updateGuideBooking(Long id,GuideBooking guideBooking);
-    Optional<GuideBooking> getGuideId(Long id);
+    Long getGuideId(Long id);
     void updateGuide(Long guide,Long id);
 
     /***driver booking interface***/
@@ -51,7 +53,7 @@ public interface bookingService {
     DriverBooking saveDriverBooking(DriverBooking driverBooking);
     Optional<DriverBooking> getBookingIdByDriver(Long id);
     String updateDriverBooking(Long id,DriverBooking driverBooking);
-    Optional<DriverBooking> getDriverId(Long id);
+   Long getDriverId(Long id);
     void updateDriver(Long driver,Long id);
 
     /***Hotel booking interface***/
@@ -59,7 +61,7 @@ public interface bookingService {
     HotelBooking saveHotelBooking(HotelBooking hotelBooking);
     Optional<HotelBooking> getBookingIdHotel(Long id);
     String updateHotelBooking(Long id,HotelBooking hotelBooking);
-    List<HotelBooking> getHotelId(Long id);
+   Long getHotelId(Long id);
     void updateHotel(Long hotel,Long id);
 
 }

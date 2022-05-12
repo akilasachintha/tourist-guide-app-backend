@@ -15,7 +15,7 @@ public interface driverBookingRepository extends JpaRepository<DriverBooking, Lo
     @Query("select B.bookingId from DriverBooking B where B.driver=:id")
     Optional<DriverBooking> findIdByDriverId(Long id);
     @Query("select B.driver from DriverBooking B where B.bookingId=:id")
-    Optional<DriverBooking> findDriverId(Long id);
+   Long findDriverId(Long id);
     @Transactional
     @Modifying
     @Query("update DriverBooking D set D.driver=:driver where D.driver=:id")
