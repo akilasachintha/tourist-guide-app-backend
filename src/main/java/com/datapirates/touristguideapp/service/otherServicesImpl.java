@@ -39,8 +39,18 @@ public class otherServicesImpl implements otherServices{
     @Autowired
     private hotelService hotelService;
 
+//    @Autowired
+//    private JavaMailSender javaMailSender;
+
     @Override
     public void sendMails(String toEmail, String subject, String body) {
+//        SimpleMailMessage massage = new SimpleMailMessage();
+//        massage.setFrom("subath.abeysekara@gmail.com");
+//        massage.setTo(toEmail);
+//        massage.setSubject(subject);
+//        massage.setText(body);
+//
+//        javaMailSender.send(massage);
     }
 
     @Override

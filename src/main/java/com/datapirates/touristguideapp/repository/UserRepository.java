@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<AppUser, Long> {
-    Optional<AppUser> findByEmail(String email);
+    AppUser findByEmail(String email);
     @Query("select u.rateAmount from AppUser u where u.userId=:id")
     Long getRateAmount(Long id);
     @Transactional

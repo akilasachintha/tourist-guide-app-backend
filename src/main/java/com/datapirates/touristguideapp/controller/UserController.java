@@ -1,5 +1,7 @@
 package com.datapirates.touristguideapp.controller;
 
+import com.datapirates.touristguideapp.admin.adminEntity;
+import com.datapirates.touristguideapp.admin.adminService;
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.users.Guide;
@@ -12,6 +14,7 @@ import net.bytebuddy.build.RepeatedAnnotationPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.datapirates.touristguideapp.entity.users.AppUser;
 
 import java.util.List;
 
@@ -24,6 +27,17 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+
+    @Autowired
+    private com.datapirates.touristguideapp.admin.adminService adminService;
+    /**Security **/
+
+    @GetMapping("/getKey")
+    private String getKey(@RequestBody AppUser user){
+        return adminService.madeUserSecretKey(user.getEmail(),user.getPassword());
+    }
+
 
     @PostMapping("/auth/login")
     public ResponseEntity<LoginResDTO> authUser(@RequestBody LoginReqDTO loginReqDTO){
