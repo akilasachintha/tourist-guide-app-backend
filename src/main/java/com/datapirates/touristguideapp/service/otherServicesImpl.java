@@ -1,6 +1,8 @@
 package com.datapirates.touristguideapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.datapirates.touristguideapp.repository.*;
@@ -39,18 +41,18 @@ public class otherServicesImpl implements otherServices{
     @Autowired
     private hotelService hotelService;
 
-//    @Autowired
-//    private JavaMailSender javaMailSender;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Override
     public void sendMails(String toEmail, String subject, String body) {
-//        SimpleMailMessage massage = new SimpleMailMessage();
-//        massage.setFrom("subath.abeysekara@gmail.com");
-//        massage.setTo(toEmail);
-//        massage.setSubject(subject);
-//        massage.setText(body);
-//
-//        javaMailSender.send(massage);
+        SimpleMailMessage massage = new SimpleMailMessage();
+        massage.setFrom("subath.abeysekara@gmail.com");
+        massage.setTo(toEmail);
+        massage.setSubject(subject);
+        massage.setText(body);
+
+        javaMailSender.send(massage);
     }
 
     @Override
