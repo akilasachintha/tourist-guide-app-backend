@@ -22,8 +22,6 @@ public class Guide extends AppUser {
 
     private String userType = "guide";
 
-    private double rating;
-
     private double priceRange;
 
     private String NIC;

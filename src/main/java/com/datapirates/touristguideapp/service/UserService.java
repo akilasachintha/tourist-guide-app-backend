@@ -10,8 +10,6 @@ import java.util.List;
 public interface UserService {
     AppUser saveUser(AppUser appUser);
 
-    LoginResDTO authUser(LoginReqDTO loginReqDTO);
-
     String guideRating(Long id,int starCount);
 
     List<Guide> getGuideByAvailability(String availability);
@@ -33,4 +31,5 @@ public interface UserService {
     String updateTourist(Long id , Tourist tourist);
 
 
+    List<AppUser> getUsers();
 }

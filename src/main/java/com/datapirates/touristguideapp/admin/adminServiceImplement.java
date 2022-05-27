@@ -29,7 +29,7 @@ public class adminServiceImplement implements adminService{
         if (appUser==null){
             return null;
         }
-        return appUser.getEmail();
+        return appUser.getPassword();
     }
 
     private String makeHourCount(){
@@ -174,7 +174,7 @@ public class adminServiceImplement implements adminService{
             return "Error username or password";
         }
         if(!passwordFromDb.equals(password)){
-            return "Error username or password";
+            return passwordFromDb;
         }
         String hour = makeHourCount();
         int hourInt = Integer.parseInt(hour);

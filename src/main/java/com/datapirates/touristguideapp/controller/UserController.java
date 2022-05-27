@@ -33,20 +33,17 @@ public class UserController {
     private com.datapirates.touristguideapp.admin.adminService adminService;
     /**Security **/
 
+    @GetMapping
+    private List<AppUser> getUsers(){
+        return userService.getUsers();
+    }
+
     @GetMapping("/getKey")
     private String getKey(@RequestBody AppUser user){
         return adminService.madeUserSecretKey(user.getEmail(),user.getPassword());
     }
 
-
-    @PostMapping("/auth/login")
-    public ResponseEntity<LoginResDTO> authUser(@RequestBody LoginReqDTO loginReqDTO){
-        LoginResDTO authUser = userService.authUser(loginReqDTO);
-        return ResponseEntity.ok(authUser);
-    }
-
     /** tourist **/
-
     @PostMapping("/tourist/add")
     private String addTourist(@RequestBody Tourist tourist){
         userService.saveTourist(tourist);

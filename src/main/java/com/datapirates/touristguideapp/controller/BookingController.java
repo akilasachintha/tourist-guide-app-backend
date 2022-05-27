@@ -1,5 +1,6 @@
 package com.datapirates.touristguideapp.controller;
 
+import com.datapirates.touristguideapp.entity.EmailBody;
 import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.bookings.DriverBooking;
 import com.datapirates.touristguideapp.entity.bookings.GuideBooking;
@@ -42,6 +43,12 @@ public class BookingController {
     @GetMapping("/getByTouristStatus")
     private List<Booking> getByTouristAndStatus(@RequestParam Long id,@RequestParam String status){
         return bookingService.getBookingByTouristAndState(id,status);
+    }
+
+    @PostMapping("/sendMail")
+    private String sendMails(@RequestBody EmailBody email){
+           bookingService.mailSender(email.getEmail(), email.getSubject(), email.getBody());
+           return "Successfully Sended";
     }
 
     @PostMapping("/add")

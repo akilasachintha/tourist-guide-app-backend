@@ -64,6 +64,7 @@ public class DriverServiceImpl implements DriverService {
         if (!checking.isPresent()){
             return "not available Id";
         }
+        System.out.println(userRepository.getRate(id));
         double currentRate = userRepository.getRate(id);
         Long currentAmount = userRepository.getRateAmount(id);
         double currentStars = currentAmount * currentRate;

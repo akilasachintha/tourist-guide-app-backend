@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
     @Query("update AppUser u set u.rateAmount=:rate where u.userId=:id")
     void setRateAmount(Long id,Long rate);
     @Query("select u.rating from AppUser u where u.userId=:id")
-    Double getRate(Long id);
+    double getRate(Long id);
     @Query("select u.email from AppUser u where u.userId=:id")
     String getEmail(Long id);
 }

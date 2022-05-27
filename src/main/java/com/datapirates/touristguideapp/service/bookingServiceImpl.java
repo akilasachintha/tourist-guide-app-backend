@@ -3,6 +3,8 @@ package com.datapirates.touristguideapp.service;
 import com.datapirates.touristguideapp.entity.bookings.*;
 import com.datapirates.touristguideapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -13,8 +15,6 @@ import java.util.Optional;
 @Service
 public class bookingServiceImpl implements bookingService{
 
-    @Autowired
-    private otherServices otherServices;
     @Autowired
     private bookingRepository bookingRepository;
 
@@ -35,6 +35,21 @@ public class bookingServiceImpl implements bookingService{
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+
+    private void sendMails(String toEmail, String subject, String body) {
+        SimpleMailMessage massage = new SimpleMailMessage();
+        massage.setFrom("travelmateapp2022@gmail.com");
+        massage.setTo(toEmail);
+        massage.setSubject(subject);
+        massage.setText(body);
+
+        javaMailSender.send(massage);
+    }
 
     @Override
     public List<Booking> getBookingByTourist(Long id) {
@@ -122,7 +137,7 @@ public class bookingServiceImpl implements bookingService{
                 String email = userRepository.getEmail(ownerId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
-                otherServices.sendMails(email,subject,body);
+                sendMails(email,subject,body);
             }
             String driverState = temporaryBookingRepository.getDriverStatus(tempID);
             if(!(driverState.toLowerCase().equals("souldselect")||driverState.toLowerCase().equals("notselect"))){
@@ -130,7 +145,7 @@ public class bookingServiceImpl implements bookingService{
                 String email = userRepository.getEmail(driverId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
-                otherServices.sendMails(email,subject,body);
+                sendMails(email,subject,body);
             }
             String guideState = temporaryBookingRepository.getGuideStatus(tempID);
             if(!(guideState.toLowerCase().equals("souldselect")||guideState.toLowerCase().equals("notselect"))){
@@ -138,14 +153,14 @@ public class bookingServiceImpl implements bookingService{
                 String email = userRepository.getEmail(guideId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
-                otherServices.sendMails(email,subject,body);
+                sendMails(email,subject,body);
             }
             Long touristId = bookingRepository.getTouristId(id);
             bookingRepository.deleteById(id);
             String email = userRepository.getEmail(touristId);
             String subject="Booking cancel";
             String body="Your Booking has successfully canceled";
-            otherServices.sendMails(email,subject,body);
+            sendMails(email,subject,body);
         }
         else {
             if(bookingState.toLowerCase().equals("rated")){
@@ -157,28 +172,28 @@ public class bookingServiceImpl implements bookingService{
                 String email = userRepository.getEmail(ownerId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
-                otherServices.sendMails(email,subject,body);
+                sendMails(email,subject,body);
             }
             Long driverId = driverBookingRepository.findDriverId(id);
             if (driverId!=null){
                 String email = userRepository.getEmail(driverId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
-                otherServices.sendMails(email,subject,body);
+                sendMails(email,subject,body);
             }
             Long guideId = guideBookingRepository.findGuideId(id);
             if (guideId!=null){
                 String email = userRepository.getEmail(guideId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
-                otherServices.sendMails(email,subject,body);
+                sendMails(email,subject,body);
             }
             Long touristId = bookingRepository.getTouristId(id);
             bookingRepository.deleteById(id);
             String email = userRepository.getEmail(touristId);
             String subject="Booking cancel";
             String body="Your Booking has successfully canceled";
-            otherServices.sendMails(email,subject,body);
+            sendMails(email,subject,body);
         }
 
         return "successfully canceled";
@@ -199,7 +214,7 @@ public class bookingServiceImpl implements bookingService{
                     String email = userRepository.getEmail(ownerId);
                     String subject="Booking cancel";
                     String body="Your Booking has canceled by tourist";
-                    otherServices.sendMails(email,subject,body);
+                    sendMails(email,subject,body);
                     temporaryBookingRepository.setHotelState(tempID,"notSelected");
                     hotelBookingRepository.deleteById(id);
                 }
@@ -216,7 +231,7 @@ public class bookingServiceImpl implements bookingService{
                     String email = userRepository.getEmail(driverId);
                     String subject="Booking cancel";
                     String body="Your Booking has canceled by tourist";
-                    otherServices.sendMails(email,subject,body);
+                    sendMails(email,subject,body);
                     temporaryBookingRepository.setDriverState(tempID,"notSelected");
                     driverBookingRepository.deleteById(id);
                 }
@@ -233,7 +248,7 @@ public class bookingServiceImpl implements bookingService{
                     String email = userRepository.getEmail(guideId);
                     String subject="Booking cancel";
                     String body="Your Booking has canceled by tourist";
-                    otherServices.sendMails(email,subject,body);
+                    sendMails(email,subject,body);
                     temporaryBookingRepository.setGuideState(tempID,"notSelected");
                     guideBookingRepository.deleteById(id);
                 }
@@ -254,7 +269,7 @@ public class bookingServiceImpl implements bookingService{
                     String email = userRepository.getEmail(ownerId);
                     String subject="Booking cancel";
                     String body="Your Booking has canceled by tourist";
-                    otherServices.sendMails(email,subject,body);
+                    sendMails(email,subject,body);
                     hotelBookingRepository.deleteById(id);
                 }
                 else {
@@ -268,7 +283,7 @@ public class bookingServiceImpl implements bookingService{
                         String email = userRepository.getEmail(driverId);
                         String subject="Booking cancel";
                         String body="Your Booking has canceled by tourist";
-                        otherServices.sendMails(email,subject,body);
+                        sendMails(email,subject,body);
                         driverBookingRepository.deleteById(id);
                     }
                     else {
@@ -282,7 +297,7 @@ public class bookingServiceImpl implements bookingService{
                             String email = userRepository.getEmail(guideId);
                             String subject="Booking cancel";
                             String body="Your Booking has canceled by tourist";
-                            otherServices.sendMails(email,subject,body);
+                            sendMails(email,subject,body);
                             guideBookingRepository.deleteById(id);
                         }
                         else {
@@ -300,7 +315,7 @@ public class bookingServiceImpl implements bookingService{
         String email = userRepository.getEmail(touristId);
         String subject="Booking cancel";
         String body="Your Booking has successfully canceled";
-        otherServices.sendMails(email,subject,body);
+        sendMails(email,subject,body);
 
         return "successfully canceled";
     }
@@ -586,5 +601,10 @@ public class bookingServiceImpl implements bookingService{
     @Override
     public void updateHotel(Long hotel, Long id) {
         hotelBookingRepository.setHotel(id,hotel);
+    }
+
+    @Override
+    public void mailSender(String toEmail, String subject, String body) {
+        sendMails(toEmail, subject, body);
     }
 }

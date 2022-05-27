@@ -32,24 +32,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(appUser);
     }
 
-    @Override
-    public LoginResDTO authUser(LoginReqDTO loginReqDTO) {
-        return null;
-    }
-//
-//    @Override
-//    public LoginResDTO authUser(LoginReqDTO loginReqDTO) {
-//        LoginResDTO loginResDTO = new LoginResDTO();
-//
-//        AppUser existingAppUser = userRepository.findByEmail(loginReqDTO.getEmail()).orElseThrow(
-//                () -> new ResourceNotFoundException("User", "Email", loginReqDTO.getEmail())
-//        );
-//
-//        loginResDTO.setUserId(existingAppUser.getUserId());
-//        loginResDTO.setUserType(existingAppUser.getUserType());
-//        loginResDTO.setStatus(true);
-//        return loginResDTO;
-//    }
 
     @Override
     public String guideRating(Long id, int starCount) {
@@ -57,9 +39,12 @@ public class UserServiceImpl implements UserService {
         if (!checking.isPresent()){
             return "not available Id";
         }
+        System.out.println("Check 01");
+
         double currentRate = userRepository.getRate(id);
         Long currentAmount = userRepository.getRateAmount(id);
         double currentStars = currentAmount * currentRate;
+        System.out.println(currentRate);
 
         /*** after updating ***/
 
@@ -129,5 +114,10 @@ public class UserServiceImpl implements UserService {
         }
         touristRepository.save(tourist);
         return "update success";
+    }
+
+    @Override
+    public List<AppUser> getUsers() {
+        return userRepository.findAll();
     }
 }

@@ -32,6 +32,16 @@ public class AppUser {
 
     private String password;
 
+    private double rating;
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
     public Long getUserId() {
         return userId;
     }

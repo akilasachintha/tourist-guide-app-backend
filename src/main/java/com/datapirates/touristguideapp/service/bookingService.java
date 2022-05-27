@@ -64,4 +64,7 @@ public interface bookingService {
    Long getHotelId(Long id);
     void updateHotel(Long hotel,Long id);
 
+    void mailSender(String toEmail, String subject, String body);
+
+
 }
