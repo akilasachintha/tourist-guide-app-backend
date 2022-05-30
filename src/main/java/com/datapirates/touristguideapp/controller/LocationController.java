@@ -2,7 +2,7 @@ package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.responseDto.LocationLocationImageDTO;
 import com.datapirates.touristguideapp.entity.location.Location;
-import com.datapirates.touristguideapp.service.LocationService;
+import com.datapirates.touristguideapp.service.interfaces.LocationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +22,10 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 public class LocationController {
-  /*  private final LocationService locationService;
+  private final LocationService locationService;
 
     // api/v1/locations
-   /* @PostMapping()
+   @PostMapping()
     public ResponseEntity<String> saveLocation(@Validated @RequestBody Location location) {
         Location savedLocation = locationService.saveLocation(location);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -61,5 +61,5 @@ public class LocationController {
     @DeleteMapping("/{locationId}")
     public ResponseEntity<String> deleteLocation(@PathVariable(name = "locationId") Long id) {
         return ResponseEntity.ok().body(locationService.deleteLocation(id));
-    }*/
+    }
 }

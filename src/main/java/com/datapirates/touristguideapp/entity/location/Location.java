@@ -49,40 +49,40 @@ public class Location {
     @ToString.Exclude
     private Set<Driver> drivers = new HashSet<>();
 
-//    public void setLocationImages(Set<LocationImage> locationImages) {
-//        this.locationImages = locationImages;
-//
-//        for (LocationImage b : locationImages) {
-//            b.setLocation(this);
-//        }
-//    }
-//
-//    public void setDrivers(Set<Driver> drivers) {
-//        this.drivers = drivers;
-//
-//        for (Driver b : drivers) {
-//            b.setLocation(this);
-//        }
-//    }
-//
-//    public void setHotels(Set<Hotel> hotels) {
-//        this.hotels = hotels;
-//
-//        for (Hotel b : hotels) {
-//            b.setLocation(this);
-//        }
-//    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-//        Location location = (Location) o;
-//        return locationId != null && Objects.equals(locationId, location.locationId);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return getClass().hashCode();
-//    }
+    public void setLocationImages(Set<LocationImage> locationImages) {
+        this.locationImages = locationImages;
+
+        for (LocationImage b : locationImages) {
+            b.setLocation(this);
+        }
+    }
+
+    public void setDrivers(Set<Driver> drivers) {
+        this.drivers = drivers;
+
+        for (Driver b : drivers) {
+            b.setLocation(this);
+        }
+    }
+
+    public void setHotels(Set<Hotel> hotels) {
+        this.hotels = hotels;
+
+        for (Hotel b : hotels) {
+            b.setLocation(this);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Location location = (Location) o;
+        return locationId != null && Objects.equals(locationId, location.locationId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

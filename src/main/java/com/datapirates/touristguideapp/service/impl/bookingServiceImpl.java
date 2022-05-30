@@ -1,7 +1,8 @@
-package com.datapirates.touristguideapp.service;
+package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.entity.bookings.*;
 import com.datapirates.touristguideapp.repository.*;
+import com.datapirates.touristguideapp.service.interfaces.bookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class bookingServiceImpl implements bookingService{
+public class bookingServiceImpl implements bookingService {
 
     @Autowired
     private bookingRepository bookingRepository;

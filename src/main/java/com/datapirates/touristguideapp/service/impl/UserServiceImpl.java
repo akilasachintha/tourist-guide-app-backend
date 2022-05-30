@@ -1,9 +1,8 @@
-package com.datapirates.touristguideapp.service;
+package com.datapirates.touristguideapp.service.impl;
 
-import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
-import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.users.*;
 import com.datapirates.touristguideapp.repository.*;
+import com.datapirates.touristguideapp.service.interfaces.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

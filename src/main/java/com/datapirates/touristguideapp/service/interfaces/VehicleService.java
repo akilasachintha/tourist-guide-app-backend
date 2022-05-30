@@ -1,4 +1,4 @@
-package com.datapirates.touristguideapp.service;
+package com.datapirates.touristguideapp.service.interfaces;
 
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;

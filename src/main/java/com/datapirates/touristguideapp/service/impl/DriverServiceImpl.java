@@ -1,10 +1,11 @@
-package com.datapirates.touristguideapp.service;
+package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.repository.DriverRepository;
 import com.datapirates.touristguideapp.repository.*;
+import com.datapirates.touristguideapp.service.interfaces.DriverService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

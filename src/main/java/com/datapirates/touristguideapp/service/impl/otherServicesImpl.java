@@ -1,5 +1,6 @@
-package com.datapirates.touristguideapp.service;
+package com.datapirates.touristguideapp.service.impl;
 
+import com.datapirates.touristguideapp.service.interfaces.otherServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -7,16 +8,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.datapirates.touristguideapp.repository.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
-public class otherServicesImpl implements otherServices{
+public class otherServicesImpl implements otherServices {
 
     @Autowired
-    private bookingService bookingService;
+    private com.datapirates.touristguideapp.service.interfaces.bookingService bookingService;
 
     @Autowired
     private bookingRepository bookingRepository;
@@ -39,7 +39,7 @@ public class otherServicesImpl implements otherServices{
     private guideRepository guideRepository;
 
     @Autowired
-    private hotelService hotelService;
+    private com.datapirates.touristguideapp.service.interfaces.hotelService hotelService;
 
     @Autowired
     private JavaMailSender javaMailSender;

@@ -24,16 +24,16 @@ public class LocationImage {
     @ToString.Exclude
     private Location location;
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-//        LocationImage that = (LocationImage) o;
-//        return url != null && Objects.equals(url, that.url);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(url);
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        LocationImage that = (LocationImage) o;
+        return url != null && Objects.equals(url, that.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url);
+    }
 }

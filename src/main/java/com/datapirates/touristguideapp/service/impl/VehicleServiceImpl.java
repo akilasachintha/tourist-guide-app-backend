@@ -1,17 +1,13 @@
-package com.datapirates.touristguideapp.service;
+package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
-import com.datapirates.touristguideapp.entity.users.Driver;
-import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
-import com.datapirates.touristguideapp.repository.DriverRepository;
-import com.datapirates.touristguideapp.repository.VehicleRepository;
+import com.datapirates.touristguideapp.service.interfaces.VehicleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

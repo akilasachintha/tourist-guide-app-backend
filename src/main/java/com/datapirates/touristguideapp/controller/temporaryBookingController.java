@@ -1,19 +1,14 @@
 package com.datapirates.touristguideapp.controller;
 
-import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
-import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.bookings.TemporaryBooking;
-import com.datapirates.touristguideapp.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import com.datapirates.touristguideapp.service.bookingService;
+import com.datapirates.touristguideapp.service.interfaces.bookingService;
 
 @RestController
 @RequestMapping("/api/booking/temporaryBooking")

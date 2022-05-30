@@ -1,8 +1,9 @@
-package com.datapirates.touristguideapp.service;
+package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
+import com.datapirates.touristguideapp.service.interfaces.hotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.datapirates.touristguideapp.repository.*;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class hotelServiceImpl implements hotelService{
+public class hotelServiceImpl implements hotelService {
 
     @Autowired
     private hotelRepository hotelRepository;

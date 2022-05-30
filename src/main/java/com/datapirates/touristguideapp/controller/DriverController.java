@@ -1,19 +1,14 @@
 package com.datapirates.touristguideapp.controller;
 
-import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
 import com.datapirates.touristguideapp.entity.users.Driver;
-import com.datapirates.touristguideapp.entity.users.Guide;
-import com.datapirates.touristguideapp.service.DriverService;
+import com.datapirates.touristguideapp.service.interfaces.DriverService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 

@@ -1,4 +1,4 @@
-package com.datapirates.touristguideapp.service;
+package com.datapirates.touristguideapp.service.interfaces;
 
 import java.util.List;
 import java.util.Optional;

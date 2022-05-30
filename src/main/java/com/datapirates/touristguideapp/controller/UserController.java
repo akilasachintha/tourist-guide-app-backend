@@ -1,18 +1,12 @@
 package com.datapirates.touristguideapp.controller;
 
-import com.datapirates.touristguideapp.admin.adminEntity;
-import com.datapirates.touristguideapp.admin.adminService;
-import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
-import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.entity.users.Tourist;
-import com.datapirates.touristguideapp.service.UserService;
+import com.datapirates.touristguideapp.service.interfaces.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.build.RepeatedAnnotationPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.datapirates.touristguideapp.entity.users.AppUser;
 
