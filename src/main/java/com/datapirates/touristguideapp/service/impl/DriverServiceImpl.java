@@ -2,7 +2,9 @@ package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
+import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.Driver;
+import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
 import com.datapirates.touristguideapp.repository.*;
 import com.datapirates.touristguideapp.service.interfaces.DriverService;
@@ -16,42 +18,36 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class DriverServiceImpl implements DriverService {
-
-    @Autowired
-    private DriverRepository driverRepository;
-//    private final DriverRepository driverRepository;
-//    private final LocationRepository locationRepository;
-//    private final ModelMapper modelMapper;
-//
     @Autowired
     private UserRepository userRepository;
-//
-//    @Override
-//    public Driver saveDriver(UserDriverReqDTO userDriverReqDTO) {
-//        return convertDtoToEntity(userDriverReqDTO);
-//    }
-//
-// //   @Override
-//    public DriverResponseDTO getDriverById(Long userId) {
-//        DriverResponseDTO driverResponseDTO = new DriverResponseDTO();
-//
-//        Driver existingDriver = driverRepository.findById(userId).orElseThrow(() ->
-//                new ResourceNotFoundException("Driver", "Id", userId));
-//
-//        driverResponseDTO.setUserType(existingDriver.getUserType());
-//        driverResponseDTO.setUserId(existingDriver.getUserId());
-//        driverResponseDTO.setLicenceNo(existingDriver.getLicenceNo());
-//        driverResponseDTO.setName(existingDriver.getName());
-//        driverResponseDTO.setAvailability(existingDriver.getAvailability());
-//        driverResponseDTO.setRating(existingDriver.getRating());
-//        driverResponseDTO.setUserPhotoUrl(existingDriver.getUserPhotoUrl());
-//
-//        return driverResponseDTO;
-//    }
+    @Autowired
+    private DriverRepository driverRepository;
+
+    private final LocationRepository locationRepository;
 
     @Override
     public Driver saveDriver(UserDriverReqDTO userDriverReqDTO) {
-        return null;
+        return convertDtoToEntity(userDriverReqDTO);
+    }
+
+    private Driver convertDtoToEntity(UserDriverReqDTO userDriverReqDTO) {
+        Driver driver = new Driver();
+
+        driver.setName(userDriverReqDTO.getName());
+        driver.setEmail(userDriverReqDTO.getEmail());
+        driver.setPassword(userDriverReqDTO.getPassword());
+        driver.setUserPhotoUrl(userDriverReqDTO.getPhotoUrl());
+        driver.setDob(userDriverReqDTO.getDob());
+        driver.setPhoneNo(userDriverReqDTO.getPhoneNo());
+        driver.setAvailability(userDriverReqDTO.getAvailability());
+        driver.setRating(userDriverReqDTO.getRating());
+        driver.setLicenceNo(userDriverReqDTO.getLicenceNo());
+
+        Location existingLocation = locationRepository.findById(userDriverReqDTO.getLocationId()).orElseThrow(() ->
+                new ResourceNotFoundException("Location", "Id", userDriverReqDTO.getUserId()));
+        driver.setLocation(existingLocation);
+
+        return driverRepository.save(driver);
     }
 
     @Override
@@ -71,7 +67,6 @@ public class DriverServiceImpl implements DriverService {
         double currentStars = currentAmount * currentRate;
 
         /*** after updating ***/
-
         currentStars+=starCount;
         currentAmount+=1;
         currentRate=currentStars/currentAmount;
@@ -94,26 +89,6 @@ public class DriverServiceImpl implements DriverService {
         driverRepository.setAvailability(id,availability);
         return "successfully updated";
     }
-
-//    private Driver convertDtoToEntity(UserDriverReqDTO userDriverReqDTO) {
-//        Driver driver = new Driver();
-//
-//        driver.setName(userDriverReqDTO.getName());
-//        driver.setEmail(userDriverReqDTO.getEmail());
-//        driver.setPassword(userDriverReqDTO.getPassword());
-//        driver.setUserPhotoUrl(userDriverReqDTO.getPhotoUrl());
-//        driver.setDob(userDriverReqDTO.getDob());
-//        driver.setPhoneNo(userDriverReqDTO.getPhoneNo());
-//        driver.setAvailability(userDriverReqDTO.getAvailability());
-//        driver.setRating(userDriverReqDTO.getRating());
-//        driver.setLicenceNo(userDriverReqDTO.getLicenceNo());
-//
-//        Location existingLocation = locationRepository.findById(userDriverReqDTO.getLocationId()).orElseThrow(() ->
-//                new ResourceNotFoundException("Location", "Id", userDriverReqDTO.getUserId()));
-//        driver.setLocation(existingLocation);
-//
-//        return driverRepository.save(driver);
-//    }
 }
 
 

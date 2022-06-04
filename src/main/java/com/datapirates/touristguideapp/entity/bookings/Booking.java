@@ -1,9 +1,11 @@
 package com.datapirates.touristguideapp.entity.bookings;
 
 import com.datapirates.touristguideapp.entity.users.Tourist;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -13,7 +15,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Booking {
@@ -55,5 +56,18 @@ public class Booking {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "bookingId = " + bookingId + ", " +
+                "relativeTemporaryId = " + relativeTemporaryId + ", " +
+                "bookingStatus = " + bookingStatus + ", " +
+                "checkInDate = " + checkInDate + ", " +
+                "checkOutDate = " + checkOutDate + ", " +
+                "paidAmount = " + paidAmount + ", " +
+                "date = " + date + ", " +
+                "time = " + time + ")";
     }
 }

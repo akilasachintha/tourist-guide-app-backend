@@ -7,6 +7,7 @@ import com.datapirates.touristguideapp.repository.UserRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class adminServiceImplement implements adminService{
@@ -25,11 +26,11 @@ public class adminServiceImplement implements adminService{
     }
 
     private String getUserPassword(String email){
-        AppUser appUser = userRepository.findByEmail(email);
+        Optional<AppUser> appUser = userRepository.findByEmail(email);
         if (appUser==null){
             return null;
         }
-        return appUser.getPassword();
+        return appUser.get().getPassword();
     }
 
     private String makeHourCount(){

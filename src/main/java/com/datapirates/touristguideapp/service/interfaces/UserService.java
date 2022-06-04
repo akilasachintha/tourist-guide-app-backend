@@ -32,4 +32,6 @@ public interface UserService {
 
 
     List<AppUser> getUsers();
+
+    LoginResDTO authUser(LoginReqDTO loginReqDTO);
 }

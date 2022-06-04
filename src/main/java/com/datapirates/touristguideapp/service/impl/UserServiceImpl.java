@@ -1,6 +1,9 @@
 package com.datapirates.touristguideapp.service.impl;
 
+import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
+import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.users.*;
+import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.*;
 import com.datapirates.touristguideapp.service.interfaces.UserService;
 import lombok.AllArgsConstructor;
@@ -118,5 +121,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<AppUser> getUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public LoginResDTO authUser(LoginReqDTO loginReqDTO) {
+        LoginResDTO loginResDTO = new LoginResDTO();
+
+        AppUser existingAppUser = userRepository.findByEmail(loginReqDTO.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("User", "Email", loginReqDTO.getEmail())
+        );
+
+        if(!existingAppUser.getPassword().equals(loginReqDTO.getPassword()) || !existingAppUser.getEmail().equals(loginReqDTO.getEmail())){
+            loginResDTO.setStatus(false);
+        }
+        else{
+            loginResDTO.setUserId(existingAppUser.getUserId());
+            loginResDTO.setUserType(existingAppUser.getUserType());
+            loginResDTO.setStatus(true);
+        }
+        return loginResDTO;
     }
 }
