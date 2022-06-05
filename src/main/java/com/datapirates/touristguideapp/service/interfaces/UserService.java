@@ -1,11 +1,12 @@
 package com.datapirates.touristguideapp.service.interfaces;
 
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
+import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
-import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.users.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     AppUser saveUser(AppUser appUser);
@@ -31,7 +32,9 @@ public interface UserService {
     String updateTourist(Long id , Tourist tourist);
 
 
-    List<AppUser> getUsers();
-
     LoginResDTO authUser(LoginReqDTO loginReqDTO);
+
+    AppUserResponseDTO getAppUserById(Long id);
+
+//    Optional<AppUser> getUserById(Long id);
 }

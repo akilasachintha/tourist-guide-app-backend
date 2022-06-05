@@ -3,20 +3,21 @@ package com.datapirates.touristguideapp.dto.responseDto;
 import lombok.Data;
 
 @Data
-public class DriverResponseDTO {
-    private Long userId;
+public class AppUserResponseDTO {
 
-    private String email;
+    private Long userId;
 
     private String userType;
 
     private String userPhotoUrl;
 
+    private String phoneNo;
+
+    private String email;
+
     private String name;
 
-    private String licenceNo;
-
-    private String availability;
+    private String dob;
 
     private double rating;
 }

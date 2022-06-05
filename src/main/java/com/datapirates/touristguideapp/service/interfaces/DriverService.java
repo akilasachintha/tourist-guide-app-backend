@@ -17,4 +17,6 @@ public interface DriverService {
     List<Driver> getDriverByAvailabilityAndLocationId(String availability,Long id);
 
     String setDriverAvailability(Long id,String availability);
+
+    List<DriverResponseDTO> getAllDrivers();
 }

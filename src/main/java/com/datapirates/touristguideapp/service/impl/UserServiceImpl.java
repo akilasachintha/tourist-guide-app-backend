@@ -1,6 +1,7 @@
 package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
+import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.users.*;
 import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
@@ -9,7 +10,6 @@ import com.datapirates.touristguideapp.service.interfaces.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -47,8 +47,6 @@ public class UserServiceImpl implements UserService {
         Long currentAmount = userRepository.getRateAmount(id);
         double currentStars = currentAmount * currentRate;
         System.out.println(currentRate);
-
-        /*** after updating ***/
 
         currentStars+=starCount;
         currentAmount+=1;
@@ -118,10 +116,6 @@ public class UserServiceImpl implements UserService {
         return "update success";
     }
 
-    @Override
-    public List<AppUser> getUsers() {
-        return userRepository.findAll();
-    }
 
     @Override
     public LoginResDTO authUser(LoginReqDTO loginReqDTO) {
@@ -140,5 +134,27 @@ public class UserServiceImpl implements UserService {
             loginResDTO.setStatus(true);
         }
         return loginResDTO;
+    }
+
+    @Override
+    public AppUserResponseDTO getAppUserById(Long id) {
+        AppUser existingAppUser = userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("AppUser", "Id", id));
+        return convertEntityToDto(existingAppUser);
+    }
+
+    private AppUserResponseDTO convertEntityToDto(AppUser appUser){
+        AppUserResponseDTO appUserResponseDTO = new AppUserResponseDTO();
+
+        appUserResponseDTO.setUserId(appUser.getUserId());
+        appUserResponseDTO.setName(appUser.getName());
+        appUserResponseDTO.setEmail(appUser.getEmail());
+        appUserResponseDTO.setUserPhotoUrl(appUser.getUserPhotoUrl());
+        appUserResponseDTO.setUserType(appUser.getUserType());
+        appUserResponseDTO.setDob(appUser.getDob());
+        appUserResponseDTO.setPhoneNo(appUser.getPhoneNo());
+        appUserResponseDTO.setRating(appUser.getRating());
+
+        return appUserResponseDTO;
     }
 }

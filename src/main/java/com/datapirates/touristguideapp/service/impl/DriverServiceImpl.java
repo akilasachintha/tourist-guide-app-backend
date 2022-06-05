@@ -6,21 +6,22 @@ import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
-import com.datapirates.touristguideapp.repository.*;
+import com.datapirates.touristguideapp.repository.LocationRepository;
+import com.datapirates.touristguideapp.repository.UserRepository;
 import com.datapirates.touristguideapp.service.interfaces.DriverService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class DriverServiceImpl implements DriverService {
-    @Autowired
+
     private UserRepository userRepository;
-    @Autowired
+
     private DriverRepository driverRepository;
 
     private final LocationRepository locationRepository;
@@ -66,7 +67,7 @@ public class DriverServiceImpl implements DriverService {
         Long currentAmount = userRepository.getRateAmount(id);
         double currentStars = currentAmount * currentRate;
 
-        /*** after updating ***/
+
         currentStars+=starCount;
         currentAmount+=1;
         currentRate=currentStars/currentAmount;
@@ -89,6 +90,27 @@ public class DriverServiceImpl implements DriverService {
         driverRepository.setAvailability(id,availability);
         return "successfully updated";
     }
+
+    @Override
+    public List<DriverResponseDTO> getAllDrivers() {
+        return driverRepository.findAll().stream().map(this::convertEntityToDto).collect(Collectors.toList());
+    }
+
+    private DriverResponseDTO convertEntityToDto(Driver driver){
+        DriverResponseDTO driverResponseDTO = new DriverResponseDTO();
+
+        driverResponseDTO.setUserId(driver.getUserId());
+        driverResponseDTO.setEmail(driver.getEmail());
+        driverResponseDTO.setName(driver.getName());
+        driverResponseDTO.setLicenceNo(driver.getLicenceNo());
+        driverResponseDTO.setRating(driver.getRating());
+        driverResponseDTO.setUserPhotoUrl(driver.getUserPhotoUrl());
+        driverResponseDTO.setAvailability(driver.getAvailability());
+        driverResponseDTO.setUserType(driver.getUserType());
+
+        return driverResponseDTO;
+    }
+
 }
 
 

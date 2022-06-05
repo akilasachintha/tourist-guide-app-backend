@@ -2,6 +2,7 @@ package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
+import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
 import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.entity.users.Tourist;
@@ -34,9 +35,14 @@ public class UserController {
         return ResponseEntity.ok(authUser);
     }
 
-    @GetMapping
-    private List<AppUser> getUsers(){
-        return userService.getUsers();
+//    @GetMapping("/{userId}")
+//    public Optional<AppUser> getUserById(@PathVariable(name = "userId") Long id) {
+//        return userService.getUserById(id);
+//    }
+
+    @GetMapping("/{appUserId}")
+    public AppUserResponseDTO getAppUserById(@PathVariable(name = "appUserId") Long id) {
+        return userService.getAppUserById(id);
     }
 
     @GetMapping("/getKey")
@@ -55,8 +61,6 @@ public class UserController {
     private String updateTourist(@RequestParam Long id,@RequestBody Tourist tourist){
         return userService.updateTourist(id,tourist);
     }
-
-    /** hotel owner **/
 
     @PostMapping("/hotelOwner/add")
     private String addHotelOwner(@RequestBody HotelOwner hotelOwner){

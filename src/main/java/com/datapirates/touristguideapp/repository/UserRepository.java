@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
     double getRate(Long id);
     @Query("select u.email from AppUser u where u.userId=:id")
     String getEmail(Long id);
+
+//    Optional<AppUser> findByUserId(Long id);
 }
