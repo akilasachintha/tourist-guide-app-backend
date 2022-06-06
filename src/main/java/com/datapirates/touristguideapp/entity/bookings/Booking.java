@@ -1,6 +1,7 @@
 package com.datapirates.touristguideapp.entity.bookings;
 
 import com.datapirates.touristguideapp.entity.users.Tourist;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +42,10 @@ public class Booking {
     @ToString.Exclude
     private Set<TemporaryBooking> temporaryBookings;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
-    @JoinColumn(name = "tourist",referencedColumnName = "userId")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "tourist", foreignKey = @ForeignKey(name = "tourist_booking_fk1"))
+    @JsonBackReference(value = "booking-tourist")
+    @ToString.Exclude
     private Tourist tourist;
 
     @Override

@@ -4,7 +4,7 @@ import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
 import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.Driver;
-import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
 import com.datapirates.touristguideapp.repository.LocationRepository;
 import com.datapirates.touristguideapp.repository.UserRepository;

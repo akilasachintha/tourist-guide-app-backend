@@ -20,6 +20,11 @@ public class RoomCategory {
 
     private String description;
 
+    @OneToMany(mappedBy = "roomCategory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "hotelcategory-hotelRooms")
+    @ToString.Exclude
+    private Set<HotelRoom> hotelRooms = new HashSet<>();
+
 
 //    @Override
 //    public boolean equals(Object o) {

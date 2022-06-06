@@ -1,6 +1,7 @@
 package com.datapirates.touristguideapp.entity.users;
 
 import com.datapirates.touristguideapp.entity.bookings.Booking;
+import com.datapirates.touristguideapp.entity.bookings.TemporaryBooking;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -25,4 +26,8 @@ public class Tourist extends AppUser {
 
    // private Set<Booking> bookings = new HashSet<>();
 
+    @OneToMany(mappedBy = "tourist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference("booking-tourist")
+    @ToString.Exclude
+    private Set<Booking> bookings;
 }

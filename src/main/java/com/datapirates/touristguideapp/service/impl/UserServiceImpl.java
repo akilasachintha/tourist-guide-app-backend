@@ -4,7 +4,7 @@ import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.users.*;
-import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.*;
 import com.datapirates.touristguideapp.service.interfaces.UserService;
 import lombok.AllArgsConstructor;

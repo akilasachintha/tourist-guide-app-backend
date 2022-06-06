@@ -1,6 +1,10 @@
 package com.datapirates.touristguideapp.service.impl;
 
+import com.datapirates.touristguideapp.dto.requestDto.BookingReqDto;
+import com.datapirates.touristguideapp.dto.requestDto.TimeReqDto;
 import com.datapirates.touristguideapp.entity.bookings.*;
+import com.datapirates.touristguideapp.entity.users.Tourist;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.*;
 import com.datapirates.touristguideapp.service.interfaces.bookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +13,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class bookingServiceImpl implements bookingService {
@@ -37,7 +39,8 @@ public class bookingServiceImpl implements bookingService {
     @Autowired
     private UserRepository userRepository;
 
-
+    @Autowired
+    private touristRepository touristRepository;
     @Autowired
     private JavaMailSender javaMailSender;
 
@@ -68,10 +71,55 @@ public class bookingServiceImpl implements bookingService {
     }
 
     @Override
-    public Booking saveBooking(Booking booking) {
-        return bookingRepository.save(booking);
+    public Booking saveBooking(BookingReqDto bookingReqDto) {
+        return convertDtoToEntity(bookingReqDto);
     }
 
+    private Booking convertDtoToEntity(BookingReqDto bookingReqDto) {
+        Booking booking = new Booking();
+        TemporaryBooking temporaryBooking = new TemporaryBooking();
+        TimeReqDto hotel;
+        TimeReqDto guide ;
+        TimeReqDto driver ;
+
+        hotel = bookingReqDto.getHotelEndTime();
+        guide = bookingReqDto.getGuideEndTime();
+        driver = bookingReqDto.getDriverEndTime();
+
+        String hotelEndTime = calculateEndTime(hotel.getDay(),hotel.getMonth(),hotel.getYear(),hotel.getHour());
+        String guideEndTime = calculateEndTime(guide.getDay(),guide.getMonth(),guide.getYear(),guide.getHour());
+        String driverEndTime = calculateEndTime(driver.getDay(),driver.getMonth(),driver.getYear(),driver.getHour());
+
+        temporaryBooking.setDriverEndTime(driverEndTime);
+        temporaryBooking.setDriverStatus(bookingReqDto.getDriverStatus());
+        temporaryBooking.setGuideEndTime(guideEndTime);
+        temporaryBooking.setPendingDriver(bookingReqDto.getPendingDriver());
+        temporaryBooking.setPendingGuide(bookingReqDto.getPendingGuide());
+        temporaryBooking.setPendingHotel(bookingReqDto.getPendingHotel());
+        temporaryBooking.setHotelStatus(bookingReqDto.getHotelStatus());
+        temporaryBooking.setHotelEndTime(hotelEndTime);
+
+        Set<TemporaryBooking> temporaryBookings = new HashSet<>();
+        temporaryBookings.add(temporaryBooking);
+
+       booking.setBookingStatus(bookingReqDto.getBookingStatus());
+       booking.setDate(bookingReqDto.getDate());
+       booking.setCheckInDate(bookingReqDto.getCheckInDate());
+       booking.setCheckOutDate(bookingReqDto.getCheckOutDate());
+       booking.setPaidAmount(bookingReqDto.getPaidAmount());
+       booking.setTemporaryBookings(temporaryBookings);
+       booking.setTime(bookingReqDto.getTime());
+
+        //   hotel.setHotelOwner(hotelReqDTO.getHotelOwner());
+
+
+        Tourist existingTourist = touristRepository.findById(bookingReqDto.getUserId()).orElseThrow(() ->
+                new ResourceNotFoundException("Location", "Id", booking.getBookingId()));
+        booking.setTourist(existingTourist);
+
+
+        return bookingRepository.save(booking);
+    }
     @Override
     public String updateBooking(Long id, Booking booking) {
         Optional<Booking> checking = bookingRepository.findById(id);

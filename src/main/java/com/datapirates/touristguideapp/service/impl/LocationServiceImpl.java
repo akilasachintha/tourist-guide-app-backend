@@ -3,7 +3,7 @@ package com.datapirates.touristguideapp.service.impl;
 import com.datapirates.touristguideapp.dto.responseDto.LocationLocationImageDTO;
 import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.location.LocationImage;
-import com.datapirates.touristguideapp.exception.ResourceNotFoundException;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.LocationRepository;
 import com.datapirates.touristguideapp.service.interfaces.LocationService;
 import lombok.AllArgsConstructor;

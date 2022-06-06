@@ -1,5 +1,6 @@
 package com.datapirates.touristguideapp.controller;
 
+import com.datapirates.touristguideapp.dto.requestDto.BookingReqDto;
 import com.datapirates.touristguideapp.entity.EmailBody;
 import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.bookings.DriverBooking;
@@ -52,8 +53,8 @@ public class BookingController {
     }
 
     @PostMapping("/add")
-    private String addBooking(@RequestBody Booking booking){
-        bookingService.saveBooking(booking);
+    private String addBooking(@RequestBody BookingReqDto bookingReqDto){
+        bookingService.saveBooking(bookingReqDto);
         return "Successfully added";
     }
 

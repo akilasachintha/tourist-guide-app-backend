@@ -1,4 +1,4 @@
-package com.datapirates.touristguideapp.exception;
+package com.datapirates.touristguideapp.repository.exception;
 
 import lombok.Getter;
 import lombok.Setter;

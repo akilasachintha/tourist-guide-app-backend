@@ -1,6 +1,7 @@
 package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
+import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/hotel")
+@RequestMapping("/api/v1/hotel")
 @CrossOrigin
 @Slf4j
 @AllArgsConstructor
@@ -27,6 +28,12 @@ public class hotelController {
     @PostMapping("/add")
     private String addHotel(@RequestBody HotelReqDTO hotelReqDTO){
         hotelService.saveHotel(hotelReqDTO);
+        return "successful added";
+    }
+
+    @PostMapping("/addRoom")
+    private String addHotelRoom(@RequestBody HotelRoomDto hotelRoomDto){
+        hotelService.saveHotelRoom(hotelRoomDto);
         return "successful added";
     }
 
@@ -88,6 +95,10 @@ public class hotelController {
     @GetMapping("/hotelRoom/getAvailableRooms")
     private List<HotelRoom> getRooms(@RequestParam Long id,String availability){
         return hotelService.getByAvailabilityAndHotel(id,availability);
+    }
+    @GetMapping("/hotelRoom/getRooms")
+    private List<HotelRoom> getAllRooms(){
+        return hotelService.getHotelRoom();
     }
 
     @PutMapping("/hotelRoom/updateAvailability")

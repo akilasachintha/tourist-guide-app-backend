@@ -11,10 +11,12 @@ import javax.persistence.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@IdClass(HotelRoomId.class)
 public class HotelRoom {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long roomId;
+
     private Long roomNo;
 
     private String roomCondition;
@@ -29,8 +31,10 @@ public class HotelRoom {
     @ToString.Exclude
     private Hotel hotel;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
-    @JoinColumn(name = "roomCategory", referencedColumnName = "categoryType")
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "roomCategory", foreignKey = @ForeignKey(name = "hotel_room_fk1"))
+    @JsonBackReference(value = "hotelcategory-hotelRooms")
     private RoomCategory roomCategory;
 
    /* @ManyToMany(cascade = CascadeType.ALL)

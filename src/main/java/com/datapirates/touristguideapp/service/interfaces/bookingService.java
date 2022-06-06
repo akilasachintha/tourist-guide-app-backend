@@ -3,13 +3,14 @@ package com.datapirates.touristguideapp.service.interfaces;
 import java.util.List;
 import java.util.Optional;
 
+import com.datapirates.touristguideapp.dto.requestDto.BookingReqDto;
 import com.datapirates.touristguideapp.entity.bookings.*;
 
 public interface bookingService {
     List<Booking> getBookingByTourist(Long id);
     Optional<Booking> getBookingByTemporary(Long id);
     List<Booking> getAllBooking();
-    Booking saveBooking(Booking booking);
+    Booking saveBooking(BookingReqDto bookingReqDto);
     String updateBooking(Long id,Booking booking);
     void deleteBooking(Long id);
     String updateTemporaryId(Long id,Long id2);
