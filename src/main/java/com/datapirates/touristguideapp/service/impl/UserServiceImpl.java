@@ -1,15 +1,19 @@
 package com.datapirates.touristguideapp.service.impl;
 
+import com.datapirates.touristguideapp.admin.adminService;
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
 import com.datapirates.touristguideapp.entity.users.*;
 import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.*;
-import com.datapirates.touristguideapp.service.interfaces.UserService;
+import com.datapirates.touristguideapp.service.interfaces.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private  UserRepository userRepository;
 
     @Autowired
+    private adminService adminService;
+    @Autowired
     private guideRepository guideRepository;
 
     @Autowired
@@ -28,6 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private touristRepository touristRepository;
+
 
     @Override
     public AppUser saveUser(AppUser appUser) {
@@ -121,17 +128,23 @@ public class UserServiceImpl implements UserService {
     public LoginResDTO authUser(LoginReqDTO loginReqDTO) {
         LoginResDTO loginResDTO = new LoginResDTO();
 
-        AppUser existingAppUser = userRepository.findByEmail(loginReqDTO.getEmail()).orElseThrow(
-                () -> new ResourceNotFoundException("User", "Email", loginReqDTO.getEmail())
-        );
+        AppUser existingAppUser = userRepository.findByEmail(loginReqDTO.getEmail());
 
-        if(!existingAppUser.getPassword().equals(loginReqDTO.getPassword()) || !existingAppUser.getEmail().equals(loginReqDTO.getEmail())){
+        if(existingAppUser == null){
+            loginResDTO.setStatus(false);
+        }
+        else if(!existingAppUser.getPassword().equals(loginReqDTO.getPassword())){
             loginResDTO.setStatus(false);
         }
         else{
             loginResDTO.setUserId(existingAppUser.getUserId());
             loginResDTO.setUserType(existingAppUser.getUserType());
             loginResDTO.setStatus(true);
+            loginResDTO.setName(existingAppUser.getName());
+
+            String token  = adminService.madeUserSecretKey(loginReqDTO.getEmail(), loginReqDTO.getPassword());
+            loginResDTO.setToken(token);
+
         }
         return loginResDTO;
     }

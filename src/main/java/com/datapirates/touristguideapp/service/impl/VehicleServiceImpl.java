@@ -3,6 +3,7 @@ package com.datapirates.touristguideapp.service.impl;
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
+import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
@@ -32,6 +33,12 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleRepository.findAll().stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
+    @Override
+    public List<VehicleResDTO> getVehiclesByAppUserId(Long id) {
+        List<Vehicle> existingVehicles = vehicleRepository.findAllByUserId(id);
+        return existingVehicles.stream().map(this::convertEntityToDto).collect(Collectors.toList());
+    }
+
     private VehicleResDTO convertEntityToDto(Vehicle vehicle){
         VehicleResDTO vehicleResDTO = new VehicleResDTO();
 
@@ -57,10 +64,12 @@ public class VehicleServiceImpl implements VehicleService {
         Vehicle vehicle = new Vehicle();
 
         vehicle.setVehicleNo(vehicleReqDTO.getVehicleNo());
+        vehicle.setVehicleName(vehicleReqDTO.getVehicleName());
         vehicle.setVehiclePhotoUrl(vehicleReqDTO.getPhotoUrl());
         vehicle.setVehicleType(vehicleReqDTO.getVehicleType());
         vehicle.setSeats(vehicleReqDTO.getSeats());
         vehicle.setPriceForKm(vehicleReqDTO.getPriceForKm());
+        vehicle.setVehicleCondition(vehicleReqDTO.getVehicleCondition());
 
         Driver existingDriver = driverRepository.findById(vehicleReqDTO.getUserId()).orElseThrow(() ->
                     new ResourceNotFoundException("Driver", "Id", vehicleReqDTO.getUserId()));

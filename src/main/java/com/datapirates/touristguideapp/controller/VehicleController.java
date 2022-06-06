@@ -1,6 +1,7 @@
 package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
+import com.datapirates.touristguideapp.dto.responseDto.LocationLocationImageDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
 import com.datapirates.touristguideapp.service.interfaces.VehicleService;
@@ -44,4 +45,8 @@ public class VehicleController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/{userId}")
+    public List<VehicleResDTO> getVehiclesByAppUserId(@PathVariable(name = "userId") Long id) {
+        return vehicleService.getVehiclesByAppUserId(id);
+    }
 }

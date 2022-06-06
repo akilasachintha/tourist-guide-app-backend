@@ -13,6 +13,7 @@ public class adminEntity {
     private int id;
     private String username;
     private String password;
+
     private String email;
 
     public adminEntity() {
