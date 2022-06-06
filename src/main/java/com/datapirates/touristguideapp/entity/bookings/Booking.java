@@ -37,6 +37,18 @@ public class Booking {
 
     private String time;
 
+    private int noOfMembers;
+
+    private String participant;
+
+    private double advancedPayment;
+
+    private Long driverId;
+
+    private Long guideId;
+
+    private Long hotelId;
+
     @OneToMany(mappedBy = "bookingid", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("booking-temporaryBookings")
     @ToString.Exclude

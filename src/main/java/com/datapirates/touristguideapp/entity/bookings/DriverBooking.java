@@ -15,9 +15,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "driver_booking_fk1"))
 public class DriverBooking extends Booking {
-    private String participant;
-
-    private double advancedPayment;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "driver",referencedColumnName = "userId")

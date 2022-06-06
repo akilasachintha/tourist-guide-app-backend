@@ -19,7 +19,6 @@ import java.util.Set;
 @PrimaryKeyJoinColumn(foreignKey = @ForeignKey(name = "hotel_booking_fk1"))
 public class HotelBooking extends Booking{
 
-    private int noOfMembers;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
     @JoinColumn(name = "hotelid", referencedColumnName = "hotelId")

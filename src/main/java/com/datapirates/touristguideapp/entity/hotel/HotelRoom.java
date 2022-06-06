@@ -33,7 +33,7 @@ public class HotelRoom {
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "roomCategory", foreignKey = @ForeignKey(name = "hotel_room_fk1"))
+    @JoinColumn(name = "roomCategory", foreignKey = @ForeignKey(name = "hotel_room_fk2"))
     @JsonBackReference(value = "hotelcategory-hotelRooms")
     private RoomCategory roomCategory;
 

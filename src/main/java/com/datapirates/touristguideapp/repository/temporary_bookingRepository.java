@@ -16,39 +16,39 @@ public interface temporary_bookingRepository extends JpaRepository<TemporaryBook
 
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.guideStatus=:state where bookingid=:id")
+    @Query("update TemporaryBooking t set t.guideStatus=:state where t.bookingid=:id")
     void setGuideState(Long id,String state);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.driverStatus=:state where bookingid=:id")
+    @Query("update TemporaryBooking t set t.driverStatus=:state where t.bookingid=:id")
     void setDriverState(Long id,String state);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.hotelStatus=:state where bookingid=:id")
+    @Query("update TemporaryBooking t set t.hotelStatus=:state where t.bookingid=:id")
     void setHotelState(Long id,String state);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.guideEndTime=:endTime where tempBookingId=:id")
+    @Query("update TemporaryBooking t set t.guideEndTime=:endTime where t.tempBookingId=:id")
     void setGuideEndTime(Long id,String endTime);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.driverEndTime=:endTime where tempBookingId=:id")
+    @Query("update TemporaryBooking t set t.driverEndTime=:endTime where t.tempBookingId=:id")
     void setDriverEndTime(Long id,String endTime);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.hotelEndTime=:endTime where tempBookingId=:id")
+    @Query("update TemporaryBooking t set t.hotelEndTime=:endTime where t.tempBookingId=:id")
     void setHotelEndTime(Long id,String endTime);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.pendingGuide=:id2 where tempBookingId=:id")
+    @Query("update TemporaryBooking t set t.pendingGuide=:id2 where t.tempBookingId=:id")
     void setPendingGuide(Long id,Long id2);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.pendingDriver=:id2 where tempBookingId=:id")
+    @Query("update TemporaryBooking t set t.pendingDriver=:id2 where t.tempBookingId=:id")
     void setPendingDriver(Long id,Long id2);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.pendingHotel=:id2 where tempBookingId=:id")
+    @Query("update TemporaryBooking t set t.pendingHotel=:id2 where t.tempBookingId=:id")
     void setPendingHotel(Long id,Long id2);
     @Query("select t.tempBookingId from TemporaryBooking t where t.pendingGuide=:id")
     Optional<TemporaryBooking> checkPendingGuide(Long id);
@@ -87,5 +87,6 @@ public interface temporary_bookingRepository extends JpaRepository<TemporaryBook
     Optional<TemporaryBooking> findByPendingDriver(Long id);
     Optional<TemporaryBooking> findByPendingHotel(Long id);
     Optional<TemporaryBooking> findByBookingid(Long id);
+
 
 }

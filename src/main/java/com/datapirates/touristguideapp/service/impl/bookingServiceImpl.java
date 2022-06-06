@@ -76,44 +76,11 @@ public class bookingServiceImpl implements bookingService {
     }
 
     private Booking convertDtoToEntity(BookingReqDto bookingReqDto) {
-        Booking booking = new Booking();
-        TemporaryBooking temporaryBooking = new TemporaryBooking();
-        TimeReqDto hotel;
-        TimeReqDto guide ;
-        TimeReqDto driver ;
-
-        hotel = bookingReqDto.getHotelEndTime();
-        guide = bookingReqDto.getGuideEndTime();
-        driver = bookingReqDto.getDriverEndTime();
-
-        String hotelEndTime = calculateEndTime(hotel.getDay(),hotel.getMonth(),hotel.getYear(),hotel.getHour());
-        String guideEndTime = calculateEndTime(guide.getDay(),guide.getMonth(),guide.getYear(),guide.getHour());
-        String driverEndTime = calculateEndTime(driver.getDay(),driver.getMonth(),driver.getYear(),driver.getHour());
-
-        temporaryBooking.setDriverEndTime(driverEndTime);
-        temporaryBooking.setDriverStatus(bookingReqDto.getDriverStatus());
-        temporaryBooking.setGuideEndTime(guideEndTime);
-        temporaryBooking.setPendingDriver(bookingReqDto.getPendingDriver());
-        temporaryBooking.setPendingGuide(bookingReqDto.getPendingGuide());
-        temporaryBooking.setPendingHotel(bookingReqDto.getPendingHotel());
-        temporaryBooking.setHotelStatus(bookingReqDto.getHotelStatus());
-        temporaryBooking.setHotelEndTime(hotelEndTime);
-
-        Set<TemporaryBooking> temporaryBookings = new HashSet<>();
-        temporaryBookings.add(temporaryBooking);
-
-       booking.setBookingStatus(bookingReqDto.getBookingStatus());
-       booking.setDate(bookingReqDto.getDate());
-       booking.setCheckInDate(bookingReqDto.getCheckInDate());
-       booking.setCheckOutDate(bookingReqDto.getCheckOutDate());
-       booking.setPaidAmount(bookingReqDto.getPaidAmount());
-       booking.setTemporaryBookings(temporaryBookings);
-       booking.setTime(bookingReqDto.getTime());
-
-        //   hotel.setHotelOwner(hotelReqDTO.getHotelOwner());
+        Booking booking = bookingReqDto.getBooking();
+        //booking.setTemporaryBookings(bookingReqDto.getTemporaryBookings());
 
 
-        Tourist existingTourist = touristRepository.findById(bookingReqDto.getUserId()).orElseThrow(() ->
+        Tourist existingTourist = touristRepository.findById(bookingReqDto.getUser()).orElseThrow(() ->
                 new ResourceNotFoundException("Location", "Id", booking.getBookingId()));
         booking.setTourist(existingTourist);
 

@@ -18,7 +18,7 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    private Long rateAmount;
+    private Long rateAmount = 0L;
 
     private String userType;
 
