@@ -26,11 +26,11 @@ public class adminServiceImplement implements adminService{
     }
 
     private String getUserPassword(String email){
-        Optional<AppUser> appUser = userRepository.findByEmail(email);
+        AppUser appUser = userRepository.findByEmail(email);
         if (appUser==null){
             return null;
         }
-        return appUser.get().getPassword();
+        return appUser.getPassword();
     }
 
     private String makeHourCount(){

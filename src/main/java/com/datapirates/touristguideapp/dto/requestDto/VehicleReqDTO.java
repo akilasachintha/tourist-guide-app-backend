@@ -8,6 +8,8 @@ public class VehicleReqDTO {
 
     private String vehicleType;
 
+    private String vehicleName;
+
     private int seats;
 
     private double priceForKm;
@@ -17,4 +19,5 @@ public class VehicleReqDTO {
     private String photoUrl;
 
     private Long userId;
+
 }
