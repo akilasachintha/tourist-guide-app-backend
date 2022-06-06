@@ -3,6 +3,7 @@ package com.datapirates.touristguideapp.service.interfaces;
 import java.util.List;
 import java.util.Optional;
 
+import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.entity.hotel.*;
 
 public interface hotelService {
@@ -22,10 +23,11 @@ public interface hotelService {
     String hotelRating(Long id,int starCount);
     List<Hotel> getAllHotels();
     Optional<Hotel> getHotelById(Long id);
-    Hotel saveHotel(Hotel hotel);
+    //Hotel saveHotel(Hotel hotel);
     String updateHotel(Long id,Hotel hotel);
     Long getOwnerId(Long hotelId);
     void updateOwner(Long owner,Long id);
+    Hotel saveHotel(HotelReqDTO userHotelReqDTO);
 
     /***bookingRooms***/
     void updateRoomsAvailability(Long hotelBooking, String availability, Long hotelId);

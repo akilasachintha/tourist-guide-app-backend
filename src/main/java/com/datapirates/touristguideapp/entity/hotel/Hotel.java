@@ -50,8 +50,11 @@ public class Hotel {
     @ToString.Exclude
     private Location location;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, optional = false)
-    @JoinColumn(name = "hotelOwner", referencedColumnName = "userId")
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "hotelOwner", foreignKey = @ForeignKey(name = "hotel_fk1"))
+    @JsonBackReference(value = "hotelOwner-hotels")
+    @ToString.Exclude
     private HotelOwner hotelOwner;
 
  /*   @Override

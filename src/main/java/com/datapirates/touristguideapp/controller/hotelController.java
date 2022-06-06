@@ -1,13 +1,18 @@
 package com.datapirates.touristguideapp.controller;
 
+import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
+import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.datapirates.touristguideapp.service.interfaces.hotelService;
 import com.datapirates.touristguideapp.entity.hotel.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -20,10 +25,11 @@ public class hotelController {
     private hotelService hotelService;
 
     @PostMapping("/add")
-    private String addHotel(@RequestBody Hotel hotel){
-        hotelService.saveHotel(hotel);
+    private String addHotel(@RequestBody HotelReqDTO hotelReqDTO){
+        hotelService.saveHotel(hotelReqDTO);
         return "successful added";
     }
+
 
     @GetMapping("/getAll")
     private List<Hotel> getAllHotels(){

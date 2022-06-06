@@ -20,4 +20,8 @@ public class HotelOwner extends AppUser {
     private final String userType = "hotelOwner";
 
 
+    @OneToMany(mappedBy = "hotelOwner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "hotelOwner-hotels")
+    @ToString.Exclude
+    private Set<Hotel> hotels = new HashSet<>();
 }
