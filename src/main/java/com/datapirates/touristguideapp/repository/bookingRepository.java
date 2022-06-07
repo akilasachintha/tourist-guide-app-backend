@@ -19,7 +19,7 @@ public interface bookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByTourist(Long id);
     Optional<Booking> findByRelativeTemporaryId(Long id);
-    List<Booking> findByTouristAndBookingStatus(Long id,String status);
+    List<Booking> findByBookingStatus(String status);
     @Query("select B.relativeTemporaryId from Booking B where B.bookingId=:id")
     Long findTempId(Long id);
     @Query("select B.tourist from Booking B where B.bookingId=:id")

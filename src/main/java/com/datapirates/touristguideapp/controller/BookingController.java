@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/booking")
+@RequestMapping("/api/v1/booking")
 @CrossOrigin
 @Slf4j
 @AllArgsConstructor

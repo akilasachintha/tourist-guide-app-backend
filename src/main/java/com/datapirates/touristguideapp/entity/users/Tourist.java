@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -29,5 +30,5 @@ public class Tourist extends AppUser {
     @OneToMany(mappedBy = "tourist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("booking-tourist")
     @ToString.Exclude
-    private Set<Booking> bookings;
+    private List<Booking> bookings;
 }

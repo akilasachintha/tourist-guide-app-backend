@@ -57,7 +57,8 @@ public class bookingServiceImpl implements bookingService {
 
     @Override
     public List<Booking> getBookingByTourist(Long id) {
-        return bookingRepository.findByTourist(id);
+        Tourist tourist = touristRepository.getById(id);
+        return tourist.getBookings();
     }
 
     @Override
@@ -133,8 +134,21 @@ public class bookingServiceImpl implements bookingService {
     }
 
     @Override
-    public List<Booking> getBookingByTouristAndState(Long id, String status) {
-        return bookingRepository.findByTouristAndBookingStatus(id,status);
+    public List<Booking> getBookingByTouristAndState(Long id,String status) {
+        Tourist tourist = touristRepository.getById(id);
+        List<Booking> booking = tourist.getBookings();
+        Booking booking1 = new Booking();
+
+        for (int i=0; i<booking.size(); i++){
+            booking1 = booking.get(i);
+            if (booking1.getBookingStatus()==null){
+                continue;
+            }
+            if (!booking1.getBookingStatus().equals(status)){
+                booking.remove(i);
+            }
+        }
+        return booking;
     }
 
     @Override
