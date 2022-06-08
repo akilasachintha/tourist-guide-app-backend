@@ -6,7 +6,7 @@ import lombok.*;
 public class UserDriverReqDTO {
     private Long userId;
 
-    private String photoUrl;
+    private String userPhotoUrl;
 
     private String phoneNo;
 

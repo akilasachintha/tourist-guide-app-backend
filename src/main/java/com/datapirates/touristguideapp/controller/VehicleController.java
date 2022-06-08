@@ -1,7 +1,6 @@
 package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
-import com.datapirates.touristguideapp.dto.responseDto.LocationLocationImageDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
 import com.datapirates.touristguideapp.service.interfaces.VehicleService;
@@ -36,13 +35,17 @@ public class VehicleController {
         return ResponseEntity.created(uri).body(savedVehicle);
     }
 
-
    @GetMapping
     public ResponseEntity<Map<String, List<VehicleResDTO>>> getVehicles() {
         Map<String, List<VehicleResDTO>> response = new HashMap<>();
         response.put("vehicles", vehicleService.getVehicles());
         log.info("Get Vehicles => " + response);
         return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/{vehicleId}")
+    public ResponseEntity<String> deleteVehicle(@PathVariable(name = "vehicleId") Long id) {
+        return ResponseEntity.ok().body(vehicleService.deleteVehicle(id));
     }
 
     @GetMapping("/{userId}")
