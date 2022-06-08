@@ -58,14 +58,16 @@ public class otherServicesImpl implements otherServices {
     public boolean compareStatus(String state1, String state2, String state3) {
         String statusType1 = "shouldSelect";
         String statusType2 = "pending";
-        if (state1.toLowerCase().equals(statusType1.toLowerCase())||state2.toLowerCase().equals(statusType1.toLowerCase())||state3.toLowerCase().equals(statusType1.toLowerCase())){
-            return false;
-        }
-        else {
-            if (state1.toLowerCase().equals(statusType2.toLowerCase())||state2.toLowerCase().equals(statusType2.toLowerCase())||state3.toLowerCase().equals(statusType2.toLowerCase())){
-                return false;
-            }
-        }
+       if(state1!=null&&state2!=null&&state3!=null){
+           if (state1.toLowerCase().equals(statusType1.toLowerCase())||state2.toLowerCase().equals(statusType1.toLowerCase())||state3.toLowerCase().equals(statusType1.toLowerCase())){
+               return false;
+           }
+           else {
+               if (state1.toLowerCase().equals(statusType2.toLowerCase())||state2.toLowerCase().equals(statusType2.toLowerCase())||state3.toLowerCase().equals(statusType2.toLowerCase())){
+                   return false;
+               }
+           }
+       }
         return true;
     }
 
@@ -73,7 +75,10 @@ public class otherServicesImpl implements otherServices {
     public boolean compareStatus2(String state1, String state2, String state3) {
         String statusType1 = "notSelect";
         String statusType2 = "confirm";
-        return !state1.toLowerCase().equals(statusType1.toLowerCase()) && !state2.toLowerCase().equals(statusType1.toLowerCase()) && !state3.toLowerCase().equals(statusType1.toLowerCase());
+        if(state1!=null&&state2!=null&&state3!=null){
+            return !state1.toLowerCase().equals(statusType1.toLowerCase()) && !state2.toLowerCase().equals(statusType1.toLowerCase()) && !state3.toLowerCase().equals(statusType1.toLowerCase());
+        }
+        return true;
     }
 
     @Scheduled(fixedRate = 10000L)
