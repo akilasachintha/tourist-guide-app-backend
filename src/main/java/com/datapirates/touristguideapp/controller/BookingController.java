@@ -18,7 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/booking")
 @CrossOrigin
-@Slf4j
+//@Slf4jg
 @AllArgsConstructor
 public class BookingController {
 

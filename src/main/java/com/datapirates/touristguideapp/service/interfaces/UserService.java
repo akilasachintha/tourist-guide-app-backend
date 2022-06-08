@@ -37,4 +37,5 @@ public interface UserService {
     AppUserResponseDTO getAppUserById(Long id);
 
 //    Optional<AppUser> getUserById(Long id);
+    List<Guide> getAll();
 }

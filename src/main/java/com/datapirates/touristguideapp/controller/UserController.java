@@ -91,6 +91,11 @@ public class UserController {
         return userService.getGuideByAvailability(availability);
     }
 
+    @GetMapping("/guide/getAll")
+    private List<Guide> getAllGuide(){
+        return userService.getAll();
+    }
+
     @PutMapping("/guide/rate")
     private String ratingGuide(@RequestParam Long id, @RequestParam int starCount){
         return userService.guideRating(id,starCount);

@@ -156,6 +156,11 @@ public class UserServiceImpl implements UserService {
         return convertEntityToDto(existingAppUser);
     }
 
+    @Override
+    public List<Guide> getAll() {
+        return guideRepository.findAll();
+    }
+
     private AppUserResponseDTO convertEntityToDto(AppUser appUser){
         AppUserResponseDTO appUserResponseDTO = new AppUserResponseDTO();
 
