@@ -2,12 +2,10 @@ package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
-import com.datapirates.touristguideapp.dto.responseDto.LocationLocationImageDTO;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.service.interfaces.DriverService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
 @RequestMapping("/api/v1/user")
 @CrossOrigin
@@ -26,8 +23,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class DriverController {
 
-    @Autowired
-    private  DriverService driverService;
+    private final DriverService driverService;
+
 
     @PostMapping("/drivers")
     public ResponseEntity<Driver> saveDriver(@Validated @RequestBody UserDriverReqDTO userDriverReqDTO) {
@@ -37,11 +34,6 @@ public class DriverController {
         return ResponseEntity.created(uri).body(savedDriver);
     }
 
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<DriverResponseDTO> getDriverById(@PathVariable(name = "userId") Long userId){
-//        DriverResponseDTO driverResponseDTO = driverService.getDriverById(userId);
-//        return ResponseEntity.ok().body(driverResponseDTO);
-//    }
 
     @GetMapping("/drivers")
     public ResponseEntity<Map<String, List<DriverResponseDTO>>> getAllDrivers() {
@@ -52,12 +44,12 @@ public class DriverController {
     }
 
     @GetMapping("/driver/getByAvailabilityAndLocation")
-    private List<Driver> getGuideByAvailability(@RequestParam String availability, @RequestParam Long id){
-        return driverService.getDriverByAvailabilityAndLocationId(availability,id);
+    private List<Driver> getGuideByAvailability(@RequestParam String availability, @RequestParam Long id) {
+        return driverService.getDriverByAvailabilityAndLocationId(availability, id);
     }
 
     @PutMapping("/driver/rate")
-    private String ratingDriver(@RequestParam Long id, @RequestParam int starCount){
-        return driverService.driverRating(id,starCount);
+    private String ratingDriver(@RequestParam Long id, @RequestParam int starCount) {
+        return driverService.driverRating(id, starCount);
     }
 }

@@ -1,6 +1,6 @@
 package com.datapirates.touristguideapp.dto.requestDto;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
 public class VehicleReqDTO {
@@ -16,7 +16,7 @@ public class VehicleReqDTO {
 
     private String vehicleCondition;
 
-    private String photoUrl;
+    private String vehiclePhotoUrl;
 
     private Long userId;
 

@@ -3,7 +3,6 @@ package com.datapirates.touristguideapp.service.impl;
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
-import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
@@ -13,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +39,16 @@ public class VehicleServiceImpl implements VehicleService {
         return existingVehicles.stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
+    @Override
+    public String deleteVehicle(Long id) {
+        Optional<Vehicle> optionalLibrary = vehicleRepository.findById(id);
+        if (!optionalLibrary.isPresent()) {
+            return "Deletion Error";
+        }
+        vehicleRepository.delete(optionalLibrary.get());
+        return "Vehicle Id " + id + " Deleted Successfully";
+    }
+
     private VehicleResDTO convertEntityToDto(Vehicle vehicle){
         VehicleResDTO vehicleResDTO = new VehicleResDTO();
 
@@ -58,18 +68,16 @@ public class VehicleServiceImpl implements VehicleService {
 
         return vehicleResDTO;
     }
-
-
     private Vehicle convertDtoToEntity(VehicleReqDTO vehicleReqDTO){
         Vehicle vehicle = new Vehicle();
 
         vehicle.setVehicleNo(vehicleReqDTO.getVehicleNo());
         vehicle.setVehicleName(vehicleReqDTO.getVehicleName());
-        vehicle.setVehiclePhotoUrl(vehicleReqDTO.getPhotoUrl());
         vehicle.setVehicleType(vehicleReqDTO.getVehicleType());
         vehicle.setSeats(vehicleReqDTO.getSeats());
         vehicle.setPriceForKm(vehicleReqDTO.getPriceForKm());
         vehicle.setVehicleCondition(vehicleReqDTO.getVehicleCondition());
+        vehicle.setVehiclePhotoUrl(vehicleReqDTO.getVehiclePhotoUrl());
 
         Driver existingDriver = driverRepository.findById(vehicleReqDTO.getUserId()).orElseThrow(() ->
                     new ResourceNotFoundException("Driver", "Id", vehicleReqDTO.getUserId()));

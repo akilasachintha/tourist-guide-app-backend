@@ -37,7 +37,7 @@ public class DriverServiceImpl implements DriverService {
         driver.setName(userDriverReqDTO.getName());
         driver.setEmail(userDriverReqDTO.getEmail());
         driver.setPassword(userDriverReqDTO.getPassword());
-        driver.setUserPhotoUrl(userDriverReqDTO.getPhotoUrl());
+        driver.setUserPhotoUrl(userDriverReqDTO.getUserPhotoUrl());
         driver.setDob(userDriverReqDTO.getDob());
         driver.setPhoneNo(userDriverReqDTO.getPhoneNo());
         driver.setAvailability(userDriverReqDTO.getAvailability());
