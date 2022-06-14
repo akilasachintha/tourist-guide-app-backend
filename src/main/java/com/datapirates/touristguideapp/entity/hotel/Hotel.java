@@ -1,10 +1,14 @@
 package com.datapirates.touristguideapp.entity.hotel;
 
 import com.datapirates.touristguideapp.entity.location.Location;
+import com.datapirates.touristguideapp.entity.location.LocationImage;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -33,6 +37,7 @@ public class Hotel {
 
     private String town;
 
+    @Lob
     private String description;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -54,23 +59,18 @@ public class Hotel {
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "hotelOwner", foreignKey = @ForeignKey(name = "hotel_fk1"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "hotel_fk2"))
     @JsonBackReference(value = "hotelOwner-hotels")
     @ToString.Exclude
     private HotelOwner hotelOwner;
 
- /*   @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Hotel hotel = (Hotel) o;
-        return hotelId != null && Objects.equals(hotelId, hotel.hotelId);
-    }
+    public void setHotelImages(Set<HotelImage> hotelImages) {
+        this.hotelImages = hotelImages;
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }*/
+        for (HotelImage b : hotelImages) {
+            b.setHotel(this);
+        }
+    }
 }
 
 

@@ -1,11 +1,12 @@
 package com.datapirates.touristguideapp.entity.location;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -23,17 +24,4 @@ public class LocationImage {
     @JsonBackReference(value = "location-locationImages")
     @ToString.Exclude
     private Location location;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        LocationImage that = (LocationImage) o;
-        return url != null && Objects.equals(url, that.url);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(url);
-    }
 }

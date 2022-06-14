@@ -8,5 +8,4 @@ import java.io.Serializable;
 public class HotelRoomId implements Serializable {
     private Long roomNo;
     private Hotel hotel;
-
 }

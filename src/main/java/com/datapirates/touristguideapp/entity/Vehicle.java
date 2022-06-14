@@ -2,11 +2,12 @@ package com.datapirates.touristguideapp.entity;
 
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -39,16 +40,4 @@ public class Vehicle {
     @ToString.Exclude
     private Driver driver;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Vehicle vehicle = (Vehicle) o;
-        return vehicleNo != null && Objects.equals(vehicleNo, vehicle.vehicleNo);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

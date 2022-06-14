@@ -1,7 +1,6 @@
 package com.datapirates.touristguideapp.entity.bookings;
 
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
-import com.datapirates.touristguideapp.entity.users.Guide;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +26,5 @@ public class HotelBooking extends Booking{
     @OneToMany(mappedBy = "hotelBooking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("booking-bookingRooms")
     @ToString.Exclude
-    private Set<bookingRooms> bookingRooms;
+    private Set<BookingRooms> bookingRooms;
 }

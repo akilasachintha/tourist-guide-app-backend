@@ -60,18 +60,6 @@ public class Booking {
     @ToString.Exclude
     private Tourist tourist;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Booking booking = (Booking) o;
-        return bookingId != null && Objects.equals(bookingId, booking.bookingId);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 
     @Override
     public String toString() {

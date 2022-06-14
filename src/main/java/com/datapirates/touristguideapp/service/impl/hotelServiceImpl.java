@@ -83,6 +83,8 @@ public class hotelServiceImpl implements hotelService {
                 new ResourceNotFoundException("Hotel Owner", "Id", hotelReqDTO.getHotelOwnerId()));
         hotel.setHotelOwner(existingHotelOwner);
 
+        hotel.setHotelImages(hotelReqDTO.getHotelImages());
+
         return hotelRepository.save(hotel);
     }
 
@@ -162,8 +164,6 @@ public class hotelServiceImpl implements hotelService {
     public Optional<Hotel> getHotelById(Long id) {
         return hotelRepository.findById(id);
     }
-
-
 
     @Override
     public String updateHotel(Long id, Hotel hotel) {

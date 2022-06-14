@@ -1,8 +1,6 @@
 package com.datapirates.touristguideapp.entity.bookings;
 
-import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -15,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class bookingRooms{
+public class BookingRooms {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,4 +25,5 @@ public class bookingRooms{
     @JsonBackReference(value = "booking-bookingRooms")
     @ToString.Exclude
     private HotelBooking hotelBooking;
+
 }

@@ -20,17 +20,4 @@ public class GuideBooking extends Booking {
     @JoinColumn(name = "guide", referencedColumnName = "userId")
 
     private Guide guide;
-
-  /*  @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        GuideBooking that = (GuideBooking) o;
-        return getBookingId() != null && Objects.equals(getBookingId(), that.getBookingId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }*/
 }
