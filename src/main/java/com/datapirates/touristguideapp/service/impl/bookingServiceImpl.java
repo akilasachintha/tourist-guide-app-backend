@@ -78,7 +78,10 @@ public class bookingServiceImpl implements bookingService {
 
     private Booking convertDtoToEntity(BookingReqDto bookingReqDto) {
         Booking booking = bookingReqDto.getBooking();
-        //booking.setTemporaryBookings(bookingReqDto.getTemporaryBookings());
+        //booking.setTemporaryBookings(bookingReqDto.getTemporaryBookings())
+        booking.setHotelId(bookingReqDto.getHotel());
+        booking.setDriverId(bookingReqDto.getDriver());
+        booking.setGuideId(bookingReqDto.getGuide());
 
 
         Tourist existingTourist = touristRepository.findById(bookingReqDto.getUser()).orElseThrow(() ->

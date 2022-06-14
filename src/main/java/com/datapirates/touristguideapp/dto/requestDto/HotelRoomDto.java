@@ -5,10 +5,15 @@ import lombok.Data;
 
 @Data
 public class HotelRoomDto {
+    private Long roomNo;
 
-    private HotelRoom hotelRoom;
+    private String roomCondition;
+
+    private String roomAvailability;
+
+    private double price;
 
     private String categoryType;
 
-    private Long hoteId;
+    private Long hotelId;
 }

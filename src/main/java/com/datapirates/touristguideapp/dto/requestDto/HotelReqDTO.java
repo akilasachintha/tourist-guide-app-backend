@@ -12,8 +12,22 @@ import java.util.Set;
 @Data
 public class HotelReqDTO {
 
-    private Hotel hotel;
+    private double rating;
+
+    private Long rateAmount;
+
+    private String name;
+
+    private String No;
+
+    private String district;
+
+    private String town;
+
+    private String description;
+
     private Long locationId;
-    private Long owner;
+
+    private Long hotelOwnerId;
 }
 

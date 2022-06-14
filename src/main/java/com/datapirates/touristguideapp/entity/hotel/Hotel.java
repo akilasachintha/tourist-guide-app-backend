@@ -33,6 +33,8 @@ public class Hotel {
 
     private String town;
 
+    private String description;
+
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotel-hotelImages")
     @ToString.Exclude

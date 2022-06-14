@@ -7,15 +7,14 @@ import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
 import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
+import com.datapirates.touristguideapp.repository.*;
 import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.service.interfaces.hotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.datapirates.touristguideapp.repository.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class hotelServiceImpl implements hotelService {
@@ -69,47 +68,39 @@ public class hotelServiceImpl implements hotelService {
 
     private Hotel convertDtoToEntity(HotelReqDTO hotelReqDTO) {
         Hotel hotel = new Hotel();
-//        Set<HotelRoom> hotelRooms = hotelReqDTO.getHotelRooms();
-//
-//        hotel.setName(hotelReqDTO.getName());
-//        hotel.setRateAmount(hotelReqDTO.getRateAmount());
-//        hotel.setDistrict(hotelReqDTO.getDistrict());
-//        hotel.setRating(hotelReqDTO.getRating());
-//        hotel.setNo(hotelReqDTO.getNo());
-//        hotel.setTown(hotelReqDTO.getTown());
-//        hotel.setHotelRooms(hotelReqDTO.getHotelRooms());
-     //   hotel.setHotelOwner(hotelReqDTO.getHotelOwner());
-        hotel = hotelReqDTO.getHotel();
+
+        hotel.setName(hotelReqDTO.getName());
+        hotel.setDescription(hotelReqDTO.getDescription());
+        hotel.setDistrict(hotelReqDTO.getDistrict());
+        hotel.setTown(hotelReqDTO.getTown());
+        hotel.setNo(hotelReqDTO.getNo());
 
         Location existingLocation = locationRepository.findById(hotelReqDTO.getLocationId()).orElseThrow(() ->
-                new ResourceNotFoundException("Location", "Id", hotelReqDTO.getHotel()));
+                new ResourceNotFoundException("Location", "Id", hotelReqDTO.getLocationId()));
         hotel.setLocation(existingLocation);
 
-        HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelReqDTO.getOwner()).orElseThrow(() ->
-                new ResourceNotFoundException("Owner", "Id", hotelReqDTO.getHotel()));
+        HotelOwner existingHotelOwner = hotelOwnerRepository.findById(hotelReqDTO.getHotelOwnerId()).orElseThrow(() ->
+                new ResourceNotFoundException("Hotel Owner", "Id", hotelReqDTO.getHotelOwnerId()));
         hotel.setHotelOwner(existingHotelOwner);
 
         return hotelRepository.save(hotel);
     }
 
 
-
     private HotelRoom convertDatoToEntity(HotelRoomDto hotelRoomDto) {
-        HotelRoom hotelRoom = hotelRoomDto.getHotelRoom();
-//        Set<HotelRoom> hotelRooms = hotelReqDTO.getHotelRooms();
-//
-//        hotel.setName(hotelReqDTO.getName());
-//        hotel.setRateAmount(hotelReqDTO.getRateAmount());
-//        hotel.setDistrict(hotelReqDTO.getDistrict());
-//        hotel.setRating(hotelReqDTO.getRating());
-//        hotel.setNo(hotelReqDTO.getNo());
-//        hotel.setTown(hotelReqDTO.getTown());
-//        hotel.setHotelRooms(hotelReqDTO.getHotelRooms());
-        //   hotel.setHotelOwner(hotelReqDTO.getHotelOwner());
+        HotelRoom hotelRoom = new HotelRoom();
+
+        hotelRoom.setRoomNo(hotelRoomDto.getRoomNo());
+        hotelRoom.setRoomAvailability(hotelRoomDto.getRoomAvailability());
+        hotelRoom.setRoomCondition(hotelRoomDto.getRoomCondition());
+        hotelRoom.setPrice(hotelRoomDto.getPrice());
 
         RoomCategory existingCategory = roomCategoryRepository.findById(hotelRoomDto.getCategoryType()).orElseThrow(() ->
-                new ResourceNotFoundException("Owner", "Id", hotelRoomDto.getHotelRoom()));
+                new ResourceNotFoundException("Owner", "Id", hotelRoomDto.getCategoryType()));
         hotelRoom.setRoomCategory(existingCategory);
+
+        Hotel existingHotel = hotelRepository.findById(hotelRoomDto.getHotelId()).orElseThrow(() -> new ResourceNotFoundException("Hotel", "Id", hotelRoomDto.getHotelId()));
+        hotelRoom.setHotel(existingHotel);
 
         return roomRepository.save(hotelRoom);
     }
@@ -153,8 +144,6 @@ public class hotelServiceImpl implements hotelService {
         double currentRate = hotelRepository.getRate(id);
         Long currentAmount = hotelRepository.getRateAmount(id);
         double currentStars = currentAmount * currentRate;
-
-        /*** after updating ***/
 
         currentStars+=starCount;
         currentAmount+=1;
@@ -200,9 +189,8 @@ public class hotelServiceImpl implements hotelService {
     @Override
     public void updateRoomsAvailability(Long hotelBooking, String availability, Long hotelId) {
         List<Long> rooms = bookingRoomsRepository.getRoomNosByBooking(hotelBooking);
-        for(int index=0; index<rooms.size(); index++){
-            Long roomNo = rooms.get(index);
-             roomRepository.setAvailability(hotelId,availability,roomNo);
+        for (Long roomNo : rooms) {
+            roomRepository.setAvailability(hotelId, availability, roomNo);
         }
     }
 }
