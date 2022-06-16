@@ -148,7 +148,6 @@ public class UserServiceImpl implements UserService {
 
             String token  = adminService.madeUserSecretKey(loginReqDTO.getEmail(), loginReqDTO.getPassword());
             loginResDTO.setToken(token);
-
         }
         return loginResDTO;
     }

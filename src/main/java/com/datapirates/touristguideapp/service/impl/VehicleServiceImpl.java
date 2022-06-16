@@ -40,12 +40,19 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public String deleteVehicle(Long id) {
-        Optional<Vehicle> optionalLibrary = vehicleRepository.findById(id);
-        if (!optionalLibrary.isPresent()) {
-            return "Deletion Error";
-        }
-        vehicleRepository.delete(optionalLibrary.get());
+    public Vehicle updateVehicleStatus(Long id, Vehicle vehicle) {
+        Vehicle existingVehicle = vehicleRepository.findById(id).orElseThrow(() ->
+            new ResourceNotFoundException("Vehicle", "Id", id));
+
+        existingVehicle.setVehicleStatus(vehicle.getVehicleStatus());
+
+        vehicleRepository.save(existingVehicle);
+        return existingVehicle;
+    }
+
+    @Override
+    public String deleteVehicleById(Long id) {
+        vehicleRepository.deleteByVehicleId(id);
         return "Vehicle Id " + id + " Deleted Successfully";
     }
 
@@ -60,6 +67,8 @@ public class VehicleServiceImpl implements VehicleService {
         vehicleResDTO.setPriceForKm(vehicle.getPriceForKm());
         vehicleResDTO.setSeats(vehicle.getSeats());
         vehicleResDTO.setVehiclePhotoUrl(vehicle.getVehiclePhotoUrl());
+        vehicleResDTO.setVehicleModal(vehicle.getVehicleModal());
+        vehicleResDTO.setVehicleStatus(vehicle.getVehicleStatus());
 
         vehicleResDTO.setUserId(vehicle.getDriver().getUserId());
         vehicleResDTO.setAvailability(vehicle.getDriver().getAvailability());

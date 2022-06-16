@@ -14,7 +14,11 @@ public class VehicleResDTO {
 
     private String vehicleType;
 
+    private String vehicleModal;
+
     private int seats;
+
+    private String vehicleStatus;
 
     private double priceForKm;
 

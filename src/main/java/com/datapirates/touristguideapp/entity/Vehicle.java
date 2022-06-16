@@ -30,14 +30,17 @@ public class Vehicle {
 
     private double priceForKm;
 
+    private String vehicleModal;
+
     private String vehicleCondition;
 
     private String vehiclePhotoUrl;
+
+    private String vehicleStatus = "pending";
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "vehicle_fk1"))
     @JsonBackReference(value = "driver-vehicles")
     @ToString.Exclude
     private Driver driver;
-
 }
