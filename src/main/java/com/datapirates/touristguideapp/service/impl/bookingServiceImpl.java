@@ -139,19 +139,22 @@ public class bookingServiceImpl implements bookingService {
     @Override
     public List<Booking> getBookingByTouristAndState(Long id,String status) {
         Tourist tourist = touristRepository.getById(id);
+        List<Booking> retBooking = new ArrayList<>();
         List<Booking> booking = tourist.getBookings();
         Booking booking1 = new Booking();
 
-        for (int i=0; i<booking.size(); i++){
-            booking1 = booking.get(i);
-            if (booking1.getBookingStatus()==null){
+        for (Booking value : booking) {
+            booking1 = value;
+            if (booking1.getBookingStatus() == null) {
+                // booking.remove(i);
                 continue;
             }
-            if (!booking1.getBookingStatus().equals(status)){
-                booking.remove(i);
+            if (booking1.getBookingStatus().equals(status)) {
+                // booking.remove(i);
+                retBooking.add(booking1);
             }
         }
-        return booking;
+        return retBooking;
     }
 
     @Override
