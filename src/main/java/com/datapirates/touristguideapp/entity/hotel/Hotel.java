@@ -61,7 +61,7 @@ public class Hotel {
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "hotelOwner", foreignKey = @ForeignKey(name = "hotel_fk1"))
+    @JoinColumn(name = "hotelOwner", foreignKey = @ForeignKey(name = "hotel_fk2"))
     @JsonBackReference(value = "hotelOwner-hotels")
     @ToString.Exclude
     private HotelOwner hotelOwner;
