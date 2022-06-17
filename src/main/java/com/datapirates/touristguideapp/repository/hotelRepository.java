@@ -1,6 +1,5 @@
 package com.datapirates.touristguideapp.repository;
 
-import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.location.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,5 +34,6 @@ public interface hotelRepository extends JpaRepository<Hotel, Long> {
     Double getRate(Long id);
     @Query("select H.rateAmount from Hotel H where H.hotelId=:id")
     Long getRateAmount(Long id);
+
     List<Hotel> findByAdminStatus(String status);
 }

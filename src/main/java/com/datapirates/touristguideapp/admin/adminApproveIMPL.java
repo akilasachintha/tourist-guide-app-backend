@@ -58,7 +58,7 @@ public class adminApproveIMPL implements adminApprove{
 
     @Override
     public List<Hotel> getHotelByAdmin(String status) {
-        return hotelRepository.findByAdminStatus(status);
+        return hotelRepository.findAll();
     }
 
     @Override

@@ -96,9 +96,9 @@ public class hotelController {
 
     /**** HOTEL ROOM ***/
 
-    @GetMapping("/hotelRoom/getAvailableRooms")
-    private List<HotelRoom> getRooms(@RequestParam Long id,String availability){
-        return hotelService.getByAvailabilityAndHotel(id,availability);
+    @GetMapping("/hotelRoom/getAvailableHotels")
+    private List<Hotel> getRooms(@RequestParam String type, @RequestParam int amount){
+        return hotelService.getAvailableHotels(type,amount);
     }
     @GetMapping("/hotelRoom/getRooms")
     private List<HotelRoom> getAllRooms(){
@@ -106,8 +106,8 @@ public class hotelController {
     }
 
     @PutMapping("/hotelRoom/updateAvailability")
-    private String updateRoomAvailability(@RequestParam Long roomNo, String availability, Long hotelId){
-         hotelService.updateAvailability(hotelId,roomNo,availability);
+    private String updateRoomAvailability(@RequestParam Long roomId, String availability){
+         hotelService.updateAvailability(roomId,availability);
          return "successfully updated";
     }
 

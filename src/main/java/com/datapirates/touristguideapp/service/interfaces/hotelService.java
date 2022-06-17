@@ -16,9 +16,9 @@ public interface hotelService {
 
     /*** HotelRoom***/
 
-    List<HotelRoom> getByAvailabilityAndHotel(Long id,String availability);
+    List<Hotel> getAvailableHotels(String type,int amount);
     List<HotelRoom> getHotelRoom();
-    String updateAvailability(Long id,Long roomNo,String availability);
+    String updateAvailability(Long id,String availability);
     void updateCategoryType(String category,String type);
 
     /***Hotel***/
@@ -34,5 +34,4 @@ public interface hotelService {
     HotelRoom saveHotelRoom(HotelRoomDto hotelRoomDto);
 
     /***bookingRooms***/
-    void updateRoomsAvailability(Long hotelBooking, String availability, Long hotelId);
 }

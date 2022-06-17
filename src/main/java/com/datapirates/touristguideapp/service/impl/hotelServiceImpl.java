@@ -13,8 +13,7 @@ import com.datapirates.touristguideapp.service.interfaces.hotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class hotelServiceImpl implements hotelService {
@@ -28,8 +27,6 @@ public class hotelServiceImpl implements hotelService {
     @Autowired
     private roomCategoryRepository roomCategoryRepository;
 
-    @Autowired
-    private bookingRoomsRepository bookingRoomsRepository;
 
     @Autowired
     private LocationRepository locationRepository;
@@ -113,17 +110,33 @@ public class hotelServiceImpl implements hotelService {
     }
 
     @Override
-    public List<HotelRoom> getByAvailabilityAndHotel(Long id, String availability) {
-        List<HotelRoom> rooms = roomRepository.findByHotelAndRoomAvailability(id,availability);
-        HotelRoom hotelRoom = new HotelRoom();
-        for (int i=0; i<rooms.size(); i++){
-            hotelRoom = rooms.get(i);
-            if (!hotelRoom.getAdminStatus().equals("confirm")){
-                rooms.remove(i);
+    public List<Hotel> getAvailableHotels(String type,int amount) {
+        List<Hotel> hotels = hotelRepository.findAll();
+        List<Hotel> hotels1 = new ArrayList<>();
+
+        for (Hotel hotel : hotels){
+            Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
+            if (hotelRooms.isEmpty()){
+                //hotels.remove(hotel);
+                continue;
+            }
+
+            int count=0;
+            for (HotelRoom hotelRoom : hotelRooms){
+                RoomCategory roomCategory = hotelRoom.getRoomCategory();
+                if(roomCategory.getCategoryType().equals(type)){
+                    count++;
+                }
+            }
+
+            if (count>=amount){
+                //hotels.remove(hotel);
+                hotels1.add(hotel);
             }
         }
-        return rooms;
+        return hotels1;
     }
+
 
     @Override
     public List<HotelRoom> getHotelRoom() {
@@ -131,12 +144,12 @@ public class hotelServiceImpl implements hotelService {
     }
 
     @Override
-    public String updateAvailability(Long id, Long roomNo, String availability) {
-        Optional<HotelRoom> checking = roomRepository.findByHotelAndRoomNo(id,roomNo);
+    public String updateAvailability(Long id, String availability) {
+        Optional<HotelRoom> checking = roomRepository.findById(id);
         if (!checking.isPresent()){
             return "not available Id";
         }
-        roomRepository.setAvailability(id,availability,roomNo);
+        roomRepository.setAvailability(id,availability);
         return "update success";
     }
 
@@ -194,11 +207,4 @@ public class hotelServiceImpl implements hotelService {
     }
 
     /*** booking rooms **/
-    @Override
-    public void updateRoomsAvailability(Long hotelBooking, String availability, Long hotelId) {
-        List<Long> rooms = bookingRoomsRepository.getRoomNosByBooking(hotelBooking);
-        for (Long roomNo : rooms) {
-            roomRepository.setAvailability(hotelId, availability, roomNo);
-        }
-    }
 }

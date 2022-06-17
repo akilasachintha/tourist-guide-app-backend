@@ -1,5 +1,11 @@
 package com.datapirates.touristguideapp.service.impl;
 
+import com.datapirates.touristguideapp.entity.bookings.Booking;
+import com.datapirates.touristguideapp.entity.bookings.TemporaryBooking;
+import com.datapirates.touristguideapp.entity.hotel.Hotel;
+import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
+import com.datapirates.touristguideapp.entity.users.HotelOwner;
+import com.datapirates.touristguideapp.entity.users.Tourist;
 import com.datapirates.touristguideapp.service.interfaces.otherServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -8,9 +14,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.datapirates.touristguideapp.repository.*;
 
-import java.util.List;
+import java.util.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Service
 public class otherServicesImpl implements otherServices {
@@ -29,6 +34,8 @@ public class otherServicesImpl implements otherServices {
     private guideBookingRepository guideBookingRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired hotelOwnerRepository hotelOwnerRepository;
     @Autowired
     private hotelRepository hotelRepository;
     @Autowired
@@ -37,6 +44,8 @@ public class otherServicesImpl implements otherServices {
     private DriverRepository driverRepository;
     @Autowired
     private guideRepository guideRepository;
+
+    @Autowired touristRepository touristRepository;
 
     @Autowired
     private com.datapirates.touristguideapp.service.interfaces.hotelService hotelService;
@@ -81,8 +90,63 @@ public class otherServicesImpl implements otherServices {
         return true;
     }
 
+    private Long getOwnerId(Long hotelId){
+        List<HotelOwner> hotelOwners = hotelOwnerRepository.findAll();
+        Long ownerId = null;
+        for (HotelOwner hotelOwner : hotelOwners){
+            Set<Hotel> hotels = hotelOwner.getHotels();
+            for (Hotel hotel : hotels){
+                if (Objects.equals(hotel.getHotelId(), hotelId)){
+                    ownerId = hotelOwner.getUserId();
+                    break;
+                }
+            }
+        }
+
+        return ownerId;
+    }
+
+    private Long getTourist(Long bookingId){
+        Long touristId = null;
+        List<Tourist> tourists = touristRepository.findAll();
+        for (Tourist tourist : tourists){
+            List<Booking> bookings = tourist.getBookings();
+            for (Booking booking : bookings){
+                if (Objects.equals(booking.getBookingId(),bookingId)){
+                    touristId = tourist.getUserId();
+                    break;
+                }
+            }
+        }
+        return touristId;
+    }
+
+    private Long tempId(Long bookingId){
+        Long tempId = null;
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+        if (booking.isPresent()){
+            Booking booking1 = booking.get();
+            Set<TemporaryBooking> temporaryBookings = booking1.getTemporaryBookings();
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                tempId = temporaryBooking.getTempBookingId();
+            }
+        }
+
+        return tempId;
+    }
+
+    private void setTempId(){
+        List<Booking> bookings = bookingRepository.findAll();
+        for (Booking booking : bookings){
+            if (booking.getRelativeTemporaryId()==null&&booking.getTemporaryBookings()!=null){
+                Long tempId = tempId(booking.getBookingId());
+                bookingRepository.setTempId(booking.getBookingId(),tempId);
+            }
+        }
+    }
     @Scheduled(fixedRate = 10000L)
     void checkTimeLimit(){
+        setTempId();
         List<Long> pendingHotelIds;
         pendingHotelIds = temporaryBookingRepository.getIdsByHotel("pending");
         for (int i=0;i<pendingHotelIds.size(); i++){
@@ -108,18 +172,20 @@ public class otherServicesImpl implements otherServices {
                 Long hotelId = temporaryBookingRepository.getPendingHotel(temId);
                 temporaryBookingRepository.setPendingHotel(temId,null);
                 Long bookingId = bookingRepository.getTBookingId(temId);
-                hotelBookingRepository.deleteById(bookingId);
-                Long touristId = bookingRepository.getTouristId(bookingId);
+                //hotelBookingRepository.deleteById(bookingId);
+                bookingRepository.setHotel(bookingId,null);
+                Long touristId = getTourist(bookingId);
                 String touristEmail = userRepository.getEmail(touristId);
                 String subject = "should book hotel again";
                 String body = "something";
                 sendMails(touristEmail,subject,body);
-                Long hotelOwnerId = hotelRepository.getOwnerId(hotelId);
+                Long hotelOwnerId = getOwnerId(hotelId);
                 String ownerEmail = userRepository.getEmail(hotelOwnerId);
                 subject = "your time has over booking is canceled";
                 body = "something";
                 sendMails(ownerEmail,subject,body);
-                hotelService.updateRoomsAvailability(bookingId,"available",hotelId);
+               // hotelService.updateRoomsAvailability(bookingId,"available",hotelId);
+
 
             }
 
@@ -148,8 +214,9 @@ public class otherServicesImpl implements otherServices {
                 Long driverId = temporaryBookingRepository.getPendingDriver(temId);
                 temporaryBookingRepository.setPendingDriver(temId,null);
                 Long bookingId = bookingRepository.getTBookingId(temId);
-                driverBookingRepository.deleteById(bookingId);
-                Long touristId = bookingRepository.getTouristId(bookingId);
+                //driverBookingRepository.deleteById(bookingId);
+                bookingRepository.setDriver(bookingId,null);
+                Long touristId = getTourist(bookingId);
                 String touristEmail = userRepository.getEmail(touristId);
                 String subject = "should book driver again";
                 String body = "something";
@@ -186,8 +253,9 @@ public class otherServicesImpl implements otherServices {
                 Long guideId = temporaryBookingRepository.getPendingGuide(temId);
                 temporaryBookingRepository.setPendingGuide(temId,null);
                 Long bookingId = bookingRepository.getTBookingId(temId);
-                driverBookingRepository.deleteById(bookingId);
-                Long touristId = bookingRepository.getTouristId(bookingId);
+                //driverBookingRepository.deleteById(bookingId);
+                bookingRepository.setGuide(bookingId,null);
+                Long touristId = getTourist(bookingId);
                 String touristEmail = userRepository.getEmail(touristId);
                 String subject = "should book guide again";
                 String body = "something";
@@ -218,7 +286,7 @@ public class otherServicesImpl implements otherServices {
                     Long bookingId = bookingRepository.getTBookingId(temporaryId);
                     bookingRepository.setBookingStatus(bookingId,"shouldPay");
                     temporaryBookingRepository.deleteById(temporaryId);
-                    Long touristId = bookingRepository.getTouristId(bookingId);
+                    Long touristId = getTourist(bookingId);
                     String touristEmail = userRepository.getEmail(touristId);
                     String subject = "Latest update About your booking";
                     String body = "Your Booking"+bookingId+"is confirmed";
@@ -226,7 +294,7 @@ public class otherServicesImpl implements otherServices {
                 }
                 else {
                     Long bookingId = bookingRepository.getTBookingId(temporaryId);
-                    Long touristId = bookingRepository.getTouristId(bookingId);
+                    Long touristId = getTourist(bookingId);
                     bookingRepository.deleteById(bookingId);
                     String touristEmail = userRepository.getEmail(touristId);
                     String subject = "Latest update About your booking";
