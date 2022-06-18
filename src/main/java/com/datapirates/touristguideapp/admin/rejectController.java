@@ -25,8 +25,8 @@ public class rejectController {
         return adminReject.rejectGuide(id);
     }
 
-    @DeleteMapping("/hotelowner")
-    private String deleteOwner(@RequestParam Long id) {
+    @DeleteMapping("/hotelowner/{userId}")
+    private String deleteOwner(@PathVariable(name = "userId") Long id) {
         return adminReject.rejectHotelOwner(id);
     }
 

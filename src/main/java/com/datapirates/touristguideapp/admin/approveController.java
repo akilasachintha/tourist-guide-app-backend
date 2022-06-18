@@ -75,8 +75,8 @@ public class approveController {
         return adminApprove.approveVehicle(id);
     }
 
-    @PutMapping("/hotelowner")
-    private String confirmHotelOwner(@RequestParam Long id) {
+    @PutMapping("/hotelowner/{userId}")
+    private String confirmHotelOwner(@PathVariable(name = "userId") Long id) {
         return adminApprove.approveHotelOwner(id);
     }
 
