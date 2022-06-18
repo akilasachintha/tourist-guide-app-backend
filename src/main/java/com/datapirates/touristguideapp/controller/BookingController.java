@@ -60,8 +60,7 @@ public class BookingController {
 
     @PostMapping("/add")
     private String addBooking(@RequestBody BookingReqDto bookingReqDto){
-        bookingService.saveBooking(bookingReqDto);
-        return "Successfully added";
+       return bookingService.saveBooking(bookingReqDto);
     }
 
     @PutMapping("/update")

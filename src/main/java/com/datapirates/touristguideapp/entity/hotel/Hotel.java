@@ -12,6 +12,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -39,7 +40,6 @@ public class Hotel {
 
     private String adminStatus="pending";
 
-    @Lob
     private String description;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -50,7 +50,7 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotel-hotelRooms")
     @ToString.Exclude
-    private Set<HotelRoom> hotelRooms = new HashSet<>();
+    private Set<HotelRoom> hotelRooms =  new HashSet<>();
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
@@ -61,7 +61,7 @@ public class Hotel {
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "hotelOwner", foreignKey = @ForeignKey(name = "hotel_fk1"))
+    @JoinColumn(name = "hotelOwner", foreignKey = @ForeignKey(name = "hotel_fk2"))
     @JsonBackReference(value = "hotelOwner-hotels")
     @ToString.Exclude
     private HotelOwner hotelOwner;

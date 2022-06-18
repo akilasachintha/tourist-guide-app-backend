@@ -23,8 +23,5 @@ public class HotelBooking extends Booking{
     @JoinColumn(name = "hotelid", referencedColumnName = "hotelId")
     private Hotel hotelid;
 
-    @OneToMany(mappedBy = "hotelBooking", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference("booking-bookingRooms")
-    @ToString.Exclude
-    private Set<BookingRooms> bookingRooms;
+
 }

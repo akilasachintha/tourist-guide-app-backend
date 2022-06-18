@@ -10,7 +10,7 @@ public interface bookingService {
     List<Booking> getBookingByTourist(Long id);
     Optional<Booking> getBookingByTemporary(Long id);
     List<Booking> getAllBooking();
-    Booking saveBooking(BookingReqDto bookingReqDto);
+    String saveBooking(BookingReqDto bookingReqDto);
     String updateBooking(Long id,Booking booking);
     void deleteBooking(Long id);
     String updateTemporaryId(Long id,Long id2);

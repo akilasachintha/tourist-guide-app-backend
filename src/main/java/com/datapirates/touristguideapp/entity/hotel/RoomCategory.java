@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,5 +24,5 @@ public class RoomCategory {
     @OneToMany(mappedBy = "roomCategory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotelcategory-hotelRooms")
     @ToString.Exclude
-    private Set<HotelRoom> hotelRooms = new HashSet<>();
+    private List<HotelRoom> hotelRooms;
 }

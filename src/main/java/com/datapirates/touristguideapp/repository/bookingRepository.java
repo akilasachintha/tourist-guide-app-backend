@@ -30,6 +30,20 @@ public interface bookingRepository extends JpaRepository<Booking, Long> {
     @Modifying
     @Query("update Booking B set B.relativeTemporaryId=:id2 where B.bookingId=:id")
     void setTempId(Long id,Long id2);
+
+    @Transactional
+    @Modifying
+    @Query("update Booking B set B.hotelId=:id2 where B.bookingId=:id")
+    void setHotel(Long id,Long id2);
+    @Transactional
+    @Modifying
+    @Query("update Booking B set B.driverId=:id2 where B.bookingId=:id")
+    void setDriver(Long id,Long id2);
+
+    @Transactional
+    @Modifying
+    @Query("update Booking B set B.guideId=:id2 where B.bookingId=:id")
+    void setGuide(Long id,Long id2);
     @Transactional
     @Modifying
     @Query("update Booking B set B.tourist=:tourist where B.tourist=:id")

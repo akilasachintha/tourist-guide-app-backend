@@ -47,6 +47,10 @@ public class Booking {
 
     private Long hotelId;
 
+    private int roomCount;
+
+    private String categoryType;
+
     @OneToMany(mappedBy = "bookingid", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference("booking-temporaryBookings")
     @ToString.Exclude
@@ -57,7 +61,6 @@ public class Booking {
     @JsonBackReference(value = "booking-tourist")
     @ToString.Exclude
     private Tourist tourist;
-
 
     @Override
     public String toString() {

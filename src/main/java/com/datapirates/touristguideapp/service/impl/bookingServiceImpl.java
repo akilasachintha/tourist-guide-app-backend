@@ -3,6 +3,11 @@ package com.datapirates.touristguideapp.service.impl;
 import com.datapirates.touristguideapp.dto.requestDto.BookingReqDto;
 import com.datapirates.touristguideapp.dto.requestDto.TimeReqDto;
 import com.datapirates.touristguideapp.entity.bookings.*;
+import com.datapirates.touristguideapp.entity.hotel.Hotel;
+import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
+import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
+import com.datapirates.touristguideapp.entity.users.Driver;
+import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.Tourist;
 import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.*;
@@ -40,6 +45,14 @@ public class bookingServiceImpl implements bookingService {
     private UserRepository userRepository;
 
     @Autowired
+    private guideRepository guideRepository;
+
+    @Autowired
+    private DriverRepository driverRepository;
+
+    @Autowired
+    private roomRepository roomRepository;
+    @Autowired
     private touristRepository touristRepository;
     @Autowired
     private JavaMailSender javaMailSender;
@@ -72,17 +85,67 @@ public class bookingServiceImpl implements bookingService {
     }
 
     @Override
-    public Booking saveBooking(BookingReqDto bookingReqDto) {
-        return convertDtoToEntity(bookingReqDto);
-    }
+    public String saveBooking(BookingReqDto bookingReqDto) {
+        Hotel hotel = hotelRepository.getById(bookingReqDto.getHotel());
+            Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
+            if (hotelRooms.isEmpty()){
+                //hotels.remove(hotel);
+                return "No Rooms";
+            }
 
+            int count=0;
+            for (HotelRoom hotelRoom : hotelRooms){
+                RoomCategory roomCategory = hotelRoom.getRoomCategory();
+                if(roomCategory.getCategoryType().equals(bookingReqDto.getCategoryType())){
+                    count++;
+                }
+            }
+
+            if (count<bookingReqDto.getRoomCount()){
+                //hotels.remove(hotel);
+                return "No enough rooms";
+            }
+
+        if (bookingReqDto.getGuide()!=null){
+            Guide guide = guideRepository.getById(bookingReqDto.getGuide());
+            if (guide.getAvailability().equals("no")){
+                return "guide already booked";
+            }
+        }
+        if (bookingReqDto.getDriver()!=null){
+            Driver driver = driverRepository.getById(bookingReqDto.getDriver());
+            if (driver.getAvailability().equals("no")){
+                return "driver already booked";
+            }
+        }
+        convertDtoToEntity(bookingReqDto);
+        return "successfully booked";
+    }
     private Booking convertDtoToEntity(BookingReqDto bookingReqDto) {
         Booking booking = bookingReqDto.getBooking();
         //booking.setTemporaryBookings(bookingReqDto.getTemporaryBookings())
         booking.setHotelId(bookingReqDto.getHotel());
         booking.setDriverId(bookingReqDto.getDriver());
         booking.setGuideId(bookingReqDto.getGuide());
+        booking.setRoomCount(bookingReqDto.getRoomCount());
+        booking.setCategoryType(bookingReqDto.getCategoryType());
 
+        Hotel hotel = hotelRepository.getById(bookingReqDto.getHotel());
+        Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
+        int count=1;
+        for (HotelRoom hotelRoom : hotelRooms){
+            if (hotelRoom.getRoomAvailability().equals("no")){
+                continue;
+            }
+            RoomCategory roomCategory = hotelRoom.getRoomCategory();
+            if(roomCategory.getCategoryType().equals(bookingReqDto.getCategoryType())){
+                roomRepository.setAvailability(hotelRoom.getRoomId(),"no");
+                count++;
+            }
+            if (count>bookingReqDto.getRoomCount()){
+                break;
+            }
+        }
 
         Tourist existingTourist = touristRepository.findById(bookingReqDto.getUser()).orElseThrow(() ->
                 new ResourceNotFoundException("Location", "Id", booking.getBookingId()));
