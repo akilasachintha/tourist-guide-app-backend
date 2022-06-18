@@ -2,6 +2,7 @@ package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
+import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
@@ -112,5 +113,11 @@ public class HotelController {
     private String updateCategory(@RequestParam String type){
         hotelService.updateCategoryType(type,null);
         return "successfully updated";
+    }
+
+    @GetMapping("/{userId}")
+    private List<HotelResponseDTO> getHotelsByAppUserId(@PathVariable(name = "userId") Long userId){
+        return hotelService.getHotelsByAppUserId(userId);
+
     }
 }

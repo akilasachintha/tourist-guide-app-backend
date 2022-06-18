@@ -2,6 +2,7 @@ package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
+import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class hotelServiceImpl implements hotelService {
@@ -47,12 +49,13 @@ public class hotelServiceImpl implements hotelService {
     @Override
     public String updateCategory(String id, RoomCategory roomCategory) {
         Optional<RoomCategory> checking = roomCategoryRepository.findById(id);
-        if (!checking.isPresent()){
+        if (!checking.isPresent()) {
             return "not available Id";
         }
         roomCategoryRepository.save(roomCategory);
         return "update success";
     }
+
     @Override
     public Hotel saveHotel(HotelReqDTO hotelReqDTO) {
         return convertDtoToEntity(hotelReqDTO);
@@ -61,6 +64,31 @@ public class hotelServiceImpl implements hotelService {
     @Override
     public HotelRoom saveHotelRoom(HotelRoomDto hotelRoomDto) {
         return convertDatoToEntity(hotelRoomDto);
+    }
+
+    @Override
+    public List<HotelResponseDTO> getHotelsByAppUserId(Long userId) {
+        List<Hotel> existingHotels = hotelRepository.findAllByUserId(userId);
+
+        return existingHotels.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
+    }
+
+
+    private HotelResponseDTO convertEntityToDTO(Hotel hotel) {
+        HotelResponseDTO hotelResponseDTO = new HotelResponseDTO();
+
+        hotelResponseDTO.setHotelId(hotel.getHotelId());
+        hotelResponseDTO.setHotelOwnerId(hotel.getHotelOwner().getUserId());
+        hotelResponseDTO.setTown(hotel.getTown());
+        hotelResponseDTO.setName(hotel.getName());
+        hotelResponseDTO.setAdminStatus(hotel.getAdminStatus());
+        hotelResponseDTO.setDistrict(hotel.getDistrict());
+        hotelResponseDTO.setDescription(hotel.getDescription());
+        hotelResponseDTO.setNo(hotel.getNo());
+        hotelResponseDTO.setHotelRooms(hotel.getHotelRooms());
+        hotelResponseDTO.setHotelImages(hotel.getHotelImages());
+
+        return hotelResponseDTO;
     }
 
     private Hotel convertDtoToEntity(HotelReqDTO hotelReqDTO) {
@@ -110,26 +138,26 @@ public class hotelServiceImpl implements hotelService {
     }
 
     @Override
-    public List<Hotel> getAvailableHotels(String type,int amount) {
+    public List<Hotel> getAvailableHotels(String type, int amount) {
         List<Hotel> hotels = hotelRepository.findAll();
         List<Hotel> hotels1 = new ArrayList<>();
 
-        for (Hotel hotel : hotels){
+        for (Hotel hotel : hotels) {
             Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
-            if (hotelRooms.isEmpty()){
+            if (hotelRooms.isEmpty()) {
                 //hotels.remove(hotel);
                 continue;
             }
 
-            int count=0;
-            for (HotelRoom hotelRoom : hotelRooms){
+            int count = 0;
+            for (HotelRoom hotelRoom : hotelRooms) {
                 RoomCategory roomCategory = hotelRoom.getRoomCategory();
-                if(roomCategory.getCategoryType().equals(type)){
+                if (roomCategory.getCategoryType().equals(type)) {
                     count++;
                 }
             }
 
-            if (count>=amount){
+            if (count >= amount) {
                 //hotels.remove(hotel);
                 hotels1.add(hotel);
             }
@@ -146,33 +174,33 @@ public class hotelServiceImpl implements hotelService {
     @Override
     public String updateAvailability(Long id, String availability) {
         Optional<HotelRoom> checking = roomRepository.findById(id);
-        if (!checking.isPresent()){
+        if (!checking.isPresent()) {
             return "not available Id";
         }
-        roomRepository.setAvailability(id,availability);
+        roomRepository.setAvailability(id, availability);
         return "update success";
     }
 
     @Override
     public void updateCategoryType(String category, String type) {
-        roomRepository.setCategory(category,type);
+        roomRepository.setCategory(category, type);
     }
 
     @Override
     public String hotelRating(Long id, int starCount) {
         Optional<Hotel> checking = hotelRepository.findById(id);
-        if (!checking.isPresent()){
+        if (!checking.isPresent()) {
             return "not available Id";
         }
         double currentRate = hotelRepository.getRate(id);
         Long currentAmount = hotelRepository.getRateAmount(id);
         double currentStars = currentAmount * currentRate;
 
-        currentStars+=starCount;
-        currentAmount+=1;
-        currentRate=currentStars/currentAmount;
-        hotelRepository.setRate(id,currentRate);
-        hotelRepository.setRateAmount(id,currentAmount);
+        currentStars += starCount;
+        currentAmount += 1;
+        currentRate = currentStars / currentAmount;
+        hotelRepository.setRate(id, currentRate);
+        hotelRepository.setRateAmount(id, currentAmount);
         return "successful rated";
     }
 
@@ -189,7 +217,7 @@ public class hotelServiceImpl implements hotelService {
     @Override
     public String updateHotel(Long id, Hotel hotel) {
         Optional<Hotel> checking = hotelRepository.findById(id);
-        if (!checking.isPresent()){
+        if (!checking.isPresent()) {
             return "not available Id";
         }
         hotelRepository.save(hotel);
@@ -203,7 +231,7 @@ public class hotelServiceImpl implements hotelService {
 
     @Override
     public void updateOwner(Long owner, Long id) {
-        hotelRepository.setOwner(id,owner);
+        hotelRepository.setOwner(id, owner);
     }
 
     /*** booking rooms **/

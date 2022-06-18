@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
+import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.hotel.*;
 
 public interface hotelService {
@@ -32,6 +33,8 @@ public interface hotelService {
     Hotel saveHotel(HotelReqDTO hotelReqDTO);
 
     HotelRoom saveHotelRoom(HotelRoomDto hotelRoomDto);
+
+    List<HotelResponseDTO> getHotelsByAppUserId(Long userId);
 
     /***bookingRooms***/
 }
