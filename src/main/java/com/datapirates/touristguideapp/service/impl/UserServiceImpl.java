@@ -188,12 +188,19 @@ public class UserServiceImpl implements UserService {
     private AppUserResponseDTO convertEntityToDto(AppUser appUser) {
         AppUserResponseDTO appUserResponseDTO = new AppUserResponseDTO();
 
-        if (appUser.getUserType().equals("driver")) {
-            Driver driver = driverRepository.findById(appUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Driver", "Id", appUser.getUserId()));
-            appUserResponseDTO.setAdminStatus(driver.getAdminStatus());
-        } else if (appUser.getUserType().equals("guide")) {
-            Guide guide = guideRepository.findById(appUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Guide", "Id", appUser.getUserId()));
-            appUserResponseDTO.setAdminStatus(guide.getAdminStatus());
+        switch (appUser.getUserType()) {
+            case "driver":
+                Driver driver = driverRepository.findById(appUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Driver", "Id", appUser.getUserId()));
+                appUserResponseDTO.setAdminStatus(driver.getAdminStatus());
+                break;
+            case "guide":
+                Guide guide = guideRepository.findById(appUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Guide", "Id", appUser.getUserId()));
+                appUserResponseDTO.setAdminStatus(guide.getAdminStatus());
+                break;
+            case "hotelOwner":
+                HotelOwner hotelOwner = hotelOwnerRepository.findById(appUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HotelOwner", "Id", appUser.getUserId()));
+                appUserResponseDTO.setAdminStatus(hotelOwner.getAdminStatus());
+                break;
         }
 
         appUserResponseDTO.setUserId(appUser.getUserId());
