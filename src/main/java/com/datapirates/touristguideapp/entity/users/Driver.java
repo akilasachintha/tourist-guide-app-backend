@@ -28,6 +28,8 @@ public class Driver extends AppUser {
 
     private String availability;
 
+    private String adminStatus = "pending";
+
     @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "driver-vehicles")
     @ToString.Exclude

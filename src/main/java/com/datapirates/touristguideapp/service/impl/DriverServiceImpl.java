@@ -2,13 +2,16 @@ package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
+import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
+import com.datapirates.touristguideapp.admin.adminApprove;
 import com.datapirates.touristguideapp.repository.LocationRepository;
 import com.datapirates.touristguideapp.repository.UserRepository;
 import com.datapirates.touristguideapp.service.interfaces.DriverService;
+import com.sun.xml.bind.v2.runtime.reflect.Lister;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,9 @@ public class DriverServiceImpl implements DriverService {
     private DriverRepository driverRepository;
 
     private final LocationRepository locationRepository;
+
+    private adminApprove adminApprove;
+
 
     @Override
     public Driver saveDriver(UserDriverReqDTO userDriverReqDTO) {
@@ -78,7 +84,15 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<Driver> getDriverByAvailabilityAndLocationId(String availability, Long id) {
-        return driverRepository.findByAvailabilityAndLocation(availability,id);
+        List<Driver> drivers = driverRepository.findByAvailabilityAndLocation(availability,id);
+        Driver driver;
+        for (int i=0; i<drivers.size(); i++){
+            driver = drivers.get(i);
+            if (!driver.getAdminStatus().equals("confirm")){
+                drivers.remove(i);
+            }
+        }
+        return drivers;
     }
 
     @Override
@@ -93,7 +107,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public List<DriverResponseDTO> getAllDrivers() {
-        return driverRepository.findAll().stream().map(this::convertEntityToDto).collect(Collectors.toList());
+        return adminApprove.getDriverByAdmin("confirm").stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
     private DriverResponseDTO convertEntityToDto(Driver driver){

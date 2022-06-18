@@ -25,6 +25,8 @@ public class HotelRoom {
 
     private double price;
 
+    private String adminStatus = "pending";
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "hotel", foreignKey = @ForeignKey(name = "hotel_room_fk1"))
     @JsonBackReference(value = "hotel-hotelRooms")
@@ -54,4 +56,21 @@ public class HotelRoom {
 //    public int hashCode() {
 //        return Objects.hash(roomNo);
 //    }
+
+
+    public String getAdminStatus() {
+        return adminStatus;
+    }
+
+    public void setAdminStatus(String adminStatus) {
+        this.adminStatus = adminStatus;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
 }

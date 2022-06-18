@@ -4,6 +4,7 @@ import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.service.interfaces.DriverService;
+import com.datapirates.touristguideapp.admin.adminApprove;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class DriverController {
 
     private final DriverService driverService;
+
+    private adminApprove adminApprove;
 
 
     @PostMapping("/drivers")

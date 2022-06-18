@@ -52,6 +52,12 @@ public class BookingController {
            return "Successfully Sended";
     }
 
+    @GetMapping("/sendMail")
+    private String sendMailsBrowser(@RequestParam String email){
+        bookingService.mailSender(email,"check","hello");
+        return "Successfully Sended";
+    }
+
     @PostMapping("/add")
     private String addBooking(@RequestBody BookingReqDto bookingReqDto){
         bookingService.saveBooking(bookingReqDto);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.datapirates.touristguideapp.service.interfaces.hotelService;
+import com.datapirates.touristguideapp.admin.adminApprove;
 import com.datapirates.touristguideapp.entity.hotel.*;
 
 import java.util.HashMap;
@@ -25,6 +26,9 @@ public class hotelController {
     @Autowired
     private hotelService hotelService;
 
+    @Autowired
+    private adminApprove adminApprove;
+
     @PostMapping("/add")
     private String addHotel(@RequestBody HotelReqDTO hotelReqDTO){
         hotelService.saveHotel(hotelReqDTO);
@@ -40,7 +44,7 @@ public class hotelController {
 
     @GetMapping("/getAll")
     private List<Hotel> getAllHotels(){
-        return hotelService.getAllHotels();
+        return adminApprove.getHotelByAdmin("confirm");
     }
     @GetMapping("/getHotel")
     private Optional<Hotel> getHotel(@RequestParam Long id){
@@ -98,12 +102,12 @@ public class hotelController {
     }
     @GetMapping("/hotelRoom/getRooms")
     private List<HotelRoom> getAllRooms(){
-        return hotelService.getHotelRoom();
+        return adminApprove.getRoomByAdmin("confirm");
     }
 
     @PutMapping("/hotelRoom/updateAvailability")
-    private String updateRoomAvailability(@RequestParam Long hotelBooking, String availability, Long hotelId){
-         hotelService.updateRoomsAvailability(hotelBooking,availability,hotelId);
+    private String updateRoomAvailability(@RequestParam Long roomNo, String availability, Long hotelId){
+         hotelService.updateAvailability(hotelId,roomNo,availability);
          return "successfully updated";
     }
 

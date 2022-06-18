@@ -37,6 +37,8 @@ public class Hotel {
 
     private String town;
 
+    private String adminStatus="pending";
+
     @Lob
     private String description;
 
@@ -59,7 +61,7 @@ public class Hotel {
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "hotel_fk2"))
+    @JoinColumn(name = "hotelOwner", foreignKey = @ForeignKey(name = "hotel_fk1"))
     @JsonBackReference(value = "hotelOwner-hotels")
     @ToString.Exclude
     private HotelOwner hotelOwner;
@@ -70,6 +72,15 @@ public class Hotel {
         for (HotelImage b : hotelImages) {
             b.setHotel(this);
         }
+    }
+
+
+    public HotelOwner getHotelOwner() {
+        return hotelOwner;
+    }
+
+    public void setHotelOwner(HotelOwner hotelOwner) {
+        this.hotelOwner = hotelOwner;
     }
 }
 

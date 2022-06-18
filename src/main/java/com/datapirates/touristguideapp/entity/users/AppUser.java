@@ -35,4 +35,12 @@ public class AppUser {
     private String password;
 
     private double rating;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

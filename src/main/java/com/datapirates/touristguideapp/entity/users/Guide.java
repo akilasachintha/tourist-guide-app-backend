@@ -28,6 +28,8 @@ public class Guide extends AppUser {
 
     private String availability;
 
+    private String adminStatus = "pending";
+
 
 
 

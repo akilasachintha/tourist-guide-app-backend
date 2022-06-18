@@ -114,7 +114,15 @@ public class hotelServiceImpl implements hotelService {
 
     @Override
     public List<HotelRoom> getByAvailabilityAndHotel(Long id, String availability) {
-        return roomRepository.findByHotelAndRoomAvailability(id,availability);
+        List<HotelRoom> rooms = roomRepository.findByHotelAndRoomAvailability(id,availability);
+        HotelRoom hotelRoom = new HotelRoom();
+        for (int i=0; i<rooms.size(); i++){
+            hotelRoom = rooms.get(i);
+            if (!hotelRoom.getAdminStatus().equals("confirm")){
+                rooms.remove(i);
+            }
+        }
+        return rooms;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.datapirates.touristguideapp.admin.adminService;
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
+import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.users.AppUser;
 import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
@@ -69,7 +70,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Guide> getGuideByAvailability(String availability) {
-        return guideRepository.findByAvailability(availability);
+        List<Guide> guides = guideRepository.findByAvailability(availability);
+        Guide guide;
+        for (int i=0; i<guides.size(); i++){
+            guide = guides.get(i);
+            if (!guide.getAdminStatus().equals("confirm")){
+                guides.remove(i);
+            }
+        }
+        return guides;
     }
 
     @Override

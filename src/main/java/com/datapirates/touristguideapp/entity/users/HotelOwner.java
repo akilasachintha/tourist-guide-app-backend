@@ -19,6 +19,8 @@ public class HotelOwner extends AppUser {
 
     private final String userType = "hotelOwner";
 
+    private String adminStatus = "pending";
+
 
     @OneToMany(mappedBy = "hotelOwner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotelOwner-hotels")

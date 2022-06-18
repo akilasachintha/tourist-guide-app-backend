@@ -7,6 +7,7 @@ import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.entity.users.Tourist;
 import com.datapirates.touristguideapp.service.interfaces.UserService;
+import com.datapirates.touristguideapp.admin.adminApprove;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private adminApprove adminApprove;
 
     @Autowired
     private com.datapirates.touristguideapp.admin.adminService adminService;
@@ -93,7 +97,7 @@ public class UserController {
 
     @GetMapping("/guide/getAll")
     private List<Guide> getAllGuide(){
-        return userService.getAll();
+        return adminApprove.getGuideByAdmin("confirm");
     }
 
     @PutMapping("/guide/rate")

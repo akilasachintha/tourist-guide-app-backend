@@ -38,9 +38,32 @@ public class Vehicle {
 
     private String vehicleStatus = "pending";
 
+    private String adminStatus = "pending";
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "vehicle_fk1"))
     @JsonBackReference(value = "driver-vehicles")
     @ToString.Exclude
     private Driver driver;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return vehicleNo != null && Objects.equals(vehicleNo, vehicle.vehicleNo);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
 }

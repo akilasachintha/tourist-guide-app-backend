@@ -3,6 +3,7 @@ package com.datapirates.touristguideapp.service.impl;
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
+import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
@@ -30,12 +31,19 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<VehicleResDTO> getVehicles() {
-        return vehicleRepository.findAll().stream().map(this::convertEntityToDto).collect(Collectors.toList());
+        return vehicleRepository.findByAdminStatus("confirm").stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
     @Override
     public List<VehicleResDTO> getVehiclesByAppUserId(Long id) {
         List<Vehicle> existingVehicles = vehicleRepository.findAllByUserId(id);
+        Vehicle vehicle;
+        for (int i=0; i<existingVehicles.size(); i++){
+            vehicle = existingVehicles.get(i);
+            if (!vehicle.getAdminStatus().equals("confirm")){
+                existingVehicles.remove(i);
+            }
+        }
         return existingVehicles.stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
