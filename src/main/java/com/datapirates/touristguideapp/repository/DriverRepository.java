@@ -1,7 +1,5 @@
 package com.datapirates.touristguideapp.repository;
 
-import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
-import com.datapirates.touristguideapp.entity.users.AppUser;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -29,4 +27,8 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     List<Driver> findByAvailabilityAndLocation(String availability, Long id);
     List<Driver> findByAdminStatus(String status);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM Driver d WHERE d.userId = :id")
+    void deleteByUserId(Long id);
 }

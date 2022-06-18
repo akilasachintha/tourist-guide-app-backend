@@ -1,17 +1,15 @@
 package com.datapirates.touristguideapp.service.impl;
 
+import com.datapirates.touristguideapp.admin.adminApprove;
 import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
-import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.entity.users.Driver;
-import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
-import com.datapirates.touristguideapp.admin.adminApprove;
 import com.datapirates.touristguideapp.repository.LocationRepository;
 import com.datapirates.touristguideapp.repository.UserRepository;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.service.interfaces.DriverService;
-import com.sun.xml.bind.v2.runtime.reflect.Lister;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +63,7 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public String driverRating(Long id, int starCount) {
         Optional<Driver> checking = driverRepository.findById(id);
-        if (!checking.isPresent()){
+        if (!checking.isPresent()) {
             return "not available Id";
         }
         System.out.println(userRepository.getRate(id));
@@ -74,21 +72,21 @@ public class DriverServiceImpl implements DriverService {
         double currentStars = currentAmount * currentRate;
 
 
-        currentStars+=starCount;
-        currentAmount+=1;
-        currentRate=currentStars/currentAmount;
-        driverRepository.setRate(id,currentRate);
-        userRepository.setRateAmount(id,currentAmount);
+        currentStars += starCount;
+        currentAmount += 1;
+        currentRate = currentStars / currentAmount;
+        driverRepository.setRate(id, currentRate);
+        userRepository.setRateAmount(id, currentAmount);
         return "successful rated";
     }
 
     @Override
     public List<Driver> getDriverByAvailabilityAndLocationId(String availability, Long id) {
-        List<Driver> drivers = driverRepository.findByAvailabilityAndLocation(availability,id);
+        List<Driver> drivers = driverRepository.findByAvailabilityAndLocation(availability, id);
         Driver driver;
-        for (int i=0; i<drivers.size(); i++){
+        for (int i = 0; i < drivers.size(); i++) {
             driver = drivers.get(i);
-            if (!driver.getAdminStatus().equals("confirm")){
+            if (!driver.getAdminStatus().equals("confirm")) {
                 drivers.remove(i);
             }
         }
@@ -98,10 +96,10 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public String setDriverAvailability(Long id, String availability) {
         Optional<Driver> checking = driverRepository.findById(id);
-        if (!checking.isPresent()){
+        if (!checking.isPresent()) {
             return "not available Id";
         }
-        driverRepository.setAvailability(id,availability);
+        driverRepository.setAvailability(id, availability);
         return "successfully updated";
     }
 
@@ -110,7 +108,22 @@ public class DriverServiceImpl implements DriverService {
         return adminApprove.getDriverByAdmin("confirm").stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
-    private DriverResponseDTO convertEntityToDto(Driver driver){
+    @Override
+    public Driver updateDriver(Long id, Driver driver) {
+        Driver existingDriver = driverRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Driver", "Id", id));
+
+        existingDriver.setLicenceNo(driver.getLicenceNo());
+        existingDriver.setPhoneNo(driver.getPhoneNo());
+        existingDriver.setName(driver.getName());
+        existingDriver.setDob(driver.getDob());
+        existingDriver.setUserPhotoUrl(driver.getUserPhotoUrl());
+
+        driverRepository.save(existingDriver);
+        return existingDriver;
+
+    }
+
+    private DriverResponseDTO convertEntityToDto(Driver driver) {
         DriverResponseDTO driverResponseDTO = new DriverResponseDTO();
 
         driverResponseDTO.setUserId(driver.getUserId());

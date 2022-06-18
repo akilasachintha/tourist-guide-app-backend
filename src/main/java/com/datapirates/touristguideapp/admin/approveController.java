@@ -12,75 +12,77 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/approve")
+@RequestMapping("/api/v1/approve")
 @CrossOrigin
 public class approveController {
 
     @Autowired
     private adminApprove adminApprove;
 
-    /**GET PENDINGS **/
+    /**
+     * GET PENDINGS
+     **/
 
     @GetMapping("/get/pending/driver")
-    private List<Driver> getPendingGuide(){
+    private List<Driver> getPendingGuide() {
         return adminApprove.getDriverByAdmin("pending");
     }
 
     @GetMapping("/get/pending/guide")
-    private List<Guide> getPendingGide(){
+    private List<Guide> getPendingGide() {
         return adminApprove.getGuideByAdmin("pending");
     }
 
     @GetMapping("/get/pending/hotel")
-    private List<Hotel> getPendingHotel(){
+    private List<Hotel> getPendingHotel() {
         return adminApprove.getHotelByAdmin("pending");
     }
 
     @GetMapping("/get/pending/hotelroom")
-    private List<HotelRoom> getPendingHotelRoom(){
+    private List<HotelRoom> getPendingHotelRoom() {
         return adminApprove.getRoomByAdmin("pending");
     }
 
     @GetMapping("/get/pending/hotelowner")
-    private List<HotelOwner> getPendingHotelOwner(){
+    private List<HotelOwner> getPendingHotelOwner() {
         return adminApprove.getHotelOwnerByAdmin("pending");
     }
 
     @GetMapping("/get/pending/vehicle")
-    private List<Vehicle> getPendingVehicle(){
+    private List<Vehicle> getPendingVehicle() {
         return adminApprove.getVehicleByAdmin("pending");
     }
 
     /*** CONFIRM ***/
 
-    @PutMapping("/guide")
-    private String confirmGuide(@RequestParam Long id){
+    @PutMapping("/guide/{userId}")
+    private String confirmGuide(@PathVariable(name = "userId") Long id) {
         return adminApprove.approveGuide(id);
     }
 
-    @PutMapping("/driver")
-    private String confirmDriver(@RequestParam Long id){
+    @PutMapping("/driver/{userId}")
+    private String confirmDriver(@PathVariable(name = "userId") Long id) {
         return adminApprove.approveDriver(id);
     }
 
     @PutMapping("/hotel")
-    private String confirmHotel(@RequestParam Long id){
+    private String confirmHotel(@RequestParam Long id) {
         return adminApprove.approveHotel(id);
     }
 
-    @PutMapping("/vehicle")
-    private String confirmVehicle(@RequestParam Long id){
+    @PutMapping("/vehicle/{vehicleId}")
+    private String confirmVehicle(@PathVariable(name = "vehicleId") Long id) {
         return adminApprove.approveVehicle(id);
     }
 
     @PutMapping("/hotelowner")
-    private String confirmHotelOwner(@RequestParam Long id){
+    private String confirmHotelOwner(@RequestParam Long id) {
         return adminApprove.approveHotelOwner(id);
     }
 
     @PutMapping("/room")
-    private String confirmRoom(@RequestParam Long id , @RequestParam Long roomNo){
-        return adminApprove.approveHotelRoom(id,roomNo);
+    private String confirmRoom(@RequestParam Long id, @RequestParam Long roomNo) {
+        return adminApprove.approveHotelRoom(id, roomNo);
     }
 
 }

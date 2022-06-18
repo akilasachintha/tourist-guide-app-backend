@@ -2,8 +2,6 @@ package com.datapirates.touristguideapp.dto.responseDto;
 
 import lombok.Data;
 
-import javax.persistence.Lob;
-
 @Data
 public class VehicleResDTO {
     private Long vehicleId;
@@ -19,6 +17,8 @@ public class VehicleResDTO {
     private int seats;
 
     private String vehicleStatus;
+
+    private String adminStatus;
 
     private double priceForKm;
 

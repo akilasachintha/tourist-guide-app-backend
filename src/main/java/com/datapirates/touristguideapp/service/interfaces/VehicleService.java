@@ -16,4 +16,6 @@ public interface VehicleService {
     Vehicle updateVehicleStatus(Long id, Vehicle vehicle);
 
     String deleteVehicleById(Long id);
+
+    Vehicle updateVehicleDetails(Long id, Vehicle vehicle);
 }

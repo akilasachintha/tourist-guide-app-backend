@@ -1,10 +1,10 @@
 package com.datapirates.touristguideapp.controller;
 
+import com.datapirates.touristguideapp.admin.adminApprove;
 import com.datapirates.touristguideapp.dto.requestDto.UserDriverReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.service.interfaces.DriverService;
-import com.datapirates.touristguideapp.admin.adminApprove;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -54,5 +54,10 @@ public class DriverController {
     @PutMapping("/driver/rate")
     private String ratingDriver(@RequestParam Long id, @RequestParam int starCount) {
         return driverService.driverRating(id, starCount);
+    }
+
+    @PutMapping("/driver/{userId}")
+    public ResponseEntity<Driver> updateDriver(@PathVariable(name = "userId") Long id, @RequestBody Driver driver) {
+        return ResponseEntity.ok().body(driverService.updateDriver(id, driver));
     }
 }

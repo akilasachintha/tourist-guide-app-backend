@@ -7,18 +7,17 @@ import com.datapirates.touristguideapp.repository.UserRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class adminServiceImplement implements adminService{
     @Autowired
-    private adminRepository adminRepository;
+    private AdminRepository adminRepository;
 
     @Autowired
     private UserRepository userRepository;
 
     public String getPw(String username) {
-        adminEntity admin = adminRepository.findByUsername(username);
+        AdminEntity admin = adminRepository.findByUsername(username);
         if(admin == null){
             return null;
         }
@@ -164,7 +163,7 @@ public class adminServiceImplement implements adminService{
     }
 
     @Override
-    public adminEntity changeAdmin(adminEntity admin) {
+    public AdminEntity changeAdmin(AdminEntity admin) {
         return adminRepository.save(admin);
     }
 

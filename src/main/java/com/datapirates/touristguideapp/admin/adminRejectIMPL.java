@@ -6,16 +6,16 @@ import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
+import com.datapirates.touristguideapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import com.datapirates.touristguideapp.repository.*;
 
 import java.util.Optional;
 
 @Service
-public class adminRejectIMPL implements adminReject{
+public class adminRejectIMPL implements adminReject {
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -48,7 +48,7 @@ public class adminRejectIMPL implements adminReject{
     @Override
     public String rejectGuide(Long id) {
         Optional<Guide> guide = guideRepository.findById(id);
-        if (!guide.isPresent()){
+        if (!guide.isPresent()) {
             return "Error id";
         }
         Guide guide1 = guide.get();
@@ -60,19 +60,19 @@ public class adminRejectIMPL implements adminReject{
     @Override
     public String rejectDriver(Long id) {
         Optional<Driver> driver = driverRepository.findById(id);
-        if (!driver.isPresent()){
-            return "Error id";
+        if (!driver.isPresent()) {
+            return "Driver Not Found with Id " + id;
         }
         Driver driver1 = driver.get();
-        sendMails(driver1.getEmail());
-        driverRepository.deleteById(id);
+//        sendMails(driver1.getEmail());
+        driverRepository.deleteByUserId(id);
         return "Rejected";
     }
 
     @Override
     public String rejectHotelOwner(Long id) {
         Optional<HotelOwner> hotelOwner = hotelOwnerRepository.findById(id);
-        if (!hotelOwner.isPresent()){
+        if (!hotelOwner.isPresent()) {
             return "Error id";
         }
         HotelOwner hotelOwner1 = hotelOwner.get();
@@ -84,7 +84,7 @@ public class adminRejectIMPL implements adminReject{
     @Override
     public String rejectHotel(Long id) {
         Optional<Hotel> hotel = hotelRepository.findById(id);
-        if (!hotel.isPresent()){
+        if (!hotel.isPresent()) {
             return "Error id";
         }
         Hotel hotel1 = hotel.get();
@@ -97,20 +97,20 @@ public class adminRejectIMPL implements adminReject{
     @Override
     public String rejectVehicle(Long id) {
         Optional<Vehicle> vehicle = vehicleRepository.findById(id);
-        if (!vehicle.isPresent()){
+        if (!vehicle.isPresent()) {
             return "Error id";
         }
         Vehicle vehicle1 = vehicle.get();
         Driver driver = vehicle1.getDriver();
-        sendMails(driver.getEmail());
-        vehicleRepository.deleteById(id);
-        return null;
+//        sendMails(driver.getEmail());
+        vehicleRepository.deleteByVehicleId(id);
+        return "Rejected";
     }
 
     @Override
     public String rejectHotelRoom(Long id, Long RoomNo) {
-        Optional<HotelRoom> room = roomRepository.findByHotelAndRoomNo(id,RoomNo);
-        if (!room.isPresent()){
+        Optional<HotelRoom> room = roomRepository.findByHotelAndRoomNo(id, RoomNo);
+        if (!room.isPresent()) {
             return "Error id";
         }
         HotelRoom room1 = room.get();

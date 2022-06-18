@@ -3,7 +3,6 @@ package com.datapirates.touristguideapp.controller;
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
-import com.datapirates.touristguideapp.entity.location.Location;
 import com.datapirates.touristguideapp.service.interfaces.VehicleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,5 +56,10 @@ public class VehicleController {
     @PutMapping("/{vehicleId}")
     public ResponseEntity<Vehicle> updateVehicleStatus(@PathVariable(name = "vehicleId") Long id, @RequestBody Vehicle vehicle) {
         return ResponseEntity.ok().body(vehicleService.updateVehicleStatus(id, vehicle));
+    }
+
+    @PutMapping("/update/{vehicleId}")
+    public ResponseEntity<Vehicle> updateVehicleDetails(@PathVariable(name = "vehicleId") Long id, @RequestBody Vehicle vehicle) {
+        return ResponseEntity.ok().body(vehicleService.updateVehicleDetails(id, vehicle));
     }
 }

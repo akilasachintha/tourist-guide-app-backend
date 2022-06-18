@@ -2,6 +2,11 @@ package com.datapirates.touristguideapp.admin;
 
 import com.datapirates.touristguideapp.entity.Vehicle;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
+import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
+import com.datapirates.touristguideapp.entity.users.Driver;
+import com.datapirates.touristguideapp.entity.users.Guide;
+import com.datapirates.touristguideapp.entity.users.HotelOwner;
+import com.datapirates.touristguideapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,9 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import com.datapirates.touristguideapp.repository.*;
-import com.datapirates.touristguideapp.entity.users.*;
-import com.datapirates.touristguideapp.entity.hotel.*;
 
 @Service
 public class adminApproveIMPL implements adminApprove{
@@ -95,7 +97,7 @@ public class adminApproveIMPL implements adminApprove{
             return "Error id";
         }
         Driver driver1 = driver.get();
-        sendMails(driver1.getEmail());
+//        sendMails(driver1.getEmail());
         driverRepository.approve(id,"confirm");
         return "Confirmed";
     }
@@ -133,7 +135,7 @@ public class adminApproveIMPL implements adminApprove{
         }
         Vehicle vehicle1 = vehicle.get();
         Driver driver = vehicle1.getDriver();
-        sendMails(driver.getEmail());
+//        sendMails(driver.getEmail());
         vehicleRepository.approve(id,"confirm");
         return "Confirmed";
     }

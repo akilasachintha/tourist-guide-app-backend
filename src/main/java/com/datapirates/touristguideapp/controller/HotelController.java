@@ -2,19 +2,16 @@ package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
-import com.datapirates.touristguideapp.dto.responseDto.DriverResponseDTO;
+import com.datapirates.touristguideapp.entity.hotel.Hotel;
+import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
+import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
+import com.datapirates.touristguideapp.service.interfaces.hotelService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.datapirates.touristguideapp.service.interfaces.hotelService;
-import com.datapirates.touristguideapp.admin.adminApprove;
-import com.datapirates.touristguideapp.entity.hotel.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,12 +19,12 @@ import java.util.Optional;
 @CrossOrigin
 @Slf4j
 @AllArgsConstructor
-public class hotelController {
+public class HotelController {
     @Autowired
     private hotelService hotelService;
 
     @Autowired
-    private adminApprove adminApprove;
+    private com.datapirates.touristguideapp.admin.adminApprove adminApprove;
 
     @PostMapping("/add")
     private String addHotel(@RequestBody HotelReqDTO hotelReqDTO){

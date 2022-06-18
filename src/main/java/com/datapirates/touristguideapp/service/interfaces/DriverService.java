@@ -19,4 +19,6 @@ public interface DriverService {
     String setDriverAvailability(Long id,String availability);
 
     List<DriverResponseDTO> getAllDrivers();
+
+    Driver updateDriver(Long id, Driver driver);
 }

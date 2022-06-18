@@ -20,4 +20,6 @@ public class AppUserResponseDTO {
     private String dob;
 
     private double rating;
+
+    private String adminStatus;
 }

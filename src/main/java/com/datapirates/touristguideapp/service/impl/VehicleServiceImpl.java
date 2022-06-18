@@ -3,17 +3,15 @@ package com.datapirates.touristguideapp.service.impl;
 import com.datapirates.touristguideapp.dto.requestDto.VehicleReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.VehicleResDTO;
 import com.datapirates.touristguideapp.entity.Vehicle;
-import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.users.Driver;
-import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.DriverRepository;
 import com.datapirates.touristguideapp.repository.VehicleRepository;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.service.interfaces.VehicleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +20,6 @@ public class VehicleServiceImpl implements VehicleService {
 
     private final VehicleRepository vehicleRepository;
     private final DriverRepository driverRepository;
-
 
     @Override
     public Vehicle saveVehicle(VehicleReqDTO vehicleReqDTO) {
@@ -37,20 +34,22 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public List<VehicleResDTO> getVehiclesByAppUserId(Long id) {
         List<Vehicle> existingVehicles = vehicleRepository.findAllByUserId(id);
-        Vehicle vehicle;
-        for (int i=0; i<existingVehicles.size(); i++){
-            vehicle = existingVehicles.get(i);
-            if (!vehicle.getAdminStatus().equals("confirm")){
-                existingVehicles.remove(i);
-            }
-        }
+
+//        Vehicle vehicle;
+//        for (int i = 0; i < existingVehicles.size(); i++) {
+//            vehicle = existingVehicles.get(i);
+//            if (!vehicle.getAdminStatus().equals("confirm")) {
+//                existingVehicles.remove(i);
+//            }
+//        }
+
         return existingVehicles.stream().map(this::convertEntityToDto).collect(Collectors.toList());
     }
 
     @Override
     public Vehicle updateVehicleStatus(Long id, Vehicle vehicle) {
         Vehicle existingVehicle = vehicleRepository.findById(id).orElseThrow(() ->
-            new ResourceNotFoundException("Vehicle", "Id", id));
+                new ResourceNotFoundException("Vehicle", "Id", id));
 
         existingVehicle.setVehicleStatus(vehicle.getVehicleStatus());
 
@@ -64,7 +63,26 @@ public class VehicleServiceImpl implements VehicleService {
         return "Vehicle Id " + id + " Deleted Successfully";
     }
 
-    private VehicleResDTO convertEntityToDto(Vehicle vehicle){
+    @Override
+    public Vehicle updateVehicleDetails(Long id, Vehicle vehicle) {
+        Vehicle existingVehicle = vehicleRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Vehicle", "Id", id));
+
+        existingVehicle.setAdminStatus("pending");
+        existingVehicle.setVehicleNo(vehicle.getVehicleNo());
+        existingVehicle.setVehicleModal(vehicle.getVehicleModal());
+        existingVehicle.setPriceForKm(vehicle.getPriceForKm());
+        existingVehicle.setVehicleType(vehicle.getVehicleType());
+        existingVehicle.setVehicleName(vehicle.getVehicleName());
+        existingVehicle.setVehiclePhotoUrl(vehicle.getVehiclePhotoUrl());
+        existingVehicle.setVehicleCondition(vehicle.getVehicleCondition());
+        existingVehicle.setSeats(vehicle.getSeats());
+
+        vehicleRepository.save(existingVehicle);
+        return existingVehicle;
+    }
+
+    private VehicleResDTO convertEntityToDto(Vehicle vehicle) {
         VehicleResDTO vehicleResDTO = new VehicleResDTO();
 
         vehicleResDTO.setVehicleId(vehicle.getVehicleId());
@@ -77,6 +95,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicleResDTO.setVehiclePhotoUrl(vehicle.getVehiclePhotoUrl());
         vehicleResDTO.setVehicleModal(vehicle.getVehicleModal());
         vehicleResDTO.setVehicleStatus(vehicle.getVehicleStatus());
+        vehicleResDTO.setAdminStatus(vehicle.getAdminStatus());
 
         vehicleResDTO.setUserId(vehicle.getDriver().getUserId());
         vehicleResDTO.setAvailability(vehicle.getDriver().getAvailability());
@@ -85,7 +104,8 @@ public class VehicleServiceImpl implements VehicleService {
 
         return vehicleResDTO;
     }
-    private Vehicle convertDtoToEntity(VehicleReqDTO vehicleReqDTO){
+
+    private Vehicle convertDtoToEntity(VehicleReqDTO vehicleReqDTO) {
         Vehicle vehicle = new Vehicle();
 
         vehicle.setVehicleNo(vehicleReqDTO.getVehicleNo());
@@ -97,7 +117,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setVehiclePhotoUrl(vehicleReqDTO.getVehiclePhotoUrl());
 
         Driver existingDriver = driverRepository.findById(vehicleReqDTO.getUserId()).orElseThrow(() ->
-                    new ResourceNotFoundException("Driver", "Id", vehicleReqDTO.getUserId()));
+                new ResourceNotFoundException("Driver", "Id", vehicleReqDTO.getUserId()));
         vehicle.setDriver(existingDriver);
 
         return vehicleRepository.save(vehicle);
