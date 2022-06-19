@@ -25,6 +25,10 @@ public class Tourist extends AppUser {
 
     private String country;
 
+    private String verifyStatus = "pending";
+
+    private String verifyCode;
+
    // private Set<Booking> bookings = new HashSet<>();
 
     @OneToMany(mappedBy = "tourist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

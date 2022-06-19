@@ -31,6 +31,7 @@ public interface UserService {
 
     String updateTourist(Long id , Tourist tourist);
 
+    String verifyTourist(String email , String code);
 
     LoginResDTO authUser(LoginReqDTO loginReqDTO);
 

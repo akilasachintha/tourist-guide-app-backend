@@ -123,7 +123,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Tourist saveTourist(Tourist tourist) {
+        tourist.setVerifyCode(buildVerify());
         return touristRepository.save(tourist);
+    }
+
+    private String buildVerify(){
+        StringBuilder code = new StringBuilder();
+        String numbers = "1234567890";
+
+        char[] numbArray = numbers.toCharArray();
+
+        for (int i=0; i<6; i++){
+            int a = (int) (Math.random()*10);
+            code.append(numbArray[a]);
+        }
+
+        return code.toString();
     }
 
     @Override
@@ -134,6 +149,18 @@ public class UserServiceImpl implements UserService {
         }
         touristRepository.save(tourist);
         return "update success";
+    }
+
+    @Override
+    public String verifyTourist(String email, String code) {
+        List<Tourist> tourists = touristRepository.findAll();
+        for(Tourist tourist : tourists){
+            if (tourist.getEmail().equals(email)&&tourist.getVerifyCode().equals(code)){
+                touristRepository.setVerifyStatus(tourist.getUserId(),"confirm");
+                return "successfully verified ";
+            }
+        }
+        return "Error verify";
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.datapirates.touristguideapp.entity.users.AppUser;
+import com.datapirates.touristguideapp.dto.requestDto.verifyReqDto;
 
 import java.util.List;
 
@@ -59,6 +60,11 @@ public class UserController {
     private String addTourist(@RequestBody Tourist tourist){
         userService.saveTourist(tourist);
         return "Successfully added";
+    }
+
+    @PostMapping("/tourist/verify")
+    private String addTourist(@RequestBody verifyReqDto verifyReqDto){
+        return userService.verifyTourist(verifyReqDto.getEmail(),verifyReqDto.getCode());
     }
 
     @PutMapping("/tourist/update")
