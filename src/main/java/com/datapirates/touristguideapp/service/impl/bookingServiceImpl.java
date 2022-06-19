@@ -91,6 +91,21 @@ public class bookingServiceImpl implements bookingService {
         return bookingRepository.findAll();
     }
 
+    private Long getOwnerId(Long hotelId){
+        List<HotelOwner> hotelOwners = hotelOwnerRepository.findAll();
+        Long ownerId = null;
+        for (HotelOwner hotelOwner : hotelOwners){
+            Set<Hotel> hotels = hotelOwner.getHotels();
+            for (Hotel hotel : hotels){
+                if (Objects.equals(hotel.getHotelId(), hotelId)){
+                    ownerId = hotelOwner.getUserId();
+                    break;
+                }
+            }
+        }
+
+        return ownerId;
+    }
     private double calculateTotalAmount(Long hotelId,Long guideId,Long vehicleId,int dayCount,String categoryType,int roomCount){
         double total=0.0;
         if (guideId!=null){
@@ -121,21 +136,6 @@ public class bookingServiceImpl implements bookingService {
         return total;
     }
 
-    private Long getOwnerId(Long hotelId){
-        List<HotelOwner> hotelOwners = hotelOwnerRepository.findAll();
-        Long ownerId = null;
-        for (HotelOwner hotelOwner : hotelOwners){
-            Set<Hotel> hotels = hotelOwner.getHotels();
-            for (Hotel hotel : hotels){
-                if (Objects.equals(hotel.getHotelId(), hotelId)){
-                    ownerId = hotelOwner.getUserId();
-                    break;
-                }
-            }
-        }
-
-        return ownerId;
-    }
 
 
     @Override
@@ -150,7 +150,7 @@ public class bookingServiceImpl implements bookingService {
             int count=0;
             for (HotelRoom hotelRoom : hotelRooms){
                 RoomCategory roomCategory = hotelRoom.getRoomCategory();
-                if(roomCategory.getCategoryType().equals(bookingReqDto.getCategoryType())){
+                if(roomCategory.getCategoryType().equals(bookingReqDto.getCategoryType())&&hotelRoom.getRoomAvailability().equals("yes")){
                     count++;
                 }
             }
@@ -185,6 +185,17 @@ public class bookingServiceImpl implements bookingService {
         booking.setCategoryType(bookingReqDto.getCategoryType());
         if(bookingReqDto.getGuide()!=null){
             sendMails(userRepository.getEmail(bookingReqDto.getGuide()),"Booking","you have a new booking");
+            guideRepository.setAvailability(bookingReqDto.getGuide(),"no");
+        }
+
+        if(bookingReqDto.getDriver()!=null){
+            sendMails(userRepository.getEmail(bookingReqDto.getDriver()),"Booking","you have a new booking");
+            guideRepository.setAvailability(bookingReqDto.getDriver(),"no");
+        }
+
+        if(bookingReqDto.getHotel()!=null){
+            Long owner  = getOwnerId(bookingReqDto.getHotel());
+            sendMails(userRepository.getEmail(owner),"Booking","you have a new booking");
         }
         Hotel hotel = hotelRepository.getById(bookingReqDto.getHotel());
         Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
@@ -276,12 +287,27 @@ public class bookingServiceImpl implements bookingService {
         return retBooking;
     }
 
+    private Long getTourist(Long bookingId){
+        Long touristId = null;
+        List<Tourist> tourists = touristRepository.findAll();
+        for (Tourist tourist : tourists){
+            List<Booking> bookings = tourist.getBookings();
+            for (Booking booking : bookings){
+                if (Objects.equals(booking.getBookingId(),bookingId)){
+                    touristId = tourist.getUserId();
+                    break;
+                }
+            }
+        }
+        return touristId;
+    }
     @Override
     public String cancelFullBooking(Long id) {
         Optional<Booking> checking = bookingRepository.findById(id);
         if (!checking.isPresent()){
             return "not available Id";
         }
+        Booking booking = checking.get();
         String bookingState = bookingRepository.getStateById(id);
         if(bookingState.toLowerCase().equals("pending")){
             Long tempID = bookingRepository.findTempId(id);
@@ -318,32 +344,47 @@ public class bookingServiceImpl implements bookingService {
             sendMails(email,subject,body);
         }
         else {
-            if(bookingState.toLowerCase().equals("rated")){
+            if(bookingState.equalsIgnoreCase("rated")){
                 return "ERROR: FinishedBooking";
             }
-            Long hotelId = hotelBookingRepository.findHotelId(id);
+            Long hotelId = booking.getHotelId();
             if (hotelId!=null){
-                Long ownerId = hotelRepository.getOwnerId(hotelId);
+                Long ownerId = getOwnerId(hotelId);
                 String email = userRepository.getEmail(ownerId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
                 sendMails(email,subject,body);
+                Hotel hotel = hotelRepository.getById(booking.getHotelId());
+                Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
+                int count=1;
+                for (HotelRoom hotelRoom : hotelRooms){
+                    RoomCategory roomCategory = hotelRoom.getRoomCategory();
+                    if(roomCategory.getCategoryType().equals(booking.getCategoryType())&&hotelRoom.getRoomAvailability().equals("no")){
+                        roomRepository.setAvailability(hotelRoom.getRoomId(),"yes");
+                        count++;
+                    }
+                    if (count>booking.getRoomCount()){
+                        break;
+                    }
+                }
             }
-            Long driverId = driverBookingRepository.findDriverId(id);
+            Long driverId = booking.getDriverId();
             if (driverId!=null){
                 String email = userRepository.getEmail(driverId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
                 sendMails(email,subject,body);
+                driverRepository.setAvailability(driverId,"yes");
             }
-            Long guideId = guideBookingRepository.findGuideId(id);
+            Long guideId = booking.getGuideId();
             if (guideId!=null){
                 String email = userRepository.getEmail(guideId);
                 String subject="Booking cancel";
                 String body="Your Booking has canceled by tourist";
                 sendMails(email,subject,body);
+                guideRepository.setAvailability(guideId,"yes");
             }
-            Long touristId = bookingRepository.getTouristId(id);
+            Long touristId = getTourist(booking.getBookingId());
             bookingRepository.deleteById(id);
             String email = userRepository.getEmail(touristId);
             String subject="Booking cancel";
