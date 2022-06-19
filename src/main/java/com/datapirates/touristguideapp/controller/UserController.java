@@ -32,10 +32,13 @@ public class UserController {
 
     @Autowired
     private com.datapirates.touristguideapp.admin.adminService adminService;
-    /**Security **/
+
+    /**
+     * Security
+     **/
 
     @PostMapping("/auth/login")
-    public ResponseEntity<LoginResDTO> authUser(@RequestBody LoginReqDTO loginReqDTO){
+    public ResponseEntity<LoginResDTO> authUser(@RequestBody LoginReqDTO loginReqDTO) {
         LoginResDTO authUser = userService.authUser(loginReqDTO);
         return ResponseEntity.ok(authUser);
     }
@@ -51,13 +54,15 @@ public class UserController {
     }
 
     @GetMapping("/getKey")
-    private String getKey(@RequestBody AppUser user){
-        return adminService.madeUserSecretKey(user.getEmail(),user.getPassword());
+    private String getKey(@RequestBody AppUser user) {
+        return adminService.madeUserSecretKey(user.getEmail(), user.getPassword());
     }
 
-    /** tourist **/
+    /**
+     * tourist
+     **/
     @PostMapping("/tourist/add")
-    private String addTourist(@RequestBody Tourist tourist){
+    private String addTourist(@RequestBody Tourist tourist) {
         userService.saveTourist(tourist);
         return "Successfully added";
     }
@@ -68,47 +73,49 @@ public class UserController {
     }
 
     @PutMapping("/tourist/update")
-    private String updateTourist(@RequestParam Long id,@RequestBody Tourist tourist){
-        return userService.updateTourist(id,tourist);
+    private String updateTourist(@RequestParam Long id, @RequestBody Tourist tourist) {
+        return userService.updateTourist(id, tourist);
     }
 
     @PostMapping("/hotelOwner/add")
-    private String addHotelOwner(@RequestBody HotelOwner hotelOwner){
+    private String addHotelOwner(@RequestBody HotelOwner hotelOwner) {
         userService.saveHotelOwner(hotelOwner);
         return "Successfully added";
     }
 
-    @PutMapping("/hotelOwner/update")
-    private String updateHotelOwner(@RequestParam Long id, @RequestBody HotelOwner hotelOwner){
-        return userService.updateHotelOwner(id,hotelOwner);
+    @PutMapping("/hotelOwner/update/{id}")
+    private String updateHotelOwner(@PathVariable(name = "id") Long id, @RequestBody HotelOwner hotelOwner) {
+        return userService.updateHotelOwner(id, hotelOwner);
     }
 
-    /** guide **/
+    /**
+     * guide
+     **/
 
     @PostMapping("/guide/add")
-    private String addGuide(@RequestBody Guide guide){
+    private String addGuide(@RequestBody Guide guide) {
         userService.saveGuide(guide);
         return "Successfully added";
     }
 
     @PutMapping("/guide/update")
-    private String updateGuide(@RequestParam Long id, @RequestBody Guide guide){
-        return userService.updateGuide(id,guide);
+    private String updateGuide(@RequestParam Long id, @RequestBody Guide guide) {
+        return userService.updateGuide(id, guide);
     }
 
     @GetMapping("/guide/getByAvailability")
-    private List<Guide> getGuideByAvailability(@RequestParam String availability){
+    private List<Guide> getGuideByAvailability(@RequestParam String availability) {
         return userService.getGuideByAvailability(availability);
     }
 
     @GetMapping("/guide/getAll")
-    private List<Guide> getAllGuide(){
+    private List<Guide> getAllGuide() {
         return adminApprove.getGuideByAdmin("confirm");
     }
 
     @PutMapping("/guide/rate")
-    private String ratingGuide(@RequestParam Long id, @RequestParam int starCount){
-        return userService.guideRating(id,starCount);
+    private String ratingGuide(@RequestParam Long id, @RequestParam int starCount) {
+        return userService.guideRating(id, starCount);
     }
 
 }

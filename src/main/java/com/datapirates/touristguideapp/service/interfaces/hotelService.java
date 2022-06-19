@@ -7,6 +7,7 @@ import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
 import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.hotel.*;
+import com.datapirates.touristguideapp.entity.users.HotelOwner;
 
 public interface hotelService {
     /***Category***/
@@ -29,12 +30,14 @@ public interface hotelService {
     //Hotel saveHotel(Hotel hotel);
     String updateHotel(Long id,Hotel hotel);
     Long getOwnerId(Long hotelId);
-    void updateOwner(Long owner,Long id);
+    void updateOwner(Long userId,Long id);
     Hotel saveHotel(HotelReqDTO hotelReqDTO);
 
     HotelRoom saveHotelRoom(HotelRoomDto hotelRoomDto);
 
     List<HotelResponseDTO> getHotelsByAppUserId(Long userId);
+
+//    HotelOwner updateHotelOwner(Long userId, HotelOwner hotelOwner);
 
     /***bookingRooms***/
 }

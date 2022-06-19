@@ -6,6 +6,7 @@ import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
+import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.service.interfaces.hotelService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,15 +55,21 @@ public class HotelController {
         return hotelService.getOwnerId(id);
     }
 
-    @PutMapping("/update")
-    private String updateHotel(@RequestParam Long id,@RequestBody Hotel hotel){
+    @PutMapping("/update/{hotelId}")
+    private String updateHotel(@PathVariable(name = "hotelId") Long id,@RequestBody Hotel hotel){
         return hotelService.updateHotel(id,hotel);
     }
-    @PutMapping("/updateOwner")
-    private String updateOwner(@RequestParam Long owner){
-        hotelService.updateOwner(owner,null);
+    @PutMapping("/updateOwner/{userId}")
+    private String updateOwner(@PathVariable(name = "userId") Long userId,HotelOwner hotelOwner){
+        hotelService.updateOwner(userId,null);
         return "successfully updated";
     }
+
+//    @PutMapping("updateHotelOwner/{userId}")
+//    private HotelOwner updateHotelOwner(@PathVariable(name = "userId") Long userId, HotelOwner hotelOwner){
+//        return hotelService.updateHotelOwner(userId, hotelOwner);
+//    }
+
     @PutMapping("/rating")
     private String rateHotel(@RequestParam Long id,@RequestBody int starCount){
         return hotelService.hotelRating(id,starCount);

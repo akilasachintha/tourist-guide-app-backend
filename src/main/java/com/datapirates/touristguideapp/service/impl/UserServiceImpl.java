@@ -128,11 +128,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String updateHotelOwner(Long id, HotelOwner hotelOwner) {
-        Optional<HotelOwner> checking = hotelOwnerRepository.findById(id);
-        if (!checking.isPresent()) {
-            return "not available Id";
-        }
-        hotelOwnerRepository.save(hotelOwner);
+        HotelOwner existingHotelOwner = hotelOwnerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("HotelOwner", "Id", id));
+
+        existingHotelOwner.setName(hotelOwner.getName());
+        existingHotelOwner.setUserPhotoUrl(hotelOwner.getUserPhotoUrl());
+        existingHotelOwner.setPhoneNo(hotelOwner.getPhoneNo());
+        hotelOwnerRepository.save(existingHotelOwner);
         return "update success";
     }
 

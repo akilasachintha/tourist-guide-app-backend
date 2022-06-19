@@ -73,6 +73,17 @@ public class hotelServiceImpl implements hotelService {
         return existingHotels.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
     }
 
+//    @Override
+//    public HotelOwner updateHotelOwner(Long userId, HotelOwner hotelOwner) {
+//        HotelOwner existingHotelOwner = hotelOwnerRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("HotelOwner", "Id", userId));
+//
+//        existingHotelOwner.setName(hotelOwner.getName());
+//        existingHotelOwner.setUserPhotoUrl(hotelOwner.getUserPhotoUrl());
+//        existingHotelOwner.setPhoneNo(hotelOwner.getPhoneNo());
+//        hotelOwnerRepository.save(existingHotelOwner);
+//        return existingHotelOwner;
+//    }
+
 
     private HotelResponseDTO convertEntityToDTO(Hotel hotel) {
         HotelResponseDTO hotelResponseDTO = new HotelResponseDTO();
@@ -216,11 +227,13 @@ public class hotelServiceImpl implements hotelService {
 
     @Override
     public String updateHotel(Long id, Hotel hotel) {
-        Optional<Hotel> checking = hotelRepository.findById(id);
-        if (!checking.isPresent()) {
-            return "not available Id";
-        }
-        hotelRepository.save(hotel);
+        Hotel existingHotel = hotelRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Hotel", "Id", id));
+
+        existingHotel.setHotelImages(hotel.getHotelImages());
+        existingHotel.setName(hotel.getName());
+        existingHotel.setDescription(hotel.getDescription());
+
+        hotelRepository.save(existingHotel);
         return "update success";
     }
 
