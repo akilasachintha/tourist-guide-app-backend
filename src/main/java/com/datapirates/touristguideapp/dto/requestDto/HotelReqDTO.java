@@ -20,7 +20,6 @@ public class HotelReqDTO {
 
     private String town;
 
-    @Lob
     private String description;
 
     private Long locationId;

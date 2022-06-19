@@ -31,6 +31,8 @@ public class Booking {
 
     private double paidAmount;
 
+    private double fullPayment;
+
     private String date;
 
     private String time;
@@ -39,13 +41,13 @@ public class Booking {
 
     private String participant;
 
-    private double advancedPayment;
-
     private Long driverId;
 
     private Long guideId;
 
     private Long hotelId;
+
+    private Long vehicleId;
 
     private int roomCount;
 

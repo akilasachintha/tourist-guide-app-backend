@@ -71,7 +71,6 @@ public class VehicleServiceImpl implements VehicleService {
         existingVehicle.setAdminStatus("pending");
         existingVehicle.setVehicleNo(vehicle.getVehicleNo());
         existingVehicle.setVehicleModal(vehicle.getVehicleModal());
-        existingVehicle.setPriceForKm(vehicle.getPriceForKm());
         existingVehicle.setVehicleType(vehicle.getVehicleType());
         existingVehicle.setVehicleName(vehicle.getVehicleName());
         existingVehicle.setVehiclePhotoUrl(vehicle.getVehiclePhotoUrl());
@@ -90,7 +89,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicleResDTO.setVehicleName(vehicle.getVehicleName());
         vehicleResDTO.setVehicleType(vehicle.getVehicleType());
         vehicleResDTO.setVehicleCondition(vehicle.getVehicleCondition());
-        vehicleResDTO.setPriceForKm(vehicle.getPriceForKm());
+        vehicleResDTO.setPriceForKm(vehicle.getPriceForDay());
         vehicleResDTO.setSeats(vehicle.getSeats());
         vehicleResDTO.setVehiclePhotoUrl(vehicle.getVehiclePhotoUrl());
         vehicleResDTO.setVehicleModal(vehicle.getVehicleModal());
@@ -112,7 +111,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setVehicleName(vehicleReqDTO.getVehicleName());
         vehicle.setVehicleType(vehicleReqDTO.getVehicleType());
         vehicle.setSeats(vehicleReqDTO.getSeats());
-        vehicle.setPriceForKm(vehicleReqDTO.getPriceForKm());
+        vehicle.setPriceForDay(vehicleReqDTO.getPriceForKm());
         vehicle.setVehicleCondition(vehicleReqDTO.getVehicleCondition());
         vehicle.setVehiclePhotoUrl(vehicleReqDTO.getVehiclePhotoUrl());
 

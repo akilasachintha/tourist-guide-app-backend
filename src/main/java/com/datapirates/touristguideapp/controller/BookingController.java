@@ -1,6 +1,6 @@
 package com.datapirates.touristguideapp.controller;
 
-import com.datapirates.touristguideapp.dto.requestDto.BookingReqDto;
+import com.datapirates.touristguideapp.dto.requestDto.*;
 import com.datapirates.touristguideapp.entity.EmailBody;
 import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.bookings.DriverBooking;
@@ -90,6 +90,10 @@ public class BookingController {
         return "Successfully deleted";
     }
 
+    @PostMapping("/getPayment")
+    private double getPayment(@RequestBody paymentReqDTO request){
+        return bookingService.getTotalAmount(request.getHotelId(), request.getGuideId(), request.getVehicleId(), request.getDayCount(), request.getCategoryType(), request.getRoomCount());
+    }
     /*** Guide Booking ***/
 
     @PostMapping("/guideBooking/add")

@@ -42,6 +42,8 @@ public class Hotel {
 
     private String description;
 
+    private String specialOffers;
+
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotel-hotelImages")
     @ToString.Exclude

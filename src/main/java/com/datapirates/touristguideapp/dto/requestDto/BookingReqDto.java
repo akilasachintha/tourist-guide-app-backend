@@ -21,5 +21,7 @@ public class BookingReqDto {
 
     private  String categoryType;
 
+    private int dayCount;
+
 
 }

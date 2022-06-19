@@ -30,7 +30,7 @@ public class Vehicle {
 
     private int seats;
 
-    private double priceForKm;
+    private double priceForDay;
 
     private String vehicleModal;
 

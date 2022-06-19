@@ -20,6 +20,7 @@ public interface bookingService {
     List<Booking> getBookingByTouristAndState(Long id,String status);
     String cancelFullBooking(Long id);
     String cancelSingleBooking(Long id,String type);
+    double getTotalAmount(Long hotelId,Long guideId,Long vehicleId,int dayCount,String categoryType,int roomCount);
 
     /*********temporary interface********/
 

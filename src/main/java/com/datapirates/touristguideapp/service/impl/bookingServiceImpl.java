@@ -2,12 +2,14 @@ package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.BookingReqDto;
 import com.datapirates.touristguideapp.dto.requestDto.TimeReqDto;
+import com.datapirates.touristguideapp.entity.Vehicle;
 import com.datapirates.touristguideapp.entity.bookings.*;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
 import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.entity.users.Guide;
+import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.entity.users.Tourist;
 import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.*;
@@ -50,6 +52,11 @@ public class bookingServiceImpl implements bookingService {
     @Autowired
     private DriverRepository driverRepository;
 
+    @Autowired hotelOwnerRepository hotelOwnerRepository;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
     @Autowired
     private roomRepository roomRepository;
     @Autowired
@@ -83,6 +90,53 @@ public class bookingServiceImpl implements bookingService {
     public List<Booking> getAllBooking() {
         return bookingRepository.findAll();
     }
+
+    private double calculateTotalAmount(Long hotelId,Long guideId,Long vehicleId,int dayCount,String categoryType,int roomCount){
+        double total=0.0;
+        if (guideId!=null){
+            Optional<Guide> guide = guideRepository.findById(guideId);
+            if (guide.isPresent()){
+                Guide guide1 = guide.get();
+                total+=guide1.getPriceRange();
+            }
+        }
+        if (vehicleId!=null){
+            Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleId);
+            if (vehicle.isPresent()){
+                Vehicle vehicle1 = vehicle.get();
+                total+=(vehicle1.getPriceForDay()*dayCount);
+            }
+        }
+        if (hotelId!=null){
+            Hotel hotel = hotelRepository.getById(hotelId);
+            Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
+            for (HotelRoom hotelRoom : hotelRooms){
+                RoomCategory roomCategory = hotelRoom.getRoomCategory();
+                if(roomCategory.getCategoryType().equals(categoryType)){
+                    total+=(hotelRoom.getPrice()*dayCount*roomCount);
+                }
+            }
+
+        }
+        return total;
+    }
+
+    private Long getOwnerId(Long hotelId){
+        List<HotelOwner> hotelOwners = hotelOwnerRepository.findAll();
+        Long ownerId = null;
+        for (HotelOwner hotelOwner : hotelOwners){
+            Set<Hotel> hotels = hotelOwner.getHotels();
+            for (Hotel hotel : hotels){
+                if (Objects.equals(hotel.getHotelId(), hotelId)){
+                    ownerId = hotelOwner.getUserId();
+                    break;
+                }
+            }
+        }
+
+        return ownerId;
+    }
+
 
     @Override
     public String saveBooking(BookingReqDto bookingReqDto) {
@@ -129,7 +183,9 @@ public class bookingServiceImpl implements bookingService {
         booking.setGuideId(bookingReqDto.getGuide());
         booking.setRoomCount(bookingReqDto.getRoomCount());
         booking.setCategoryType(bookingReqDto.getCategoryType());
-
+        if(bookingReqDto.getGuide()!=null){
+            sendMails(userRepository.getEmail(bookingReqDto.getGuide()),"Booking","you have a new booking");
+        }
         Hotel hotel = hotelRepository.getById(bookingReqDto.getHotel());
         Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
         int count=1;
@@ -417,6 +473,11 @@ public class bookingServiceImpl implements bookingService {
         sendMails(email,subject,body);
 
         return "successfully canceled";
+    }
+
+    @Override
+    public double getTotalAmount(Long hotelId,Long guideId,Long vehicleId,int dayCount,String categoryType,int roomCount) {
+        return calculateTotalAmount(hotelId, guideId, vehicleId, dayCount, categoryType, roomCount);
     }
 
     /*****temporary booking methods****/
