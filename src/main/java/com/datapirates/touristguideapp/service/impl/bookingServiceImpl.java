@@ -1,7 +1,6 @@
 package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.BookingReqDto;
-import com.datapirates.touristguideapp.dto.requestDto.TimeReqDto;
 import com.datapirates.touristguideapp.entity.Vehicle;
 import com.datapirates.touristguideapp.entity.bookings.*;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
@@ -140,7 +139,7 @@ public class bookingServiceImpl implements bookingService {
 
     @Override
     public String saveBooking(BookingReqDto bookingReqDto) {
-        Hotel hotel = hotelRepository.getById(bookingReqDto.getHotel());
+        Hotel hotel = hotelRepository.getById(bookingReqDto.getHotelId());
             Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
             if (hotelRooms.isEmpty()){
                 //hotels.remove(hotel);
@@ -160,14 +159,14 @@ public class bookingServiceImpl implements bookingService {
                 return "No enough rooms";
             }
 
-        if (bookingReqDto.getGuide()!=null){
-            Guide guide = guideRepository.getById(bookingReqDto.getGuide());
+        if (bookingReqDto.getGuideId()!=null){
+            Guide guide = guideRepository.getById(bookingReqDto.getGuideId());
             if (guide.getAvailability().equals("no")){
                 return "guide already booked";
             }
         }
-        if (bookingReqDto.getDriver()!=null){
-            Driver driver = driverRepository.getById(bookingReqDto.getDriver());
+        if (bookingReqDto.getDriverId()!=null){
+            Driver driver = driverRepository.getById(bookingReqDto.getDriverId());
             if (driver.getAvailability().equals("no")){
                 return "driver already booked";
             }
@@ -178,26 +177,26 @@ public class bookingServiceImpl implements bookingService {
     private Booking convertDtoToEntity(BookingReqDto bookingReqDto) {
         Booking booking = bookingReqDto.getBooking();
         //booking.setTemporaryBookings(bookingReqDto.getTemporaryBookings())
-        booking.setHotelId(bookingReqDto.getHotel());
-        booking.setDriverId(bookingReqDto.getDriver());
-        booking.setGuideId(bookingReqDto.getGuide());
+        booking.setHotelId(bookingReqDto.getHotelId());
+        booking.setDriverId(bookingReqDto.getDriverId());
+        booking.setGuideId(bookingReqDto.getGuideId());
         booking.setRoomCount(bookingReqDto.getRoomCount());
         booking.setCategoryType(bookingReqDto.getCategoryType());
-        if(bookingReqDto.getGuide()!=null){
-            sendMails(userRepository.getEmail(bookingReqDto.getGuide()),"Booking","you have a new booking");
-            guideRepository.setAvailability(bookingReqDto.getGuide(),"no");
+        if(bookingReqDto.getGuideId()!=null){
+            sendMails(userRepository.getEmail(bookingReqDto.getGuideId()),"Booking","you have a new booking");
+            guideRepository.setAvailability(bookingReqDto.getGuideId(),"no");
         }
 
-        if(bookingReqDto.getDriver()!=null){
-            sendMails(userRepository.getEmail(bookingReqDto.getDriver()),"Booking","you have a new booking");
-            guideRepository.setAvailability(bookingReqDto.getDriver(),"no");
+        if(bookingReqDto.getDriverId()!=null){
+            sendMails(userRepository.getEmail(bookingReqDto.getDriverId()),"Booking","you have a new booking");
+            driverRepository.setAvailability(bookingReqDto.getDriverId(),"no");
         }
 
-        if(bookingReqDto.getHotel()!=null){
-            Long owner  = getOwnerId(bookingReqDto.getHotel());
+        if(bookingReqDto.getHotelId()!=null){
+            Long owner  = getOwnerId(bookingReqDto.getHotelId());
             sendMails(userRepository.getEmail(owner),"Booking","you have a new booking");
         }
-        Hotel hotel = hotelRepository.getById(bookingReqDto.getHotel());
+        Hotel hotel = hotelRepository.getById(bookingReqDto.getHotelId());
         Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
         int count=1;
         for (HotelRoom hotelRoom : hotelRooms){
@@ -309,41 +308,6 @@ public class bookingServiceImpl implements bookingService {
         }
         Booking booking = checking.get();
         String bookingState = bookingRepository.getStateById(id);
-        if(bookingState.toLowerCase().equals("pending")){
-            Long tempID = bookingRepository.findTempId(id);
-            String hotelState = temporaryBookingRepository.getHotelStatus(tempID);
-            if(!(hotelState.toLowerCase().equals("souldselect")||hotelState.toLowerCase().equals("notselect"))){
-                Long hotelId = temporaryBookingRepository.getPendingHotel(tempID);
-                Long ownerId = hotelRepository.getOwnerId(hotelId);
-                String email = userRepository.getEmail(ownerId);
-                String subject="Booking cancel";
-                String body="Your Booking has canceled by tourist";
-                sendMails(email,subject,body);
-            }
-            String driverState = temporaryBookingRepository.getDriverStatus(tempID);
-            if(!(driverState.toLowerCase().equals("souldselect")||driverState.toLowerCase().equals("notselect"))){
-                Long driverId = temporaryBookingRepository.getPendingDriver(tempID);
-                String email = userRepository.getEmail(driverId);
-                String subject="Booking cancel";
-                String body="Your Booking has canceled by tourist";
-                sendMails(email,subject,body);
-            }
-            String guideState = temporaryBookingRepository.getGuideStatus(tempID);
-            if(!(guideState.toLowerCase().equals("souldselect")||guideState.toLowerCase().equals("notselect"))){
-                Long guideId = temporaryBookingRepository.getPendingGuide(tempID);
-                String email = userRepository.getEmail(guideId);
-                String subject="Booking cancel";
-                String body="Your Booking has canceled by tourist";
-                sendMails(email,subject,body);
-            }
-            Long touristId = bookingRepository.getTouristId(id);
-            bookingRepository.deleteById(id);
-            String email = userRepository.getEmail(touristId);
-            String subject="Booking cancel";
-            String body="Your Booking has successfully canceled";
-            sendMails(email,subject,body);
-        }
-        else {
             if(bookingState.equalsIgnoreCase("rated")){
                 return "ERROR: FinishedBooking";
             }
@@ -390,7 +354,6 @@ public class bookingServiceImpl implements bookingService {
             String subject="Booking cancel";
             String body="Your Booking has successfully canceled";
             sendMails(email,subject,body);
-        }
 
         return "successfully canceled";
     }

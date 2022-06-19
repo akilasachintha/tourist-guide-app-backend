@@ -11,11 +11,11 @@ public class BookingReqDto {
 
     private Long user;
 
-    private Long guide;
+    private Long hotelId;
 
-    private Long driver;
+    private Long driverId;
 
-    private Long hotel;
+    private Long guideId;
 
     private int roomCount;
 
