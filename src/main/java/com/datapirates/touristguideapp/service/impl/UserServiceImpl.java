@@ -12,6 +12,8 @@ import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundExce
 import com.datapirates.touristguideapp.service.interfaces.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +42,19 @@ public class UserServiceImpl implements UserService {
 
     private final DriverRepository driverRepository;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+
+    private void sendMails(String toEmail, String subject, String body) {
+        SimpleMailMessage massage = new SimpleMailMessage();
+        massage.setFrom("travelmateapp2022@gmail.com");
+        massage.setTo(toEmail);
+        massage.setSubject(subject);
+        massage.setText(body);
+
+        javaMailSender.send(massage);
+    }
 
     @Override
     public AppUser saveUser(AppUser appUser) {
@@ -123,7 +138,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Tourist saveTourist(Tourist tourist) {
-        tourist.setVerifyCode(buildVerify());
+        String verifyCode = buildVerify();
+        tourist.setVerifyCode(verifyCode);
+        sendMails(tourist.getEmail(),"VerifyCode",verifyCode);
         return touristRepository.save(tourist);
     }
 
