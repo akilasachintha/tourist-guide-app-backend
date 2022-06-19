@@ -140,7 +140,8 @@ public class bookingServiceImpl implements bookingService {
     @Override
     public String saveBooking(BookingReqDto bookingReqDto) {
         Booking booking = bookingReqDto.getBooking();
-        Hotel hotel = hotelRepository.getById(booking.getHotelId());
+        if (booking.getHotelId()!=null){
+            Hotel hotel = hotelRepository.getById(booking.getHotelId());
             Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
             if (hotelRooms.isEmpty()){
                 //hotels.remove(hotel);
@@ -159,6 +160,8 @@ public class bookingServiceImpl implements bookingService {
                 //hotels.remove(hotel);
                 return "No enough rooms";
             }
+
+        }
 
         if (booking.getGuideId()!=null){
             Guide guide = guideRepository.getById(booking.getGuideId());
