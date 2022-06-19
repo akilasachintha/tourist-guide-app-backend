@@ -349,7 +349,7 @@ public class bookingServiceImpl implements bookingService {
                 guideRepository.setAvailability(guideId,"yes");
             }
             Long touristId = getTourist(booking.getBookingId());
-            bookingRepository.deleteById(id);
+            bookingRepository.deleteBooking(id);
             String email = userRepository.getEmail(touristId);
             String subject="Booking cancel";
             String body="Your Booking has successfully canceled";

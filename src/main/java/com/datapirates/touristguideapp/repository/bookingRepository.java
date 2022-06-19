@@ -58,4 +58,8 @@ public interface bookingRepository extends JpaRepository<Booking, Long> {
     String getCheckOutDateById(Long id);
     @Query("SELECT B.bookingStatus FROM Booking B where B.bookingId=:id")
     String getStateById(Long id);
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM Booking b WHERE b.bookingId = :id")
+    void deleteBooking(Long id);
 }
