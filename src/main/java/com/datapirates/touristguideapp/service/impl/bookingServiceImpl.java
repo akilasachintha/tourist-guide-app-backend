@@ -139,7 +139,8 @@ public class bookingServiceImpl implements bookingService {
 
     @Override
     public String saveBooking(BookingReqDto bookingReqDto) {
-        Hotel hotel = hotelRepository.getById(bookingReqDto.getHotelId());
+        Booking booking = bookingReqDto.getBooking();
+        Hotel hotel = hotelRepository.getById(booking.getHotelId());
             Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
             if (hotelRooms.isEmpty()){
                 //hotels.remove(hotel);
@@ -159,14 +160,14 @@ public class bookingServiceImpl implements bookingService {
                 return "No enough rooms";
             }
 
-        if (bookingReqDto.getGuideId()!=null){
-            Guide guide = guideRepository.getById(bookingReqDto.getGuideId());
+        if (booking.getGuideId()!=null){
+            Guide guide = guideRepository.getById(booking.getGuideId());
             if (guide.getAvailability().equals("no")){
                 return "guide already booked";
             }
         }
-        if (bookingReqDto.getDriverId()!=null){
-            Driver driver = driverRepository.getById(bookingReqDto.getDriverId());
+        if (booking.getDriverId()!=null){
+            Driver driver = driverRepository.getById(booking.getDriverId());
             if (driver.getAvailability().equals("no")){
                 return "driver already booked";
             }
@@ -176,27 +177,23 @@ public class bookingServiceImpl implements bookingService {
     }
     private Booking convertDtoToEntity(BookingReqDto bookingReqDto) {
         Booking booking = bookingReqDto.getBooking();
-        //booking.setTemporaryBookings(bookingReqDto.getTemporaryBookings())
-        booking.setHotelId(bookingReqDto.getHotelId());
-        booking.setDriverId(bookingReqDto.getDriverId());
-        booking.setGuideId(bookingReqDto.getGuideId());
         booking.setRoomCount(bookingReqDto.getRoomCount());
         booking.setCategoryType(bookingReqDto.getCategoryType());
-        if(bookingReqDto.getGuideId()!=null){
-            sendMails(userRepository.getEmail(bookingReqDto.getGuideId()),"Booking","you have a new booking");
-            guideRepository.setAvailability(bookingReqDto.getGuideId(),"no");
+        if(booking.getGuideId()!=null){
+            sendMails(userRepository.getEmail(booking.getGuideId()),"Booking","you have a new booking");
+            guideRepository.setAvailability(booking.getGuideId(),"no");
         }
 
-        if(bookingReqDto.getDriverId()!=null){
-            sendMails(userRepository.getEmail(bookingReqDto.getDriverId()),"Booking","you have a new booking");
-            driverRepository.setAvailability(bookingReqDto.getDriverId(),"no");
+        if(booking.getDriverId()!=null){
+            sendMails(userRepository.getEmail(booking.getDriverId()),"Booking","you have a new booking");
+            driverRepository.setAvailability(booking.getDriverId(),"no");
         }
 
-        if(bookingReqDto.getHotelId()!=null){
-            Long owner  = getOwnerId(bookingReqDto.getHotelId());
+        if(booking.getHotelId()!=null){
+            Long owner  = getOwnerId(booking.getHotelId());
             sendMails(userRepository.getEmail(owner),"Booking","you have a new booking");
         }
-        Hotel hotel = hotelRepository.getById(bookingReqDto.getHotelId());
+        Hotel hotel = hotelRepository.getById(booking.getHotelId());
         Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
         int count=1;
         for (HotelRoom hotelRoom : hotelRooms){

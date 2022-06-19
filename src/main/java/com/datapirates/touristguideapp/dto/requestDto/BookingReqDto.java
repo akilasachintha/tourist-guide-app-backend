@@ -11,12 +11,6 @@ public class BookingReqDto {
 
     private Long user;
 
-    private Long hotelId;
-
-    private Long driverId;
-
-    private Long guideId;
-
     private int roomCount;
 
     private  String categoryType;
