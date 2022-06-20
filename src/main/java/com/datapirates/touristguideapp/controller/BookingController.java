@@ -121,6 +121,16 @@ public class BookingController {
         return bookingService.getGuideId(id);
     }
 
+    @GetMapping("/guideBooking/confirm")
+    private String confirmGuideBooking(@RequestParam Long id){
+        return bookingService.confirmGuide(id,"confirm");
+    }
+
+    @GetMapping("/guideBooking/reject")
+    private String rejectGuideBooking(@RequestParam Long id){
+        return bookingService.confirmGuide(id,"shouldSelect");
+    }
+
     @PutMapping("/guideBooking/update")
     private String updateGuideBooking(@RequestParam Long id , @RequestBody GuideBooking guideBooking){
         return bookingService.updateGuideBooking(id,guideBooking);
@@ -161,6 +171,16 @@ public class BookingController {
     private String cancelDriverBooking(@RequestParam Long id){
         return bookingService.cancelSingleBooking(id,"driver");
     }
+
+    @GetMapping("/driverBooking/confirm")
+    private String confirmDriverBooking(@RequestParam Long id){
+        return bookingService.confirmDriver(id,"confirm");
+    }
+
+    @GetMapping("/driverBooking/reject")
+    private String rejectDriverBooking(@RequestParam Long id){
+        return bookingService.confirmDriver(id,"shouldSelect");
+    }
     @PutMapping("/driverBooking/updateDriver")
     private String updateDriver(@RequestParam Long driver){
         bookingService.updateDriver(driver,null);
@@ -198,5 +218,15 @@ public class BookingController {
     private String updateHotel(@RequestParam Long hotel ){
         bookingService.updateHotel(hotel,null);
         return "successfully updated";
+    }
+
+    @GetMapping("/hotelBooking/confirm")
+    private String confirmHotelBooking(@RequestParam Long id){
+        return bookingService.confirmHotel(id,"confirm");
+    }
+
+    @GetMapping("/hotelBooking/reject")
+    private String rejectHotelBooking(@RequestParam Long id){
+        return bookingService.confirmHotel(id,"shouldSelect");
     }
 }

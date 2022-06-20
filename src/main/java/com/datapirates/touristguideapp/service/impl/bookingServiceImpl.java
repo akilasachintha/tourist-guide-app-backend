@@ -196,23 +196,24 @@ public class bookingServiceImpl implements bookingService {
         if(booking.getHotelId()!=null){
             Long owner  = getOwnerId(booking.getHotelId());
             sendMails(userRepository.getEmail(owner),"Booking","you have a new booking");
+            Hotel hotel = hotelRepository.getById(booking.getHotelId());
+            Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
+            int count=1;
+            for (HotelRoom hotelRoom : hotelRooms){
+                if (hotelRoom.getRoomAvailability().equals("no")){
+                    continue;
+                }
+                RoomCategory roomCategory = hotelRoom.getRoomCategory();
+                if(roomCategory.getCategoryType().equals(bookingReqDto.getCategoryType())){
+                    roomRepository.setAvailability(hotelRoom.getRoomId(),"no");
+                    count++;
+                }
+                if (count>bookingReqDto.getRoomCount()){
+                    break;
+                }
+            }
         }
-        Hotel hotel = hotelRepository.getById(booking.getHotelId());
-        Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
-        int count=1;
-        for (HotelRoom hotelRoom : hotelRooms){
-            if (hotelRoom.getRoomAvailability().equals("no")){
-                continue;
-            }
-            RoomCategory roomCategory = hotelRoom.getRoomCategory();
-            if(roomCategory.getCategoryType().equals(bookingReqDto.getCategoryType())){
-                roomRepository.setAvailability(hotelRoom.getRoomId(),"no");
-                count++;
-            }
-            if (count>bookingReqDto.getRoomCount()){
-                break;
-            }
-        }
+
 
         Tourist existingTourist = touristRepository.findById(bookingReqDto.getUser()).orElseThrow(() ->
                 new ResourceNotFoundException("Location", "Id", booking.getBookingId()));
@@ -478,6 +479,51 @@ public class bookingServiceImpl implements bookingService {
         sendMails(email,subject,body);
 
         return "successfully canceled";
+    }
+
+    @Override
+    public String confirmHotel(Long id,String type) {
+        Booking booking = bookingRepository.getById(id);
+        if (booking.getHotelId()!=null){
+            Set<TemporaryBooking> temporaryBookings = booking.getTemporaryBookings();
+
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                temporaryBookingRepository.setHotelState(temporaryBooking.getTempBookingId(),type);
+
+            }
+            return "successfully";
+        }
+        return "Error";
+    }
+
+    @Override
+    public String confirmDriver(Long id,String type) {
+        Booking booking = bookingRepository.getById(id);
+        if (booking.getDriverId()!=null){
+            Set<TemporaryBooking> temporaryBookings = booking.getTemporaryBookings();
+
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                temporaryBookingRepository.setDriverState(temporaryBooking.getTempBookingId(),type);
+
+            }
+            return "successfullyConfirm";
+        }
+        return "Error Confirm";
+    }
+
+    @Override
+    public String confirmGuide(Long id,String type) {
+        Booking booking = bookingRepository.getById(id);
+        if (booking.getGuideId()!=null){
+            Set<TemporaryBooking> temporaryBookings = booking.getTemporaryBookings();
+
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                temporaryBookingRepository.setGuideState(temporaryBooking.getTempBookingId(),type);
+
+            }
+            return "successfullyConfirm";
+        }
+        return "Error Confirm";
     }
 
     @Override

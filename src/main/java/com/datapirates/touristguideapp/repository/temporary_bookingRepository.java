@@ -16,15 +16,15 @@ public interface temporary_bookingRepository extends JpaRepository<TemporaryBook
 
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.guideStatus=:state where t.bookingid=:id")
+    @Query("update TemporaryBooking t set t.guideStatus=:state where t.tempBookingId=:id")
     void setGuideState(Long id,String state);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.driverStatus=:state where t.bookingid=:id")
+    @Query("update TemporaryBooking t set t.driverStatus=:state where t.tempBookingId=:id")
     void setDriverState(Long id,String state);
     @Transactional
     @Modifying
-    @Query("update TemporaryBooking t set t.hotelStatus=:state where t.bookingid=:id")
+    @Query("update TemporaryBooking t set t.hotelStatus=:state where t.tempBookingId=:id")
     void setHotelState(Long id,String state);
     @Transactional
     @Modifying

@@ -64,8 +64,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String guideRating(GuideRateDTO guideRateDTO) {
-        Guide existingGuide = guideRepository.findById(guideRateDTO.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Guide", "Id", guideRateDTO.getUserId()));
+    public String userRating(GuideRateDTO guideRateDTO) {
+
         double currentRate = userRepository.getRate(guideRateDTO.getUserId());
         Long currentAmount = userRepository.getRateAmount(guideRateDTO.getUserId());
         double currentStars = currentAmount * currentRate;
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         currentStars += starCount;
         currentAmount += 1;
         currentRate = currentStars / currentAmount;
-        guideRepository.setRate(guideRateDTO.getUserId(), currentRate);
+        userRepository.setRate(guideRateDTO.getUserId(), currentRate);
         userRepository.setRateAmount(guideRateDTO.getUserId(), currentAmount);
         return "successful rated";
     }

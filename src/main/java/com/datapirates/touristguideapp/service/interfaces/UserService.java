@@ -14,7 +14,7 @@ import java.util.List;
 public interface UserService {
     AppUser saveUser(AppUser appUser);
 
-    String guideRating(GuideRateDTO guideRateDTO);
+    String userRating(GuideRateDTO guideRateDTO);
 
     List<Guide> getGuideByAvailability(String availability);
 

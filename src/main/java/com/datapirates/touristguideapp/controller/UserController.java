@@ -114,9 +114,9 @@ public class UserController {
         return adminApprove.getGuideByAdmin("confirm");
     }
 
-    @PutMapping("/guide/rate")
-    private String ratingGuide(@RequestBody GuideRateDTO guideRateDTO) {
-        return userService.guideRating(guideRateDTO);
+    @PutMapping("/user/rate")
+    private String ratingUser(@RequestBody GuideRateDTO guideRateDTO) {
+        return userService.userRating(guideRateDTO);
     }
 
 }
