@@ -18,6 +18,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -519,6 +520,7 @@ public class bookingServiceImpl implements bookingService {
         return ids;
     }
 
+
     /*****temporary booking methods****/
 
     @Override
@@ -635,31 +637,70 @@ public class bookingServiceImpl implements bookingService {
     }
 
     @Override
-    public Optional<TemporaryBooking> checkGuideIsPending(Long id) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByPendingGuide(id);
-        if (!checking.isPresent()){
-            return null;
+    public Booking checkGuideIsPending(Long id) {
+        List<Booking> bookings = bookingRepository.findByBookingStatus("pending");
+
+        for (Booking booking : bookings){
+            if (booking.getDriverId()==null){
+                continue;
+            }
+            Set<TemporaryBooking> temporaryBookings = booking.getTemporaryBookings();
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                if (temporaryBooking.getGuideStatus().equalsIgnoreCase("pending")&&temporaryBooking.getPendingGuide().equals(id)){
+                    return booking;
+                }
+            }
+
         }
-        return temporaryBookingRepository.checkPendingGuide(id);
+
+        return null;
     }
 
 
     @Override
-    public Optional<TemporaryBooking> checkDriverIsPending(Long id) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByPendingDriver(id);
-        if (!checking.isPresent()){
-            return null;
+    public Booking checkDriverIsPending(Long id) {
+        List<Booking> bookings = bookingRepository.findByBookingStatus("pending");
+
+        for (Booking booking : bookings){
+            if (booking.getDriverId()==null){
+                continue;
+            }
+            Set<TemporaryBooking> temporaryBookings = booking.getTemporaryBookings();
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                if (temporaryBooking.getDriverStatus().equalsIgnoreCase("pending")&&temporaryBooking.getPendingDriver().equals(id)){
+                    return booking;
+                }
+            }
+
         }
-        return temporaryBookingRepository.checkPendingDriver(id);
+
+        return null;
     }
 
     @Override
-    public List<TemporaryBooking> checkHotelIsPending(Long id) {
-        Optional<TemporaryBooking> checking = temporaryBookingRepository.findByPendingHotel(id);
-        if (!checking.isPresent()){
-            return null;
+    public List<Booking> checkHotelIsPending(Long id) {
+        List<Booking> bookings = bookingRepository.findByBookingStatus("pending");
+        HotelOwner hotelOwner = hotelOwnerRepository.getById(id);
+        Set<Hotel> hotels = hotelOwner.getHotels();
+        List<Booking> bookings1= new ArrayList<>();
+
+        for (Booking booking : bookings){
+            if (booking.getHotelId()==null){
+                continue;
+            }
+            Set<TemporaryBooking> temporaryBookings = booking.getTemporaryBookings();
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                for (Hotel hotel:hotels) {
+                    if (temporaryBooking.getHotelStatus().equalsIgnoreCase("pending") && temporaryBooking.getPendingHotel().equals(hotel.getHotelId())) {
+                        bookings1.add(booking);
+                        break;
+                    }
+                }
+            }
+
         }
-        return temporaryBookingRepository.checkPendingHotel(id);
+
+        return bookings1;
     }
 
     @Override
@@ -703,6 +744,20 @@ public class bookingServiceImpl implements bookingService {
         years-=2022;
         Long hourCount=years*365*24+months*30*24+days*24+hours;
         return hourCount;
+    }
+
+    @Override
+    public List<Booking> getBookingsForPayment(Long id) {
+        Tourist tourist = touristRepository.getById(id);
+        List<Booking> bookings = tourist.getBookings();
+        List<Booking> bookings1 = new ArrayList<>();
+
+        for (Booking booking  : bookings){
+            if (booking.getBookingStatus().equalsIgnoreCase("shouldPay")){
+                bookings1.add(booking);
+            }
+        }
+        return bookings1;
     }
 
     /***guide booking***/

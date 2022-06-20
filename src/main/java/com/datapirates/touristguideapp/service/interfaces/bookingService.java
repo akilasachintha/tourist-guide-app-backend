@@ -40,12 +40,13 @@ public interface bookingService {
     void deleteTemporary(Long id);
     TemporaryBooking saveTemporary(TemporaryBooking temporaryBooking);
     List<TemporaryBooking> getAllTemporary();
-    Optional<TemporaryBooking> checkGuideIsPending(Long id);
-    Optional<TemporaryBooking> checkDriverIsPending(Long id);
-    List<TemporaryBooking> checkHotelIsPending(Long id);
+    Booking checkGuideIsPending(Long id);
+    Booking checkDriverIsPending(Long id);
+    List<Booking> checkHotelIsPending(Long id);
     String calculateEndTime(String day,String month,String year,String hour);
     Long hourCount(String day,String month,String year,String hour);
 
+    List<Booking> getBookingsForPayment(Long id);
 /***guide booking interface***/
 
     GuideBooking saveGuideBooking(GuideBooking guideBooking);

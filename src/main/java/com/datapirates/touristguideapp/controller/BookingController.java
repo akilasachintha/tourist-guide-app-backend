@@ -99,6 +99,11 @@ public class BookingController {
     private double getPayment(@RequestBody paymentReqDTO request){
         return bookingService.getTotalAmount(request.getHotelId(), request.getGuideId(), request.getVehicleId(), request.getDayCount(), request.getCategoryType(), request.getRoomCount());
     }
+
+    @GetMapping("/getBookingPay")
+    private List<Booking> getShouldpayBooking(@RequestParam Long id){
+        return bookingService.getBookingsForPayment(id);
+    }
     /*** Guide Booking ***/
 
     @PostMapping("/guideBooking/add")

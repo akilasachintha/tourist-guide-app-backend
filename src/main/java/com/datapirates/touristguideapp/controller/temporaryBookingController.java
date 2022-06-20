@@ -1,5 +1,6 @@
 package com.datapirates.touristguideapp.controller;
 
+import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.bookings.TemporaryBooking;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +58,7 @@ public class temporaryBookingController {
    /** guide temp**/
 
     @GetMapping("/checkGuideIsPending")
-    private Optional<TemporaryBooking> checkGuidePending(@RequestParam Long id){
+    private Booking checkGuidePending(@RequestParam Long id){
         return bookingService.checkGuideIsPending(id);
     }
    @PutMapping("/updateGuideState")
@@ -76,7 +77,7 @@ public class temporaryBookingController {
     /** driver temp **/
 
     @GetMapping("/checkDriverIsPending")
-    private Optional<TemporaryBooking> checkDriverPending(@RequestParam Long id){
+    private Booking checkDriverPending(@RequestParam Long id){
         return bookingService.checkDriverIsPending(id);
     }
     @PutMapping("/updateDriverState")
@@ -95,8 +96,8 @@ public class temporaryBookingController {
     /** hotel temp **/
 
     @GetMapping("/checkHotelIsPending")
-    private List<TemporaryBooking> checkHotelPending(@RequestParam Long id){
-        return bookingService.checkHotelIsPending(id);
+    private List<Booking> checkHotelPending(@RequestParam Long owner){
+        return bookingService.checkHotelIsPending(owner);
     }
     @PutMapping("/updateHotelState")
     private String updateHotelState(@RequestParam Long id,String status){
