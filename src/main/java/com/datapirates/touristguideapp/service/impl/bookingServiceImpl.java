@@ -484,6 +484,41 @@ public class bookingServiceImpl implements bookingService {
         return calculateTotalAmount(hotelId, guideId, vehicleId, dayCount, categoryType, roomCount);
     }
 
+    @Override
+    public List<Long> getUsersForRating(Long id) {
+        Tourist tourist = touristRepository.getById(id);
+        List<Booking> bookings = tourist.getBookings();
+        List<Long> ids = new ArrayList<>();
+
+        for (Booking booking : bookings){
+            if (booking.getBookingStatus().equalsIgnoreCase("shouldRating")){
+                if (booking.getGuideId()!=null){
+                    ids.add(booking.getGuideId());
+                }
+                if(booking.getDriverId()!=null){
+                    ids.add(booking.getDriverId());
+                }
+            }
+        }
+        return ids;
+    }
+
+    @Override
+    public List<Long> getHotelForRating(Long id) {
+        Tourist tourist = touristRepository.getById(id);
+        List<Booking> bookings = tourist.getBookings();
+        List<Long> ids = new ArrayList<>();
+
+        for (Booking booking : bookings){
+            if (booking.getBookingStatus().equalsIgnoreCase("shouldRating")){
+                if (booking.getHotelId()!=null){
+                    ids.add(booking.getHotelId());
+                }
+            }
+        }
+        return ids;
+    }
+
     /*****temporary booking methods****/
 
     @Override

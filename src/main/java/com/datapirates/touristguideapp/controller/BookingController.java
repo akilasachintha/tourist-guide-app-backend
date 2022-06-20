@@ -41,9 +41,14 @@ public class BookingController {
     private List<Booking> getAll(){
         return bookingService.getAllBooking();
     }
-    @GetMapping("/getByTouristStatus")
-    private List<Booking> getByTouristAndStatus(@RequestParam Long id,@RequestParam String status){
-        return bookingService.getBookingByTouristAndState(id,status);
+    @GetMapping("/getRatingUsers")
+    private List<Long> getByTouristUser(@RequestParam Long id){
+        return bookingService.getUsersForRating(id);
+    }
+
+    @GetMapping("/getRatingHotels")
+    private List<Long> getByTouristHotel(@RequestParam Long id){
+        return bookingService.getHotelForRating(id);
     }
 
     @PostMapping("/sendMail")

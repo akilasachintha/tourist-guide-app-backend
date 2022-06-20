@@ -47,8 +47,8 @@ public class DriverController {
     }
 
     @GetMapping("/driver/getByAvailabilityAndLocation")
-    private List<Driver> getGuideByAvailability(@RequestParam String availability, @RequestParam Long id) {
-        return driverService.getDriverByAvailabilityAndLocationId(availability, id);
+    private List<Driver> getGuideByAvailability( @RequestParam Long id) {
+        return driverService.getDriverByAvailabilityAndLocationId("yes", id);
     }
 
     @PutMapping("/driver/rate")

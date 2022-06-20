@@ -104,8 +104,8 @@ public class UserController {
     }
 
     @GetMapping("/guide/getByAvailability")
-    private List<Guide> getGuideByAvailability(@RequestParam String availability) {
-        return userService.getGuideByAvailability(availability);
+    private List<Guide> getGuideByAvailability() {
+        return userService.getGuideByAvailability("yes");
     }
 
     @GetMapping("/guide/getAll")

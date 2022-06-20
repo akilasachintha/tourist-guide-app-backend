@@ -22,6 +22,10 @@ public interface bookingService {
     String cancelSingleBooking(Long id,String type);
     double getTotalAmount(Long hotelId,Long guideId,Long vehicleId,int dayCount,String categoryType,int roomCount);
 
+    List<Long> getUsersForRating(Long id);
+
+    List<Long> getHotelForRating(Long id);
+
     /*********temporary interface********/
 
     String updateGuideState(Long id,String state);

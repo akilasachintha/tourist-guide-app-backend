@@ -13,6 +13,7 @@ import com.datapirates.touristguideapp.service.interfaces.DriverService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,12 +82,14 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public List<Driver> getDriverByAvailabilityAndLocationId(String availability, Long id) {
-        List<Driver> drivers = driverRepository.findByAvailabilityAndLocation(availability, id);
+    public List<Driver> getDriverByAvailabilityAndLocationId(String availability,Long id) {
+        List<Driver> drivers = driverRepository.findByAvailability(availability);
+
         Driver driver;
         for (int i = 0; i < drivers.size(); i++) {
             driver = drivers.get(i);
-            if (!driver.getAdminStatus().equals("confirm")) {
+            Location location = driver.getLocation();
+            if (!driver.getAdminStatus().equals("confirm")||!location.getLocationId().equals(id)) {
                 drivers.remove(i);
             }
         }

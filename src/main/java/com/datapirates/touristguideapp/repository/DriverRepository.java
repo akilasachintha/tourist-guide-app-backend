@@ -24,7 +24,7 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
     @Modifying
     @Query("update Driver D set D.availability=:availability where D.userId=:id")
     void setAvailability(Long id,String availability);
-    List<Driver> findByAvailabilityAndLocation(String availability, Long id);
+    List<Driver> findByAvailability(String availability);
     List<Driver> findByAdminStatus(String status);
 
     @Modifying
