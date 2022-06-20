@@ -3,6 +3,7 @@ package com.datapirates.touristguideapp.service.impl;
 import com.datapirates.touristguideapp.admin.AdminEntity;
 import com.datapirates.touristguideapp.admin.AdminRepository;
 import com.datapirates.touristguideapp.admin.adminService;
+import com.datapirates.touristguideapp.dto.requestDto.GuideRateDTO;
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
@@ -63,23 +64,18 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String guideRating(Long id, int starCount) {
-        Optional<Guide> checking = guideRepository.findById(id);
-        if (!checking.isPresent()) {
-            return "not available Id";
-        }
-        System.out.println("Check 01");
-
-        double currentRate = userRepository.getRate(id);
-        Long currentAmount = userRepository.getRateAmount(id);
+    public String guideRating(GuideRateDTO guideRateDTO) {
+        Guide existingGuide = guideRepository.findById(guideRateDTO.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Guide", "Id", guideRateDTO.getUserId()));
+        double currentRate = userRepository.getRate(guideRateDTO.getUserId());
+        Long currentAmount = userRepository.getRateAmount(guideRateDTO.getUserId());
         double currentStars = currentAmount * currentRate;
-        System.out.println(currentRate);
+        int starCount = guideRateDTO.getStarCount();
 
         currentStars += starCount;
         currentAmount += 1;
         currentRate = currentStars / currentAmount;
-        guideRepository.setRate(id, currentRate);
-        userRepository.setRateAmount(id, currentAmount);
+        guideRepository.setRate(guideRateDTO.getUserId(), currentRate);
+        userRepository.setRateAmount(guideRateDTO.getUserId(), currentAmount);
         return "successful rated";
     }
 

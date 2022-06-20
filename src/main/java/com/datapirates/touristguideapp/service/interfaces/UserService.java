@@ -1,17 +1,20 @@
 package com.datapirates.touristguideapp.service.interfaces;
 
+import com.datapirates.touristguideapp.dto.requestDto.GuideRateDTO;
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
 import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
-import com.datapirates.touristguideapp.entity.users.*;
+import com.datapirates.touristguideapp.entity.users.AppUser;
+import com.datapirates.touristguideapp.entity.users.Guide;
+import com.datapirates.touristguideapp.entity.users.HotelOwner;
+import com.datapirates.touristguideapp.entity.users.Tourist;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     AppUser saveUser(AppUser appUser);
 
-    String guideRating(Long id,int starCount);
+    String guideRating(GuideRateDTO guideRateDTO);
 
     List<Guide> getGuideByAvailability(String availability);
 

@@ -1,6 +1,7 @@
 package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.admin.adminApprove;
+import com.datapirates.touristguideapp.dto.requestDto.GuideRateDTO;
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.VerifyReqDto;
 import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
@@ -114,8 +115,8 @@ public class UserController {
     }
 
     @PutMapping("/guide/rate")
-    private String ratingGuide(@RequestParam Long id, @RequestParam int starCount) {
-        return userService.guideRating(id, starCount);
+    private String ratingGuide(@RequestBody GuideRateDTO guideRateDTO) {
+        return userService.guideRating(guideRateDTO);
     }
 
 }
