@@ -560,6 +560,7 @@ public class bookingServiceImpl implements bookingService {
             if (booking.getBookingStatus().equalsIgnoreCase("shouldRating")){
                 if (booking.getHotelId()!=null){
                     ids.add(booking.getHotelId());
+                    bookingRepository.setBookingStatus(booking.getBookingId(),"rated");
                 }
             }
         }
