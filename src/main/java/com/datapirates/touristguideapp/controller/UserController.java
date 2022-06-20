@@ -1,20 +1,20 @@
 package com.datapirates.touristguideapp.controller;
 
+import com.datapirates.touristguideapp.admin.adminApprove;
 import com.datapirates.touristguideapp.dto.requestDto.LoginReqDTO;
-import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
+import com.datapirates.touristguideapp.dto.requestDto.VerifyReqDto;
 import com.datapirates.touristguideapp.dto.responseDto.AppUserResponseDTO;
+import com.datapirates.touristguideapp.dto.responseDto.LoginResDTO;
+import com.datapirates.touristguideapp.entity.users.AppUser;
 import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.entity.users.Tourist;
 import com.datapirates.touristguideapp.service.interfaces.UserService;
-import com.datapirates.touristguideapp.admin.adminApprove;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.datapirates.touristguideapp.entity.users.AppUser;
-import com.datapirates.touristguideapp.dto.requestDto.verifyReqDto;
 
 import java.util.List;
 
@@ -68,12 +68,12 @@ public class UserController {
     }
 
     @PostMapping("/tourist/verify")
-    private String addTourist(@RequestBody verifyReqDto verifyReqDto){
-        return userService.verifyTourist(verifyReqDto.getEmail(),verifyReqDto.getCode());
+    private String addTourist(@RequestBody VerifyReqDto verifyReqDto) {
+        return userService.verifyTourist(verifyReqDto.getEmail(), verifyReqDto.getCode());
     }
 
-    @PutMapping("/tourist/update")
-    private String updateTourist(@RequestParam Long id, @RequestBody Tourist tourist) {
+    @PutMapping("/tourist/update/{id}")
+    private String updateTourist(@PathVariable(name = "id") Long id, @RequestBody Tourist tourist) {
         return userService.updateTourist(id, tourist);
     }
 
@@ -83,8 +83,8 @@ public class UserController {
         return "Successfully added";
     }
 
-    @PutMapping("/hotelOwner/update/{id}")
-    private String updateHotelOwner(@PathVariable(name = "id") Long id, @RequestBody HotelOwner hotelOwner) {
+    @PutMapping("/hotelOwner/update")
+    private String updateHotelOwner(@RequestParam Long id, @RequestBody HotelOwner hotelOwner) {
         return userService.updateHotelOwner(id, hotelOwner);
     }
 
@@ -98,8 +98,8 @@ public class UserController {
         return "Successfully added";
     }
 
-    @PutMapping("/guide/update")
-    private String updateGuide(@RequestParam Long id, @RequestBody Guide guide) {
+    @PutMapping("/guide/update/{id}")
+    private String updateGuide(@PathVariable(name = "id") Long id, @RequestBody Guide guide) {
         return userService.updateGuide(id, guide);
     }
 

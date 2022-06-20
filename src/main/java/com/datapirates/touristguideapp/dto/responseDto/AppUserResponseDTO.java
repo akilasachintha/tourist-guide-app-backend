@@ -22,4 +22,8 @@ public class AppUserResponseDTO {
     private double rating;
 
     private String adminStatus;
+
+    private String availability;
+
+    private String verifyStatus;
 }

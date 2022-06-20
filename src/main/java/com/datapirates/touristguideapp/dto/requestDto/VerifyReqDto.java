@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class verifyReqDto {
+public class VerifyReqDto {
     private String email;
     private String code;
 }

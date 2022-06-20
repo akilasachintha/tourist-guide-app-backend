@@ -2,8 +2,13 @@ package com.datapirates.touristguideapp.entity;
 
 public class EmailBody {
     String email;
-    String subject = "Check 01";
-    String body = "Hello Subath";
+    String subject = "Please verify your registration";
+    String body = "Dear [[name]],<br>"
+            + "Please click the link below to verify your registration:<br>"
+            + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+            + "Thank you,<br>"
+            + "Travel Mate.";
+    ;
 
     public String getEmail() {
         return email;

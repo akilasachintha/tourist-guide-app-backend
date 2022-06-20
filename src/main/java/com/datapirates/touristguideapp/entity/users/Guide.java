@@ -1,16 +1,13 @@
 package com.datapirates.touristguideapp.entity.users;
 
-import com.datapirates.touristguideapp.entity.GuideLanguage;
-import com.datapirates.touristguideapp.entity.bookings.GuideBooking;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @Getter
@@ -26,11 +23,9 @@ public class Guide extends AppUser {
 
     private String NIC;
 
-    private String availability;
+    private String availability = "available";
 
     private String adminStatus = "pending";
-
-
 
 
 }

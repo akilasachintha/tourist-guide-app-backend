@@ -103,11 +103,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String updateGuide(Long id, Guide guide) {
-        Optional<Guide> checking = guideRepository.findById(id);
-        if (!checking.isPresent()) {
-            return "not available Id";
-        }
-        guideRepository.save(guide);
+        Guide existingGuide = guideRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guide", "Id", id));
+
+        existingGuide.setName(guide.getName());
+        existingGuide.setAvailability(guide.getAvailability());
+        existingGuide.setUserPhotoUrl(guide.getUserPhotoUrl());
+
+        guideRepository.save(existingGuide);
         return "update success";
     }
 
@@ -141,18 +143,18 @@ public class UserServiceImpl implements UserService {
     public Tourist saveTourist(Tourist tourist) {
         String verifyCode = buildVerify();
         tourist.setVerifyCode(verifyCode);
-        sendMails(tourist.getEmail(),"VerifyCode",verifyCode);
+        sendMails(tourist.getEmail(), "VerifyCode", verifyCode);
         return touristRepository.save(tourist);
     }
 
-    private String buildVerify(){
+    private String buildVerify() {
         StringBuilder code = new StringBuilder();
         String numbers = "1234567890";
 
         char[] numbArray = numbers.toCharArray();
 
-        for (int i=0; i<6; i++){
-            int a = (int) (Math.random()*10);
+        for (int i = 0; i < 6; i++) {
+            int a = (int) (Math.random() * 10);
             code.append(numbArray[a]);
         }
 
@@ -172,10 +174,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public String verifyTourist(String email, String code) {
         List<Tourist> tourists = touristRepository.findAll();
-        for(Tourist tourist : tourists){
-            if (tourist.getEmail().equals(email)&&tourist.getVerifyCode().equals(code)){
-                touristRepository.setVerifyStatus(tourist.getUserId(),"confirm");
-                return "successfully verified ";
+        for (Tourist tourist : tourists) {
+            if (tourist.getEmail().equals(email) && tourist.getVerifyCode().equals(code)) {
+                touristRepository.setVerifyStatus(tourist.getUserId(), "confirm");
+                return "successfully verified";
             }
         }
         return "Error verify";
@@ -241,10 +243,15 @@ public class UserServiceImpl implements UserService {
             case "guide":
                 Guide guide = guideRepository.findById(appUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Guide", "Id", appUser.getUserId()));
                 appUserResponseDTO.setAdminStatus(guide.getAdminStatus());
+                appUserResponseDTO.setAvailability(guide.getAvailability());
                 break;
             case "hotelOwner":
                 HotelOwner hotelOwner = hotelOwnerRepository.findById(appUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("HotelOwner", "Id", appUser.getUserId()));
                 appUserResponseDTO.setAdminStatus(hotelOwner.getAdminStatus());
+                break;
+            case "tourist":
+                Tourist tourist = touristRepository.findById(appUser.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Tourist", "Id", appUser.getUserId()));
+                appUserResponseDTO.setVerifyStatus(tourist.getVerifyStatus());
                 break;
         }
 
