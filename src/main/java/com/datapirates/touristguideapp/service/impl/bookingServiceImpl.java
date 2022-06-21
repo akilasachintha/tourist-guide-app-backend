@@ -363,6 +363,10 @@ public class bookingServiceImpl implements bookingService {
                 guideRepository.setAvailability(guideId,"yes");
             }
             Long touristId = getTourist(booking.getBookingId());
+            Set<TemporaryBooking> temporaryBookings = booking.getTemporaryBookings();
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                temporaryBookingRepository.deleteTemBooking(temporaryBooking.getTempBookingId());
+            }
             bookingRepository.deleteBooking(id);
             String email = userRepository.getEmail(touristId);
             String subject="Booking cancel";
@@ -557,6 +561,9 @@ public class bookingServiceImpl implements bookingService {
                 if(booking.getDriverId()!=null){
                     ids.add(booking.getDriverId());
                 }
+            }
+            if (booking.getHotelId()==null){
+                bookingRepository.setBookingStatus(booking.getBookingId(),"rated");
             }
         }
         return ids;

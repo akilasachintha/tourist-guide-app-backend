@@ -83,6 +83,11 @@ public interface temporary_bookingRepository extends JpaRepository<TemporaryBook
     @Query("select t.tempBookingId from TemporaryBooking t where t.guideStatus=:status")
     List<Long> getIdsByGuide(String status);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM TemporaryBooking t WHERE t.tempBookingId = :id")
+    void deleteTemBooking(Long id);
+
     Optional<TemporaryBooking> findByPendingGuide(Long id);
     Optional<TemporaryBooking> findByPendingDriver(Long id);
     Optional<TemporaryBooking> findByPendingHotel(Long id);
