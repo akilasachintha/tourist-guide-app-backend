@@ -169,7 +169,7 @@ public class hotelServiceImpl implements hotelService {
             int count = 0;
             for (Booking booking : bookings){
                 if (booking.getCategoryType()!=null){
-                    if (booking.getCategoryType().equals(type) && booking.getCheckOutDate()!=null){
+                    if (booking.getCategoryType().equals(type) && booking.getCheckOutDate()!=null&&booking.getHotelId().equals(hotel.getHotelId())){
                         long bookingEndTime = Long.parseLong(booking.getCheckOutDate());
                         long bookingStartTime = Long.parseLong(startCount);
                         if (bookingEndTime<bookingStartTime){
