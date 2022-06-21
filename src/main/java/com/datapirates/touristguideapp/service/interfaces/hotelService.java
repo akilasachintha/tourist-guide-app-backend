@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
+import com.datapirates.touristguideapp.dto.responseDto.AvailableHotelDTO;
 import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.hotel.*;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
@@ -18,7 +19,7 @@ public interface hotelService {
 
     /*** HotelRoom***/
 
-    List<Hotel> getAvailableHotels(String type,int amount,String startCount);
+    List<AvailableHotelDTO> getAvailableHotels(String type, int amount, String startCount);
     List<HotelRoom> getHotelRoom();
     String updateAvailability(Long id,String availability);
     void updateCategoryType(String category,String type);

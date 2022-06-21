@@ -2,6 +2,7 @@ package com.datapirates.touristguideapp.service.impl;
 
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
+import com.datapirates.touristguideapp.dto.responseDto.AvailableHotelDTO;
 import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
@@ -153,11 +154,12 @@ public class hotelServiceImpl implements hotelService {
     }
 
     @Override
-    public List<Hotel> getAvailableHotels(String type, int amount,String startCount) {
+    public List<AvailableHotelDTO> getAvailableHotels(String type, int amount, String startCount) {
         List<Hotel> hotels = hotelRepository.findAll();
+        List<AvailableHotelDTO> availableHotelDTOS = new ArrayList<>();
         List<Booking> bookings = bookingRepository.findAll();
         List<Hotel> hotels1 = new ArrayList<>();
-
+        double price = 0.0;
         for (Hotel hotel : hotels) {
             Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
             if (hotelRooms.isEmpty()) {
@@ -185,10 +187,13 @@ public class hotelServiceImpl implements hotelService {
 
             if (count >= amount) {
                 //hotels.remove(hotel);
-                hotels1.add(hotel);
+                AvailableHotelDTO availableHotelDTO = new AvailableHotelDTO();
+                availableHotelDTO.setHotel(hotel);
+                availableHotelDTO.setPrice(price);
+                availableHotelDTOS.add(availableHotelDTO);
             }
         }
-        return hotels1;
+        return availableHotelDTOS;
     }
 
 

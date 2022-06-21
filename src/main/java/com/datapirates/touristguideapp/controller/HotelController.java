@@ -2,6 +2,7 @@ package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
+import com.datapirates.touristguideapp.dto.responseDto.AvailableHotelDTO;
 import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
@@ -102,7 +103,7 @@ public class HotelController {
     /**** HOTEL ROOM ***/
 
     @GetMapping("/hotelRoom/getAvailableHotels")
-    private List<Hotel> getRooms(@RequestParam String type, @RequestParam int amount,@RequestParam String startCount){
+    private List<AvailableHotelDTO> getRooms(@RequestParam String type, @RequestParam int amount, @RequestParam String startCount){
         return hotelService.getAvailableHotels(type,amount,startCount);
     }
     @GetMapping("/hotelRoom/getRooms")
