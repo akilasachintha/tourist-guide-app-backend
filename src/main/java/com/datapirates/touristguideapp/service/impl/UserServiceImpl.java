@@ -132,6 +132,7 @@ public class UserServiceImpl implements UserService {
         existingHotelOwner.setUserPhotoUrl(hotelOwner.getUserPhotoUrl());
         existingHotelOwner.setPhoneNo(hotelOwner.getPhoneNo());
         hotelOwnerRepository.save(existingHotelOwner);
+
         return "update success";
     }
 

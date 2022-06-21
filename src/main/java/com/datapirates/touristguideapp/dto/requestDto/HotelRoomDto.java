@@ -1,6 +1,5 @@
 package com.datapirates.touristguideapp.dto.requestDto;
 
-import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import lombok.Data;
 
 @Data
@@ -9,7 +8,7 @@ public class HotelRoomDto {
 
     private String roomCondition;
 
-    private String roomAvailability;
+    private String roomAvailability = "yes";
 
     private double price;
 

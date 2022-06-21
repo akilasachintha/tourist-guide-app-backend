@@ -10,15 +10,14 @@ import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.entity.users.Tourist;
-import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.repository.*;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import com.datapirates.touristguideapp.service.interfaces.bookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -63,7 +62,6 @@ public class bookingServiceImpl implements bookingService {
     private touristRepository touristRepository;
     @Autowired
     private JavaMailSender javaMailSender;
-
 
     private void sendMails(String toEmail, String subject, String body) {
         SimpleMailMessage massage = new SimpleMailMessage();

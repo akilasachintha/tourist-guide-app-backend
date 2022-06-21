@@ -42,6 +42,11 @@ public class HotelController {
     }
 
 
+//    @DeleteMapping("{hotelId}")
+//    private String deleteHotel(@PathVariable(name = "hotelId") Long hotelId){
+//        return hotelService.deleteHotel(hotelId);
+//    }
+
     @GetMapping("/getAll")
     private List<Hotel> getAllHotels(){
         return adminApprove.getHotelByAdmin("confirm");

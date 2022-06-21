@@ -65,8 +65,8 @@ public class approveController {
         return adminApprove.approveDriver(id);
     }
 
-    @PutMapping("/hotel")
-    private String confirmHotel(@RequestParam Long id) {
+    @PutMapping("/hotel/{hotelId}")
+    private String confirmHotel(@PathVariable(name = "hotelId") Long id) {
         return adminApprove.approveHotel(id);
     }
 
@@ -80,9 +80,9 @@ public class approveController {
         return adminApprove.approveHotelOwner(id);
     }
 
-    @PutMapping("/room")
-    private String confirmRoom(@RequestParam Long id, @RequestParam Long roomNo) {
-        return adminApprove.approveHotelRoom(id, roomNo);
+    @PutMapping("/room/{id}")
+    private String confirmRoom(@PathVariable Long id) {
+        return adminApprove.approveHotelRoom(id);
     }
 
 }

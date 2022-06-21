@@ -1,14 +1,15 @@
 package com.datapirates.touristguideapp.service.interfaces;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
 import com.datapirates.touristguideapp.dto.responseDto.AvailableHotelDTO;
 import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
-import com.datapirates.touristguideapp.entity.hotel.*;
-import com.datapirates.touristguideapp.entity.users.HotelOwner;
+import com.datapirates.touristguideapp.entity.hotel.Hotel;
+import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
+import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface hotelService {
     /***Category***/
@@ -39,6 +40,8 @@ public interface hotelService {
     List<HotelResponseDTO> getHotelsByAppUserId(Long userId);
 
     String deleteHotel(Long id);
+
+//    String deleteHotel(Long hotelId);
 
 //    HotelOwner updateHotelOwner(Long userId, HotelOwner hotelOwner);
 

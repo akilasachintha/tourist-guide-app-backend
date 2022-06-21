@@ -84,8 +84,8 @@ public class UserController {
         return "Successfully added";
     }
 
-    @PutMapping("/hotelOwner/update")
-    private String updateHotelOwner(@RequestParam Long id, @RequestBody HotelOwner hotelOwner) {
+    @PutMapping("/hotelOwner/update/{id}")
+    private String updateHotelOwner(@PathVariable(name = "id") Long id, @RequestBody HotelOwner hotelOwner) {
         return userService.updateHotelOwner(id, hotelOwner);
     }
 

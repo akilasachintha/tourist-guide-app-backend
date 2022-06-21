@@ -1,7 +1,10 @@
 package com.datapirates.touristguideapp.entity.hotel;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -21,7 +24,7 @@ public class HotelRoom {
 
     private String roomCondition;
 
-    private String roomAvailability;
+    private String roomAvailability = "yes";
 
     private double price;
 

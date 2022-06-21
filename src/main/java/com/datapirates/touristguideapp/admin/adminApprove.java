@@ -11,16 +11,27 @@ import java.util.List;
 
 public interface adminApprove {
     List<HotelRoom> getRoomByAdmin(String status);
+
     List<Guide> getGuideByAdmin(String status);
+
     List<Hotel> getHotelByAdmin(String status);
+
     List<Driver> getDriverByAdmin(String status);
+
     List<HotelOwner> getHotelOwnerByAdmin(String status);
+
     List<Vehicle> getVehicleByAdmin(String status);
+
     String approveGuide(Long id);
+
     String approveDriver(Long id);
+
     String approveHotelOwner(Long id);
+
     String approveHotel(Long id);
+
     String approveVehicle(Long id);
-    String approveHotelRoom(Long id, Long RoomNo);
+
+    String approveHotelRoom(Long id);
 
 }

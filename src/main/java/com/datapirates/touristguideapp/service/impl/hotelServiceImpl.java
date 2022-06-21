@@ -17,7 +17,10 @@ import com.datapirates.touristguideapp.service.interfaces.hotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +47,7 @@ public class hotelServiceImpl implements hotelService {
 
     @Autowired
     private HotelImageRepository hotelImageRepository;
+
     @Override
     public List<RoomCategory> getAllCategories() {
         return roomCategoryRepository.findAll();
@@ -84,14 +88,14 @@ public class hotelServiceImpl implements hotelService {
     @Override
     public String deleteHotel(Long id) {
         Optional<Hotel> hotel1 = hotelRepository.findById(id);
-        if (hotel1.isPresent()){
+        if (hotel1.isPresent()) {
             Hotel hotel = hotel1.get();
             Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
-            for (HotelRoom hotelRoom : hotelRooms){
+            for (HotelRoom hotelRoom : hotelRooms) {
                 roomRepository.deleteRoom(hotelRoom.getRoomId());
             }
             Set<HotelImage> hotelImages = hotel.getHotelImages();
-            for (HotelImage hotelImage : hotelImages){
+            for (HotelImage hotelImage : hotelImages) {
                 hotelImageRepository.deleteHotelImage(hotelImage.getUrl());
             }
             hotelRepository.deleteHotel(id);
@@ -101,6 +105,14 @@ public class hotelServiceImpl implements hotelService {
         return "Error Id";
 
     }
+
+//    @Override
+//    public String deleteHotel(Long hotelId) {
+//        Hotel existingHotel = hotelRepository.findById(hotelId).orElseThrow(() -> new ResourceNotFoundException("Hotel", "Id", hotelId));
+//        hotelRepository.delete(existingHotel);
+//
+//        return "Deleted";
+//    }
 
 //    @Override
 //    public HotelOwner updateHotelOwner(Long userId, HotelOwner hotelOwner) {
@@ -161,6 +173,7 @@ public class hotelServiceImpl implements hotelService {
         hotelRoom.setRoomAvailability(hotelRoomDto.getRoomAvailability());
         hotelRoom.setRoomCondition(hotelRoomDto.getRoomCondition());
         hotelRoom.setPrice(hotelRoomDto.getPrice());
+        hotelRoom.setRoomAvailability(hotelRoomDto.getRoomAvailability());
 
         RoomCategory existingCategory = roomCategoryRepository.findById(hotelRoomDto.getCategoryType()).orElseThrow(() ->
                 new ResourceNotFoundException("Owner", "Id", hotelRoomDto.getCategoryType()));
@@ -175,9 +188,9 @@ public class hotelServiceImpl implements hotelService {
     @Override
     public String deleteCategory(String type) {
         Optional<RoomCategory> roomCategory = roomCategoryRepository.findById(type);
-        if (roomCategory.isPresent()){
+        if (roomCategory.isPresent()) {
             List<HotelRoom> hotelRooms = roomCategory.get().getHotelRooms();
-            for (HotelRoom hotelRoom : hotelRooms){
+            for (HotelRoom hotelRoom : hotelRooms) {
                 roomRepository.deleteRoom(hotelRoom.getRoomId());
             }
             roomCategoryRepository.deleteCategory(type);
@@ -200,13 +213,13 @@ public class hotelServiceImpl implements hotelService {
                 continue;
             }
             int count = 0;
-            for (Booking booking : bookings){
-                if (booking.getCategoryType()!=null){
-                    if (booking.getCategoryType().equals(type) && booking.getCheckOutDate()!=null&&booking.getHotelId().equals(hotel.getHotelId())){
+            for (Booking booking : bookings) {
+                if (booking.getCategoryType() != null) {
+                    if (booking.getCategoryType().equals(type) && booking.getCheckOutDate() != null && booking.getHotelId().equals(hotel.getHotelId())) {
                         long bookingEndTime = Long.parseLong(booking.getCheckOutDate());
                         long bookingStartTime = Long.parseLong(startCount);
-                        if (bookingEndTime<bookingStartTime){
-                            count+=booking.getRoomCount();
+                        if (bookingEndTime < bookingStartTime) {
+                            count += booking.getRoomCount();
                         }
                     }
                 }

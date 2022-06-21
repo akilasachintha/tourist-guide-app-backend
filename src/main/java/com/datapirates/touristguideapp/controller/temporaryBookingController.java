@@ -2,17 +2,16 @@ package com.datapirates.touristguideapp.controller;
 
 import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.bookings.TemporaryBooking;
+import com.datapirates.touristguideapp.service.interfaces.bookingService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import com.datapirates.touristguideapp.service.interfaces.bookingService;
 
 @RestController
-@RequestMapping("/api/booking/temporaryBooking")
+@RequestMapping("/api/v1/booking/temporaryBooking")
 @CrossOrigin
 @Slf4j
 @AllArgsConstructor

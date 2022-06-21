@@ -7,6 +7,7 @@ import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.repository.*;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class adminApproveIMPL implements adminApprove{
+public class adminApproveIMPL implements adminApprove {
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -60,7 +61,7 @@ public class adminApproveIMPL implements adminApprove{
 
     @Override
     public List<Hotel> getHotelByAdmin(String status) {
-        return hotelRepository.findAll();
+        return hotelRepository.findByAdminStatus(status);
     }
 
     @Override
@@ -81,76 +82,76 @@ public class adminApproveIMPL implements adminApprove{
     @Override
     public String approveGuide(Long id) {
         Optional<Guide> guide = guideRepository.findById(id);
-        if (!guide.isPresent()){
+        if (!guide.isPresent()) {
             return "Error id";
         }
         //Guide guide1 = guide.get();
         //sendMails(guide1.getEmail());
-        guideRepository.approve(id,"confirm");
+        guideRepository.approve(id, "confirm");
         return "Confirmed";
     }
 
     @Override
     public String approveDriver(Long id) {
         Optional<Driver> driver = driverRepository.findById(id);
-        if (!driver.isPresent()){
+        if (!driver.isPresent()) {
             return "Error id";
         }
         Driver driver1 = driver.get();
 //        sendMails(driver1.getEmail());
-        driverRepository.approve(id,"confirm");
+        driverRepository.approve(id, "confirm");
         return "Confirmed";
     }
 
     @Override
     public String approveHotelOwner(Long id) {
         Optional<HotelOwner> hotelOwner = hotelOwnerRepository.findById(id);
-        if (!hotelOwner.isPresent()){
+        if (!hotelOwner.isPresent()) {
             return "Error id";
         }
         HotelOwner hotelOwner1 = hotelOwner.get();
         sendMails(hotelOwner1.getEmail());
-        hotelOwnerRepository.approve(id,"confirm");
+        hotelOwnerRepository.approve(id, "confirm");
         return "Confirmed";
     }
 
     @Override
     public String approveHotel(Long id) {
         Optional<Hotel> hotel = hotelRepository.findById(id);
-        if (!hotel.isPresent()){
+        if (!hotel.isPresent()) {
             return "Error id";
         }
         Hotel hotel1 = hotel.get();
         HotelOwner hotelOwner = hotel1.getHotelOwner();
         sendMails(hotelOwner.getEmail());
-        hotelRepository.approve(id,"confirm");
+        hotelRepository.approve(id, "confirm");
         return "Confirmed";
     }
 
     @Override
     public String approveVehicle(Long id) {
         Optional<Vehicle> vehicle = vehicleRepository.findById(id);
-        if (!vehicle.isPresent()){
+        if (!vehicle.isPresent()) {
             return "Error id";
         }
         Vehicle vehicle1 = vehicle.get();
         Driver driver = vehicle1.getDriver();
 //        sendMails(driver.getEmail());
-        vehicleRepository.approve(id,"confirm");
+        vehicleRepository.approve(id, "confirm");
         return "Confirmed";
     }
 
     @Override
-    public String approveHotelRoom(Long id, Long RoomNo) {
-        Optional<HotelRoom> room = roomRepository.findByHotelAndRoomNo(id,RoomNo);
-        if (!room.isPresent()){
-            return "Error id";
-        }
-        HotelRoom room1 = room.get();
-        Hotel hotel = room1.getHotel();
+    public String approveHotelRoom(Long id) {
+        HotelRoom existingHotelRoom = roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", id));
+
+        existingHotelRoom.setAdminStatus("confirm");
+        roomRepository.save(existingHotelRoom);
+
+        Hotel hotel = existingHotelRoom.getHotel();
         HotelOwner hotelOwner = hotel.getHotelOwner();
         sendMails(hotelOwner.getEmail());
-        roomRepository.approve(id,"confirm",RoomNo);
+
         return "Confirmed";
     }
 }

@@ -7,6 +7,7 @@ import com.datapirates.touristguideapp.entity.users.Driver;
 import com.datapirates.touristguideapp.entity.users.Guide;
 import com.datapirates.touristguideapp.entity.users.HotelOwner;
 import com.datapirates.touristguideapp.repository.*;
+import com.datapirates.touristguideapp.repository.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -108,16 +109,14 @@ public class adminRejectIMPL implements adminReject {
     }
 
     @Override
-    public String rejectHotelRoom(Long id, Long RoomNo) {
-        Optional<HotelRoom> room = roomRepository.findByHotelAndRoomNo(id, RoomNo);
-        if (!room.isPresent()) {
-            return "Error id";
-        }
-        HotelRoom room1 = room.get();
-        Hotel hotel = room1.getHotel();
+    public String rejectHotelRoom(Long id) {
+        HotelRoom existingHotelRoom = roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", id));
+
+        Hotel hotel = existingHotelRoom.getHotel();
         HotelOwner hotelOwner = hotel.getHotelOwner();
         sendMails(hotelOwner.getEmail());
-        roomRepository.deleteById(id);
+        roomRepository.deleteByRoomId(id);
+
         return "Rejected";
     }
 }

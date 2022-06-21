@@ -40,8 +40,8 @@ public class rejectController {
         return adminReject.rejectVehicle(id);
     }
 
-    @DeleteMapping("/room")
-    private String deleteRoom(@RequestParam Long id, Long roomNo) {
-        return adminReject.rejectHotelRoom(id, roomNo);
+    @DeleteMapping("/room/{id}")
+    private String deleteRoom(@PathVariable(name = "id") Long id) {
+        return adminReject.rejectHotelRoom(id);
     }
 }
