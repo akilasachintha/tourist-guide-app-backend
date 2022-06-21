@@ -47,4 +47,10 @@ public interface hotelRepository extends JpaRepository<Hotel, Long> {
     @Modifying
     @Query(value = "SELECT h FROM Hotel h WHERE h.hotelOwner.userId=:userId")
     List<Hotel> findAllByUserId(Long userId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM Hotel h WHERE h.hotelId = :id")
+    void deleteHotel(Long id);
+
 }

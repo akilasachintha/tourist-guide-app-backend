@@ -44,7 +44,7 @@ public class Hotel {
 
     private String specialOffers;
 
-    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "hotel-hotelImages")
     @ToString.Exclude
     private Set<HotelImage> hotelImages = new HashSet<>();

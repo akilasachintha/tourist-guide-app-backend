@@ -15,7 +15,7 @@ public interface hotelService {
     List<RoomCategory> getAllCategories();
     RoomCategory saveCategory(RoomCategory roomCategory);
     String updateCategory(String id,RoomCategory roomCategory);
-    void deleteCategory(String id);
+    String deleteCategory(String type);
 
     /*** HotelRoom***/
 
@@ -37,6 +37,8 @@ public interface hotelService {
     HotelRoom saveHotelRoom(HotelRoomDto hotelRoomDto);
 
     List<HotelResponseDTO> getHotelsByAppUserId(Long userId);
+
+    String deleteHotel(Long id);
 
 //    HotelOwner updateHotelOwner(Long userId, HotelOwner hotelOwner);
 

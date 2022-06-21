@@ -6,6 +6,7 @@ import com.datapirates.touristguideapp.dto.responseDto.AvailableHotelDTO;
 import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
 import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
+import com.datapirates.touristguideapp.entity.hotel.HotelImage;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
 import com.datapirates.touristguideapp.entity.location.Location;
@@ -41,6 +42,8 @@ public class hotelServiceImpl implements hotelService {
     @Autowired
     private bookingRepository bookingRepository;
 
+    @Autowired
+    private HotelImageRepository hotelImageRepository;
     @Override
     public List<RoomCategory> getAllCategories() {
         return roomCategoryRepository.findAll();
@@ -76,6 +79,27 @@ public class hotelServiceImpl implements hotelService {
         List<Hotel> existingHotels = hotelRepository.findAllByUserId(userId);
 
         return existingHotels.stream().map(this::convertEntityToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public String deleteHotel(Long id) {
+        Optional<Hotel> hotel1 = hotelRepository.findById(id);
+        if (hotel1.isPresent()){
+            Hotel hotel = hotel1.get();
+            Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
+            for (HotelRoom hotelRoom : hotelRooms){
+                roomRepository.deleteRoom(hotelRoom.getRoomId());
+            }
+            Set<HotelImage> hotelImages = hotel.getHotelImages();
+            for (HotelImage hotelImage : hotelImages){
+                hotelImageRepository.deleteHotelImage(hotelImage.getUrl());
+            }
+            hotelRepository.deleteHotel(id);
+            return "successfully deleted";
+        }
+
+        return "Error Id";
+
     }
 
 //    @Override
@@ -149,8 +173,17 @@ public class hotelServiceImpl implements hotelService {
     }
 
     @Override
-    public void deleteCategory(String id) {
-        roomCategoryRepository.deleteById(id);
+    public String deleteCategory(String type) {
+        Optional<RoomCategory> roomCategory = roomCategoryRepository.findById(type);
+        if (roomCategory.isPresent()){
+            List<HotelRoom> hotelRooms = roomCategory.get().getHotelRooms();
+            for (HotelRoom hotelRoom : hotelRooms){
+                roomRepository.deleteRoom(hotelRoom.getRoomId());
+            }
+            roomCategoryRepository.deleteCategory(type);
+            return "successfully deleted";
+        }
+        return "Error Id";
     }
 
     @Override

@@ -28,6 +28,10 @@ public interface roomRepository extends JpaRepository<HotelRoom, Long> {
     @Query("update HotelRoom R set R.roomCategory=:category where R.roomCategory=:type")
     void setCategory(String category,String type);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM HotelRoom h WHERE h.roomId = :id")
+    void deleteRoom(Long id);
     List<HotelRoom> findByHotelAndRoomAvailability(Long id, String availability);
     List<HotelRoom> findByAdminStatus(String status);
     Optional<HotelRoom> findByHotelAndRoomNo(Long id, Long roomNo);

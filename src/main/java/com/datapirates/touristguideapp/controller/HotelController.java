@@ -96,8 +96,7 @@ public class HotelController {
 
     @DeleteMapping("/category/delete")
     private String deleteCat(@RequestParam String id){
-        hotelService.deleteCategory(id);
-        return "successful deleted";
+        return hotelService.deleteCategory(id);
     }
 
     /**** HOTEL ROOM ***/
@@ -126,6 +125,11 @@ public class HotelController {
     @GetMapping("/{userId}")
     private List<HotelResponseDTO> getHotelsByAppUserId(@PathVariable(name = "userId") Long userId){
         return hotelService.getHotelsByAppUserId(userId);
+
+    }
+    @DeleteMapping ("/deleteHotel")
+    private String deleteHotel(@RequestParam Long id){
+        return hotelService.deleteHotel(id);
 
     }
 }
