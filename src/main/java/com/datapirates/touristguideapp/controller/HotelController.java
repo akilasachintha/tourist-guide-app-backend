@@ -102,8 +102,8 @@ public class HotelController {
     /**** HOTEL ROOM ***/
 
     @GetMapping("/hotelRoom/getAvailableHotels")
-    private List<Hotel> getRooms(@RequestParam String type, @RequestParam int amount){
-        return hotelService.getAvailableHotels(type,amount);
+    private List<Hotel> getRooms(@RequestParam String type, @RequestParam int amount,@RequestParam String startCount){
+        return hotelService.getAvailableHotels(type,amount,startCount);
     }
     @GetMapping("/hotelRoom/getRooms")
     private List<HotelRoom> getAllRooms(){

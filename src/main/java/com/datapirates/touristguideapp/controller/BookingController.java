@@ -86,8 +86,8 @@ public class BookingController {
         return "successfully updated";
     }
     @PutMapping("/cancelBooking")
-    private String cancelBooking(@RequestParam Long bookingId){
-        return bookingService.cancelFullBooking(bookingId);
+    private String cancelBooking(@RequestBody BookingId bookingId){
+        return bookingService.cancelFullBooking(bookingId.getBookingId());
     }
     @DeleteMapping("/delete")
     private String deleteBooking(@RequestParam Long id){

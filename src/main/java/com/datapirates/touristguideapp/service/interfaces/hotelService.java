@@ -18,7 +18,7 @@ public interface hotelService {
 
     /*** HotelRoom***/
 
-    List<Hotel> getAvailableHotels(String type,int amount);
+    List<Hotel> getAvailableHotels(String type,int amount,String startCount);
     List<HotelRoom> getHotelRoom();
     String updateAvailability(Long id,String availability);
     void updateCategoryType(String category,String type);

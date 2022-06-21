@@ -141,6 +141,7 @@ public class bookingServiceImpl implements bookingService {
     @Override
     public String saveBooking(BookingReqDto bookingReqDto) {
         Booking booking = bookingReqDto.getBooking();
+        List<Booking> bookings = bookingRepository.findAll();
         if (booking.getHotelId()!=null){
             Hotel hotel = hotelRepository.getById(booking.getHotelId());
             Set<HotelRoom> hotelRooms = hotel.getHotelRooms();
@@ -150,6 +151,17 @@ public class bookingServiceImpl implements bookingService {
             }
 
             int count=0;
+            for (Booking booking2 : bookings){
+                if (booking2.getCategoryType()!=null&&booking.getCategoryType()!=null){
+                    if (booking2.getCategoryType().equals(booking.getCategoryType()) && booking2.getCheckOutDate()!=null&&booking.getCheckInDate()!=null){
+                        long bookingEndTime = Long.parseLong(booking2.getCheckOutDate());
+                        long bookingStartTime = Long.parseLong(booking.getCheckInDate());
+                        if (bookingEndTime<bookingStartTime){
+                            count+=booking2.getRoomCount();
+                        }
+                    }
+                }
+            }
             for (HotelRoom hotelRoom : hotelRooms){
                 RoomCategory roomCategory = hotelRoom.getRoomCategory();
                 if(roomCategory.getCategoryType().equals(bookingReqDto.getCategoryType())&&hotelRoom.getRoomAvailability().equals("yes")){

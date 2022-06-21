@@ -3,6 +3,7 @@ package com.datapirates.touristguideapp.service.impl;
 import com.datapirates.touristguideapp.dto.requestDto.HotelReqDTO;
 import com.datapirates.touristguideapp.dto.requestDto.HotelRoomDto;
 import com.datapirates.touristguideapp.dto.responseDto.HotelResponseDTO;
+import com.datapirates.touristguideapp.entity.bookings.Booking;
 import com.datapirates.touristguideapp.entity.hotel.Hotel;
 import com.datapirates.touristguideapp.entity.hotel.HotelRoom;
 import com.datapirates.touristguideapp.entity.hotel.RoomCategory;
@@ -35,6 +36,9 @@ public class hotelServiceImpl implements hotelService {
 
     @Autowired
     private hotelOwnerRepository hotelOwnerRepository;
+
+    @Autowired
+    private bookingRepository bookingRepository;
 
     @Override
     public List<RoomCategory> getAllCategories() {
@@ -149,8 +153,9 @@ public class hotelServiceImpl implements hotelService {
     }
 
     @Override
-    public List<Hotel> getAvailableHotels(String type, int amount) {
+    public List<Hotel> getAvailableHotels(String type, int amount,String startCount) {
         List<Hotel> hotels = hotelRepository.findAll();
+        List<Booking> bookings = bookingRepository.findAll();
         List<Hotel> hotels1 = new ArrayList<>();
 
         for (Hotel hotel : hotels) {
@@ -159,8 +164,18 @@ public class hotelServiceImpl implements hotelService {
                 //hotels.remove(hotel);
                 continue;
             }
-
             int count = 0;
+            for (Booking booking : bookings){
+                if (booking.getCategoryType()!=null){
+                    if (booking.getCategoryType().equals(type) && booking.getCheckOutDate()!=null){
+                        long bookingEndTime = Long.parseLong(booking.getCheckOutDate());
+                        long bookingStartTime = Long.parseLong(startCount);
+                        if (bookingEndTime<bookingStartTime){
+                            count+=booking.getRoomCount();
+                        }
+                    }
+                }
+            }
             for (HotelRoom hotelRoom : hotelRooms) {
                 RoomCategory roomCategory = hotelRoom.getRoomCategory();
                 if (roomCategory.getCategoryType().equals(type)) {

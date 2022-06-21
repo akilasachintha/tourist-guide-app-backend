@@ -23,7 +23,7 @@ public class Guide extends AppUser {
 
     private String NIC;
 
-    private String availability = "available";
+    private String availability = "yes";
 
     private String adminStatus = "pending";
 

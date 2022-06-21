@@ -23,7 +23,7 @@ public class Booking {
 
     private Long relativeTemporaryId;
 
-    private String bookingStatus;
+    private String bookingStatus = "pending";
 
     private String checkInDate;
 
