@@ -85,8 +85,8 @@ public class adminApproveIMPL implements adminApprove {
         if (!guide.isPresent()) {
             return "Error id";
         }
-        //Guide guide1 = guide.get();
-        //sendMails(guide1.getEmail());
+        Guide guide1 = guide.get();
+        sendMails(guide1.getEmail());
         guideRepository.approve(id, "confirm");
         return "Confirmed";
     }
@@ -98,7 +98,7 @@ public class adminApproveIMPL implements adminApprove {
             return "Error id";
         }
         Driver driver1 = driver.get();
-//        sendMails(driver1.getEmail());
+        sendMails(driver1.getEmail());
         driverRepository.approve(id, "confirm");
         return "Confirmed";
     }
@@ -136,7 +136,7 @@ public class adminApproveIMPL implements adminApprove {
         }
         Vehicle vehicle1 = vehicle.get();
         Driver driver = vehicle1.getDriver();
-//        sendMails(driver.getEmail());
+        sendMails(driver.getEmail());
         vehicleRepository.approve(id, "confirm");
         return "Confirmed";
     }

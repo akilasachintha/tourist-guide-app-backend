@@ -162,8 +162,10 @@ public class bookingServiceImpl implements bookingService {
             }
             for (HotelRoom hotelRoom : hotelRooms){
                 RoomCategory roomCategory = hotelRoom.getRoomCategory();
+                System.out.println(roomCategory.getCategoryType());
                 if(roomCategory.getCategoryType().equals(bookingReqDto.getCategoryType())&&hotelRoom.getRoomAvailability().equals("yes")){
                     count++;
+                    System.out.println("count"+count);
                 }
             }
 

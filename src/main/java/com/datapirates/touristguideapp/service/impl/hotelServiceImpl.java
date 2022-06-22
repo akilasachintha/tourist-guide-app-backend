@@ -229,17 +229,20 @@ public class hotelServiceImpl implements hotelService {
             }
             for (HotelRoom hotelRoom : hotelRooms) {
                 RoomCategory roomCategory = hotelRoom.getRoomCategory();
-                if (roomCategory.getCategoryType().equals(type)) {
+                if (roomCategory.getCategoryType().equals(type)&&hotelRoom.getRoomAvailability().equals("yes")&&hotelRoom.getAdminStatus().equalsIgnoreCase("confirm")) {
                     count++;
+
                 }
             }
 
             if (count >= amount) {
                 //hotels.remove(hotel);
-                AvailableHotelDTO availableHotelDTO = new AvailableHotelDTO();
-                availableHotelDTO.setHotel(hotel);
-                availableHotelDTO.setPrice(price);
-                availableHotelDTOS.add(availableHotelDTO);
+                if (hotel.getAdminStatus().equalsIgnoreCase("confirm")){
+                    AvailableHotelDTO availableHotelDTO = new AvailableHotelDTO();
+                    availableHotelDTO.setHotel(hotel);
+                    availableHotelDTO.setPrice(price);
+                    availableHotelDTOS.add(availableHotelDTO);
+                }
             }
         }
         return availableHotelDTOS;

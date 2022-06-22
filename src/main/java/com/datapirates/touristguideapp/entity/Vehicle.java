@@ -38,7 +38,7 @@ public class Vehicle {
 
     private String vehiclePhotoUrl;
 
-    private String vehicleStatus = "pending";
+    private String vehicleStatus;
 
     private String adminStatus = "pending";
 
