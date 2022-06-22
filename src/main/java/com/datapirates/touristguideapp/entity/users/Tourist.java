@@ -31,7 +31,7 @@ public class Tourist extends AppUser {
 
    // private Set<Booking> bookings = new HashSet<>();
 
-    @OneToMany(mappedBy = "tourist", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tourist", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference("booking-tourist")
     @ToString.Exclude
     private List<Booking> bookings;

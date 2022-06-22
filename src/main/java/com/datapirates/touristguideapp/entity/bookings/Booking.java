@@ -53,12 +53,12 @@ public class Booking {
 
     private String categoryType;
 
-    @OneToMany(mappedBy = "bookingid", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bookingid", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference("booking-temporaryBookings")
     @ToString.Exclude
     private Set<TemporaryBooking> temporaryBookings;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "tourist", foreignKey = @ForeignKey(name = "tourist_booking_fk1"))
     @JsonBackReference(value = "booking-tourist")
     @ToString.Exclude

@@ -37,7 +37,7 @@ public class TemporaryBooking {
     private String driverEndTime;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "bookingid", foreignKey = @ForeignKey(name = "temporary_booking_fk1"))
     @JsonBackReference(value = "booking-temporaryBookings")
     @ToString.Exclude

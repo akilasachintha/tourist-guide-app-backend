@@ -169,7 +169,7 @@ public class bookingServiceImpl implements bookingService {
 
             if (count<bookingReqDto.getRoomCount()){
                 //hotels.remove(hotel);
-                return "No enough rooms";
+                return "no enough rooms";
             }
 
         }
@@ -306,6 +306,7 @@ public class bookingServiceImpl implements bookingService {
             for (Booking booking : bookings){
                 if (Objects.equals(booking.getBookingId(),bookingId)){
                     touristId = tourist.getUserId();
+                   // System.out.println(touristId);
                     break;
                 }
             }
@@ -582,6 +583,21 @@ public class bookingServiceImpl implements bookingService {
             }
         }
         return ids;
+    }
+
+    @Override
+    public List<Booking> getBookingsForPayByTOurist(Long id) {
+        Optional<Tourist> tourist = touristRepository.findById(id);
+        List<Booking> bookings2 = new ArrayList<>();
+        if (tourist.isPresent()){
+            List<Booking> bookings = tourist.get().getBookings();
+            for (Booking booking : bookings){
+                if (booking.getBookingStatus().equalsIgnoreCase("shouldPay")){
+                    bookings2.add(booking);
+                }
+            }
+        }
+        return bookings2;
     }
 
 

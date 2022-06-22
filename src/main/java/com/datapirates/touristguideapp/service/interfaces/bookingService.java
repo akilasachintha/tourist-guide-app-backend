@@ -33,6 +33,7 @@ public interface bookingService {
 
     List<Long> getHotelForRating(Long id);
 
+    List<Booking> getBookingsForPayByTOurist(Long id);
     /*********temporary interface********/
 
     String updateGuideState(Long id,String state);

@@ -46,6 +46,10 @@ public class BookingController {
         return bookingService.getUsersForRating(id);
     }
 
+    @GetMapping("/getPaymentBooks")
+    private List<Booking> getByTouristPayment(@RequestParam Long id){
+        return bookingService.getBookingsForPayByTOurist(id);
+    }
     @GetMapping("/getRatingHotels")
     private List<Long> getByTouristHotel(@RequestParam Long id){
         return bookingService.getHotelForRating(id);
@@ -128,7 +132,7 @@ public class BookingController {
 
     @GetMapping("/guideBooking/reject")
     private String rejectGuideBooking(@RequestParam Long id){
-        return bookingService.confirmGuide(id,"shouldSelect");
+        return bookingService.confirmGuide(id,"notSelect");
     }
 
     @PutMapping("/guideBooking/update")
@@ -179,7 +183,7 @@ public class BookingController {
 
     @GetMapping("/driverBooking/reject")
     private String rejectDriverBooking(@RequestParam Long id){
-        return bookingService.confirmDriver(id,"shouldSelect");
+        return bookingService.confirmDriver(id,"notSelect");
     }
     @PutMapping("/driverBooking/updateDriver")
     private String updateDriver(@RequestParam Long driver){
@@ -227,6 +231,6 @@ public class BookingController {
 
     @GetMapping("/hotelBooking/reject")
     private String rejectHotelBooking(@RequestParam Long id){
-        return bookingService.confirmHotel(id,"shouldSelect");
+        return bookingService.confirmHotel(id,"notSelect");
     }
 }

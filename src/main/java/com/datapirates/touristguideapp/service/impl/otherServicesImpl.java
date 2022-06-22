@@ -68,11 +68,11 @@ public class otherServicesImpl implements otherServices {
         String statusType1 = "shouldSelect";
         String statusType2 = "pending";
        if(state1!=null&&state2!=null&&state3!=null){
-           if (state1.toLowerCase().equals(statusType1.toLowerCase())||state2.toLowerCase().equals(statusType1.toLowerCase())||state3.toLowerCase().equals(statusType1.toLowerCase())){
+           if (state1.equalsIgnoreCase(statusType1)|| state2.equalsIgnoreCase(statusType1)|| state3.equalsIgnoreCase(statusType1)){
                return false;
            }
            else {
-               if (state1.toLowerCase().equals(statusType2.toLowerCase())||state2.toLowerCase().equals(statusType2.toLowerCase())||state3.toLowerCase().equals(statusType2.toLowerCase())){
+               if (state1.equalsIgnoreCase(statusType2)|| state2.equalsIgnoreCase(statusType2)|| state3.equalsIgnoreCase(statusType2)){
                    return false;
                }
            }
@@ -85,7 +85,7 @@ public class otherServicesImpl implements otherServices {
         String statusType1 = "notSelect";
         String statusType2 = "confirm";
         if(state1!=null&&state2!=null&&state3!=null){
-            return !state1.toLowerCase().equals(statusType1.toLowerCase()) && !state2.toLowerCase().equals(statusType1.toLowerCase()) && !state3.toLowerCase().equals(statusType1.toLowerCase());
+            return !(state1.equalsIgnoreCase(statusType1) && state2.equalsIgnoreCase(statusType1) && state3.equalsIgnoreCase(statusType1));
         }
         return true;
     }
@@ -144,8 +144,8 @@ public class otherServicesImpl implements otherServices {
             }
         }
     }
-    @Scheduled(fixedRate = 10000L)
-    void checkTimeLimit(){
+
+    private void checkPendingTime(){
         setTempId();
         List<Long> pendingHotelIds;
         pendingHotelIds = temporaryBookingRepository.getIdsByHotel("pending");
@@ -184,7 +184,7 @@ public class otherServicesImpl implements otherServices {
                 subject = "your time has over booking is canceled";
                 body = "something";
                 sendMails(ownerEmail,subject,body);
-               // hotelService.updateRoomsAvailability(bookingId,"available",hotelId);
+                // hotelService.updateRoomsAvailability(bookingId,"available",hotelId);
 
 
             }
@@ -268,47 +268,62 @@ public class otherServicesImpl implements otherServices {
 
             }
         }
+    }
+
+    private void StatusUpdate(){
+        List<Booking> bookings = bookingRepository.findAll();
+        for (Booking booking : bookings){
+
+            //System.out.println("hello");
+            if (booking.getTemporaryBookings()==null){
+                continue;
+            }
+            Set<TemporaryBooking> temporaryBookings = booking.getTemporaryBookings();
+           // System.out.println(tourist1.getBookings());/*
+            for (TemporaryBooking temporaryBooking : temporaryBookings){
+                String guideState = temporaryBookingRepository.getGuideStatus(temporaryBooking.getTempBookingId());
+                String driverState = temporaryBookingRepository.getDriverStatus(temporaryBooking.getTempBookingId());
+                String hotelState = temporaryBookingRepository.getHotelStatus(temporaryBooking.getTempBookingId());
+
+                boolean bookingProcessOver = compareStatus(guideState,driverState,hotelState);
+                boolean bookingConfirm = compareStatus2(guideState,driverState,hotelState);
+
+                if(bookingProcessOver){
+                    if (bookingConfirm){
+                        bookingRepository.setBookingStatus(booking.getBookingId(),"shouldPay");
+                        temporaryBookingRepository.deleteTemBooking(temporaryBooking.getTempBookingId());
+                        Long touristId = getTourist(booking.getBookingId());
+                        String touristEmail = userRepository.getEmail(touristId);
+                        String subject = "Latest update About your booking";
+                        String body = "Your Booking"+booking.getBookingId()+"is confirmed";
+                        sendMails(touristEmail,subject,body);
+                    }
+                    else {
+                        Long touristId = getTourist(booking.getBookingId());
+                        temporaryBookingRepository.deleteTemBooking(temporaryBooking.getTempBookingId());
+                        bookingRepository.deleteBooking(booking.getBookingId());
+                        String touristEmail = userRepository.getEmail(touristId);
+                        String subject = "Latest update About your booking";
+                        String body = "Your Booking"+booking.getBookingId()+"is canceled.You have to do new booking";
+                        sendMails(touristEmail,subject,body);
+                    }
+                }
+            }
+
+        }
+    }
+    @Scheduled(fixedRate = 10000L)
+    void checkTimeLimit(){
+
 
         /*** booking confirmation**/
 
-        List<Long> allTemporaryIds = temporaryBookingRepository.getAllTempIds();
-        for (int index=0;index<allTemporaryIds.size();index++){
-            Long temporaryId = allTemporaryIds.get(index);
-            String guideState = temporaryBookingRepository.getGuideStatus(temporaryId);
-            String driverState = temporaryBookingRepository.getDriverStatus(temporaryId);
-            String hotelState = temporaryBookingRepository.getHotelStatus(temporaryId);
-
-            boolean bookingProcessOver = compareStatus(guideState,driverState,hotelState);
-            boolean bookingConfirm = compareStatus2(guideState,driverState,hotelState);
-
-            if(!bookingProcessOver){
-                if (bookingConfirm){
-                    Long bookingId = bookingRepository.getTBookingId(temporaryId);
-                    bookingRepository.setBookingStatus(bookingId,"shouldPay");
-                    temporaryBookingRepository.deleteById(temporaryId);
-                    Long touristId = getTourist(bookingId);
-                    String touristEmail = userRepository.getEmail(touristId);
-                    String subject = "Latest update About your booking";
-                    String body = "Your Booking"+bookingId+"is confirmed";
-                    sendMails(touristEmail,subject,body);
-                }
-                else {
-                    Long bookingId = bookingRepository.getTBookingId(temporaryId);
-                    Long touristId = getTourist(bookingId);
-                    bookingRepository.deleteById(bookingId);
-                    String touristEmail = userRepository.getEmail(touristId);
-                    String subject = "Latest update About your booking";
-                    String body = "Your Booking"+bookingId+"is canceled.You have to do new booking";
-                    sendMails(touristEmail,subject,body);
-                }
-            }
-        }
+        StatusUpdate();
 
         /*** check rating time ***/
-        List<Long> bookingIdsOnPayed = bookingRepository.getAllBookingIdsByState("paid");
-        for (int index=0; index<bookingIdsOnPayed.size();index++){
-            Long bookingId = bookingIdsOnPayed.get(index);
-            String checkOutTime = bookingRepository.getCheckOutDateById(bookingId);
+        List<Booking> bookings1 = bookingRepository.findByBookingStatus("paid");
+        for (Booking booking : bookings1){
+            String checkOutTime = booking.getCheckOutDate();
 
             Date date = new Date();
             SimpleDateFormat sdt = new SimpleDateFormat("dd");
@@ -325,7 +340,7 @@ public class otherServicesImpl implements otherServices {
             Long checkOutTimeCount = Long.parseLong(checkOutTime);
 
             if (checkOutTimeCount<=nowTimeCount){
-                bookingRepository.setBookingStatus(bookingId,"shouldRate");
+                bookingRepository.setBookingStatus(booking.getBookingId(),"shouldRate");
             }
         }
     }
